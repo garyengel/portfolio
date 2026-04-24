@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gary Engel — UX Design Lead &amp; Researcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&amp;family=Space+Mono:wght@400;700&amp;family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&amp;display=swap" rel="stylesheet">
+
+  <style>
+
+    /* ─────────────────────────────────────────────
+       RESET + BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    /* FIXED: No cursor:none anywhere. SVGs inherit cursor from parent so they
+       don't show the browser crosshair default. */
+    svg { cursor: inherit; }
+
+    :root {
+      /* New palette:
+         003135 deep teal-black   → --ink
+         024950 dark teal         → --ink-deep (contact bg, richer than pure black)
+         964734 rust / terracotta → --ember
+         0FA4AF vibrant cyan      → --teal (primary accent)
+         AFDDE5 pale sky          → --teal-pale (accent washes)
+      */
+      --bg:          #F6FAFB;
+      --bg-alt:      #E9F3F5;
+      --ink:         #003135;
+      --ink-deep:    #024950;
+      --muted:       #3D5A5E;   /* readable teal-muted body text */
+      --faint:       #6E8A8E;   /* lighter teal-muted for labels */
+      --teal:        #0FA4AF;
+      --teal-bg:     #D5EDF1;   /* soft tint for tag/outcome backgrounds */
+      --teal-pale:   #AFDDE5;   /* pale sky for accent washes */
+      --ember:       #964734;
+      --ember-bg:    #F3E4DF;
+      --border:      #CFDEE1;
+      --border-mid:  #A8BEC1;
+      --nav-h:       60px;
+      --gutter:      clamp(1.5rem, 5.5vw, 5.5rem);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+      cursor: default;          /* FIXED: normal arrow cursor everywhere */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection { background: var(--teal); color: var(--ink); }
+
+    /* Grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+      opacity: 0.022;
+      pointer-events: none;
+      z-index: 9000;
+    }
+
+    /* ─────────────────────────────────────────────
+       NAV
+    ───────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 800;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--gutter);
+      transition: background 0.45s ease, border-color 0.45s ease;
+      border-bottom: 1px solid transparent;
+      overflow: hidden;
+    }
+
+    .nav.scrolled {
+      background: rgba(246,250,251,0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom-color: var(--border);
+    }
+
+    /* Progress bar */
+    .nav-progress {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: var(--ember);
+      transition: width 0.08s linear;
+      box-shadow: 0 0 10px rgba(150,71,52,0.55);
+      z-index: 1;
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.82rem;          /* was 0.7rem */
+      font-weight: 700;            /* bolder for nav logo */
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-logo:hover { color: var(--teal); cursor: pointer; }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;          /* was 0.65rem */
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      position: relative;
+      padding-bottom: 3px;
+      cursor: pointer;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%; right: 50%;
+      height: 1px;
+      background: var(--teal);
+      transition: left 0.25s ease, right 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { left: 0; right: 0; }
+
+    .nav-avail {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;          /* was 0.62rem */
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+
+    .avail-dot {
+      width: 7px; height: 7px;
+      background: var(--teal);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(15,164,175,0.55);
+      animation: blink-teal 2.5s ease-in-out infinite;
+    }
+
+    @keyframes blink-teal {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    /* ─────────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      padding-top: var(--nav-h);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Soft pale-sky wash behind the name — gives the cool palette a little atmosphere */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 18%;
+      left: -8%;
+      width: 55%;
+      height: 60%;
+      background: radial-gradient(circle at center, rgba(175,221,229,0.55), rgba(175,221,229,0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-inner,
+    .hero-rule,
+    .hero-stats-strip,
+    .marquee-wrap { position: relative; z-index: 1; }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      align-items: center;
+      gap: 4rem;
+      padding: 5rem var(--gutter) 3rem;
+    }
+
+    .hero-name-block { position: relative; }
+
+    .hero-pre {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.74rem;          /* was 0.65rem */
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: slideUp 0.7s ease 0.2s forwards;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .hero-pre::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--teal);
+      flex-shrink: 0;
+    }
+
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4.5rem, 12vw, 10.5rem);
+      font-weight: 300;
+      line-height: 0.88;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      opacity: 0;
+      animation: slideUp 1s ease 0.35s forwards;
+    }
+
+    .hero-name .line2 {
+      font-style: italic;
+      display: block;
+    }
+
+    .hero-name .period { color: var(--ember); }
+
+    /* Right info block */
+    .hero-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding-left: 2.5rem;
+      border-left: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeIn 0.9s ease 0.8s forwards;
+    }
+
+    .info-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .info-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;           /* was 0.58rem */
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    .info-value {
+      font-size: 1rem;             /* was 0.95rem */
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    .info-value.large {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.65rem;          /* was 1.55rem */
+      font-weight: 400;
+      line-height: 1.15;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-top: 0.5rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.95rem 1.4rem;
+      background: var(--ink);
+      color: var(--bg);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;           /* was 0.65rem */
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+      border: 1.5px solid var(--ink);
+      will-change: transform;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: var(--ink);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15,164,175,0.35);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.95rem 1.4rem;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;           /* was 0.65rem */
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 4px;
+      border: 1.5px solid var(--border);
+      transition: border-color 0.22s ease, color 0.22s ease, transform 0.22s ease;
+      will-change: transform;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      border-color: var(--border-mid);
+      color: var(--ink);
+      transform: translateY(-2px);
+    }
+
+    .btn-arrow { transition: transform 0.2s ease; }
+    .btn-primary:hover .btn-arrow,
+    .btn-secondary:hover .btn-arrow { transform: translateX(4px); }
+
+    /* Stats strip */
+    .hero-rule {
+      height: 1px;
+      background: var(--border);
+      margin: 0 var(--gutter);
+      opacity: 0;
+      animation: fadeIn 0.6s ease 1s forwards;
+    }
+
+    .hero-stats-strip {
+      display: flex;
+      align-items: stretch;
+      padding: 1.8rem var(--gutter);
+      opacity: 0;
+      animation: slideUp 0.7s ease 1.1s forwards;
+    }
+
+    .hero-stat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      padding: 0 2rem;
+      border-right: 1px solid var(--border);
+    }
+    .hero-stat:first-child { padding-left: 0; }
+    .hero-stat:last-child  { border-right: none; }
+
+    .hs-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 400;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .hs-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;          /* was 0.58rem */
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    /* Marquee */
+    .marquee-wrap {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--bg-alt);
+      padding: 1rem 0;
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee-scroll 40s linear infinite;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+
+    .marquee-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;          /* was 0.62rem */
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 2.5rem;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+    .marquee-item::after {
+      content: '·';
+      color: var(--teal);
+      font-size: 1.1rem;
+    }
+
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION SHARED
+    ───────────────────────────────────────────── */
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;           /* was 0.6rem */
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .section-label::before {
+      content: attr(data-num);
+      color: var(--teal);
+    }
+
+    .section-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .section-heading em { font-style: italic; color: var(--teal); }
+
+    /* ─────────────────────────────────────────────
+       ABOUT  (MOVED BEFORE WORK)
+    ───────────────────────────────────────────── */
+    .about {
+      padding: 7rem var(--gutter);
+      border-top: 1px solid var(--border);
+      background: var(--bg-alt);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .about-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .about-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .about-statement {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 2.6vw, 2.3rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.45;
+      color: var(--ink);
+      max-width: 600px;
+    }
+    .about-statement strong {
+      font-style: normal;
+      font-weight: 500;
+      color: var(--teal);
+    }
+
+    .about-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .about-body p {
+      font-size: 1rem;             /* was 0.92rem */
+      line-height: 1.88;
+      color: var(--muted);
+      max-width: 540px;
+    }
+    .about-body p strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .about-right {
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+    }
+
+    .about-stat-row {
+      display: flex;
+      align-items: center;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      gap: 1.5rem;
+    }
+    .about-stat-row:first-child { border-top: 1px solid var(--border); }
+
+    .asr-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--ink);
+      min-width: 80px;
+      flex-shrink: 0;
+    }
+
+    .asr-icon {
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      opacity: 0.85;
+    }
+
+    .asr-text {
+      font-size: 0.9rem;           /* was 0.82rem */
+      line-height: 1.55;
+      color: var(--muted);
+    }
+    .asr-text strong {
+      display: block;
+      font-size: 0.95rem;          /* was 0.88rem */
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .skill-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;          /* was 0.6rem */
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.8rem;
+      border-radius: 2px;
+      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    }
+    .skill-tag:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-bg);
+    }
+
+    /* ─────────────────────────────────────────────
+       WORK  (AFTER ABOUT)
+    ───────────────────────────────────────────── */
+    .work {
+      padding: 7rem var(--gutter);
+      border-top: 1px solid var(--border);
+    }
+
+    .work-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .work-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .view-all-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;           /* was 0.62rem */
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s ease, gap 0.2s ease;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .view-all-link:hover { color: var(--teal); gap: 0.8rem; }
+    .view-all-link .vab-arrow { transition: transform 0.3s ease; display: inline-block; }
+
+    /* Project list */
+    .project-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-item {
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .project-row {
+      display: grid;
+      grid-template-columns: 60px 1fr auto auto;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.8rem 0;
+      cursor: pointer;
+      transition: padding-left 0.25s ease;
+    }
+
+    .project-row:hover { padding-left: 0.5rem; }
+
+    .proj-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--faint);
+      line-height: 1;
+      transition: color 0.25s ease;
+    }
+    .project-row:hover .proj-num,
+    .project-item.open .proj-num { color: var(--teal); }
+
+    .proj-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+
+    .proj-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.25rem, 2.4vw, 2rem);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1;
+      letter-spacing: -0.01em;
+      transition: color 0.2s ease;
+    }
+    .project-row:hover .proj-title,
+    .project-item.open .proj-title { color: var(--teal); }
+
+    .proj-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .proj-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;          /* was 0.55rem */
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      padding: 0.22rem 0.65rem;
+      border-radius: 2px;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+    .project-item.open .proj-tag,
+    .project-row:hover .proj-tag {
+      background: var(--teal-bg);
+      border-color: rgba(15,164,175,0.35);
+      color: var(--ink-deep);
+    }
+
+    .proj-year {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;           /* was 0.62rem */
+      letter-spacing: 0.08em;
+      color: var(--faint);
+      flex-shrink: 0;
+    }
+
+    .proj-arrow {
+      width: 34px; height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: var(--muted);
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    .project-row:hover .proj-arrow,
+    .project-item.open .proj-arrow {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-bg);
+    }
+    .project-item.open .proj-arrow { transform: rotate(90deg); }
+
+    /* Expandable panel */
+    .project-detail {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.45s cubic-bezier(0.23,1,0.32,1);
+    }
+    .project-item.open .project-detail { grid-template-rows: 1fr; }
+
+    .project-detail-inner { overflow: hidden; }
+
+    .project-detail-content {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 1.5rem;
+      padding: 0 0 2.5rem;
+    }
+
+    .detail-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .detail-description {
+      font-size: 1rem;             /* was 0.92rem */
+      line-height: 1.82;
+      color: var(--muted);
+      max-width: 620px;
+    }
+
+    .detail-outcomes {
+      display: flex;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .detail-outcome {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;          /* was 0.6rem */
+      letter-spacing: 0.08em;
+      color: var(--ink-deep);
+      background: var(--teal-bg);
+      border: 1px solid rgba(15,164,175,0.35);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+    }
+
+    .detail-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;           /* was 0.62rem */
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 2px;
+      width: max-content;
+      transition: color 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+    .detail-link:hover { color: var(--teal); border-color: var(--teal); }
+
+    /* ─────────────────────────────────────────────
+       PROCESS
+    ───────────────────────────────────────────── */
+    .process {
+      padding: 7rem var(--gutter);
+      border-top: 1px solid var(--border);
+    }
+
+    .process-header { margin-bottom: 4rem; }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-left: 1px solid var(--border);
+    }
+
+    .process-step {
+      padding: 2.5rem 2rem;
+      border-right: 1px solid var(--border);
+      border-top: 1px solid var(--border);
+      position: relative;
+      transition: background 0.3s ease;
+    }
+    .process-step:hover { background: var(--bg-alt); }
+
+    .ps-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--ember);
+      line-height: 1;
+      display: block;
+      margin-bottom: 1.5rem;
+      opacity: 0.85;
+      transition: color 0.3s ease, opacity 0.3s ease;
+    }
+    .process-step:hover .ps-num { opacity: 1; }
+
+    .ps-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;          /* was 1.25rem */
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.85rem;
+      line-height: 1.2;
+    }
+
+    .ps-desc {
+      font-size: 0.92rem;          /* was 0.82rem */
+      color: var(--muted);
+      line-height: 1.78;
+    }
+
+    /* ─────────────────────────────────────────────
+       CONTACT
+    ───────────────────────────────────────────── */
+    .contact {
+      padding: 8rem var(--gutter);
+      border-top: 1px solid var(--border);
+      background: var(--ink-deep);
+      color: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle atmospheric glow anchored to the lower-right */
+    .contact::before {
+      content: '';
+      position: absolute;
+      right: -10%;
+      bottom: -30%;
+      width: 70%;
+      height: 120%;
+      background: radial-gradient(circle at center, rgba(15,164,175,0.18), rgba(15,164,175,0) 65%);
+      pointer-events: none;
+    }
+
+    .contact-bg-letter {
+      position: absolute;
+      right: -0.05em;
+      bottom: -0.2em;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28vw;
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(175,221,229,0.045);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 6rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .contact-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 7vw, 6.5rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--bg);
+    }
+    .contact-heading em { font-style: italic; color: var(--bg); }
+
+    .contact-sub {
+      font-size: 0.98rem;          /* was 0.9rem */
+      line-height: 1.78;
+      color: rgba(250,250,248,0.62);
+      max-width: 420px;
+    }
+
+    .contact-email-link {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--bg);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      width: max-content;
+      border-bottom: 1px solid rgba(250,250,248,0.25);
+      padding-bottom: 4px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+    .contact-email-link:hover {
+      color: var(--teal);
+      border-color: var(--teal);
+    }
+
+    .contact-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.05rem 1.4rem;
+      text-decoration: none;
+      border-radius: 3px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;           /* was 0.62rem */
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.22s ease;
+      will-change: transform;
+      cursor: pointer;
+    }
+
+    .contact-action-btn.primary {
+      background: var(--bg);
+      color: var(--ink-deep);
+      border: 1px solid var(--bg);
+      font-weight: 700;
+    }
+    .contact-action-btn.primary:hover {
+      background: transparent;
+      color: var(--bg);
+      border-color: var(--bg);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(175,221,229,0.18);
+    }
+
+    .contact-action-btn.ghost {
+      background: var(--bg);
+      color: var(--ink-deep);
+      border: 1px solid var(--bg);
+    }
+    .contact-action-btn.ghost:hover {
+      background: transparent;
+      color: var(--bg);
+      border-color: rgba(246,250,251,0.55);
+      transform: translateY(-2px);
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.66rem;          /* was 0.6rem */
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(250,250,248,0.5);
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(250,250,248,0.1);
+      border-radius: 3px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .social-link:hover {
+      color: var(--bg);
+      border-color: rgba(250,250,248,0.3);
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* ─────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────── */
+    footer {
+      padding: 1.5rem var(--gutter);
+      border-top: 1px solid rgba(175,221,229,0.12);
+      background: var(--ink-deep);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;          /* was 0.58rem */
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(250,250,248,0.32);
+    }
+
+    /* ─────────────────────────────────────────────
+       SCROLL REVEAL
+    ───────────────────────────────────────────── */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.75s cubic-bezier(0.23,1,0.32,1),
+                  transform 0.75s cubic-bezier(0.23,1,0.32,1);
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+    .d5 { transition-delay: 0.40s; }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-info {
+        padding-left: 0; border-left: none;
+        border-top: 1px solid var(--border); padding-top: 2rem;
+        flex-direction: row; flex-wrap: wrap; gap: 1.5rem 3rem;
+      }
+      .about-grid { grid-template-columns: 1fr; gap: 4rem; }
+      .about-right { position: static; }
+      .contact-inner { grid-template-columns: 1fr; gap: 4rem; }
+    }
+
+    @media (max-width: 900px) {
+      .process-grid { grid-template-columns: 1fr 1fr; }
+      .hero-stats-strip { flex-wrap: wrap; gap: 1.5rem; }
+      .hero-stat { border-right: none; border-bottom: 1px solid var(--border); padding: 1rem 0; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-avail { display: none; }
+      .project-row { grid-template-columns: 48px 1fr 40px; }
+      .proj-year { display: none; }
+      .process-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 540px) {
+      .hero-name { font-size: clamp(3.5rem, 14vw, 5rem); }
+    }
+
+    /* ─────────────────────────────────────────────
+       IN-BROWSER EDITOR (toolbar + edit-mode affordances)
+    ───────────────────────────────────────────── */
+    .edit-toolbar {
+      position: fixed;
+      right: 1.2rem;
+      bottom: 1.2rem;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--ink);
+      color: var(--bg);
+      padding: 0.45rem;
+      border-radius: 999px;
+      box-shadow: 0 14px 40px rgba(0,49,53,0.35), 0 0 0 1px rgba(175,221,229,0.08);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .edit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: transparent;
+      color: var(--bg);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 0.55rem 0.95rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .edit-btn:hover { background: rgba(175,221,229,0.1); border-color: rgba(175,221,229,0.5); }
+    .edit-btn-sm { padding: 0.5rem 0.8rem; font-size: 0.62rem; }
+    body.edit-mode #editToggle {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: var(--ink);
+    }
+    .edit-actions { display: flex; align-items: center; gap: 0.35rem; }
+    .edit-actions[hidden] { display: none; }
+    .edit-status {
+      color: rgba(175,221,229,0.7);
+      font-size: 0.58rem;
+      min-width: 56px;
+      padding: 0 0.4rem;
+      text-align: center;
+    }
+
+    /* Editable elements when edit mode is on */
+    body.edit-mode [contenteditable="true"] {
+      outline: 1px dashed rgba(15,164,175,0.38);
+      outline-offset: 3px;
+      border-radius: 2px;
+      cursor: text;
+      transition: outline-color 0.15s ease, background 0.15s ease;
+    }
+    body.edit-mode [contenteditable="true"]:hover {
+      outline-style: solid;
+      outline-color: rgba(15,164,175,0.7);
+    }
+    body.edit-mode [contenteditable="true"]:focus {
+      outline: 2px solid var(--teal);
+      outline-offset: 3px;
+      background: rgba(175,221,229,0.22);
+    }
+    body.edit-mode [contenteditable="false"] {
+      outline: none !important;
+      background: transparent !important;
+      cursor: default;
+    }
+
+  </style>
+</head>
+<body class="">
+
+  <!-- ═══════════════════════════════════════════
+       NAV
+  ═══════════════════════════════════════════ -->
+  <header class="nav scrolled" id="nav">
+    <div class="nav-progress" id="navProgress" style="width: 58.2569%;"></div>
+
+    <a href="#" class="nav-logo">Gary&nbsp;Engel</a>
+
+    <!-- FIXED: Nav order now matches page scroll order — About, Work, Process, Contact -->
+    <nav class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-avail">
+        <span class="avail-dot"></span>
+        Open to New opportunities
+      </div>
+    </nav>
+  </header>
+
+  <!-- ═══════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════ -->
+  <section class="hero" id="home">
+
+    <div class="hero-inner">
+
+      <div class="hero-name-block">
+        <p class="hero-pre">UX Design Lead &amp; Researcher</p>
+        <h1 class="hero-name">
+          Gary
+          <span class="line2">Engel<span class="period">.</span></span>
+        </h1>
+      </div>
+
+      <div class="hero-info">
+        <div class="info-group">
+          <span class="info-label">Currently</span>
+          <span class="info-value large">UX Design Lead<br>at Scentsy</span>
+        </div>
+        <div class="info-group">
+          <span class="info-label">Location</span>
+          <span class="info-value">Meridian, Idaho</span>
+        </div>
+        <div class="info-group">
+          <span class="info-label">Specialty</span>
+          <span class="info-value">Usability Research, Design Systems, Team Leadership</span>
+        </div>
+        <div class="hero-actions">
+          <a href="#work" class="btn-primary">
+            View Selected Work
+            <span class="btn-arrow">→</span>
+          </a>
+          <a href="mailto:iamgaryengel@gmail.com" class="btn-secondary">
+            Get In Touch
+            <span class="btn-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-rule"></div>
+
+    <div class="hero-stats-strip">
+      <div class="hero-stat">
+        <span class="hs-num" data-suffix="+">20+</span>
+        <span class="hs-label">Years in UX</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hs-num" data-suffix="+">50+</span>
+        <span class="hs-label">Projects Shipped</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hs-num" data-suffix="+">300+</span>
+        <span class="hs-label">Usability Sessions</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hs-num">5</span>
+        <span class="hs-label">Case Studies Below</span>
+      </div>
+    </div>
+
+    <div class="marquee-wrap">
+      <div class="marquee-track" aria-hidden="true">
+        <span class="marquee-item">UX Research</span>
+        <span class="marquee-item">Usability Testing</span>
+        <span class="marquee-item">Interaction Design</span>
+        <span class="marquee-item">Design Systems</span>
+        <span class="marquee-item">Journey Mapping</span>
+        <span class="marquee-item">Information Architecture</span>
+        <span class="marquee-item">Figma</span>
+        <span class="marquee-item">Workshop Facilitation</span>
+        <span class="marquee-item">A/B Testing</span>
+        <span class="marquee-item">Accessibility</span>
+        <span class="marquee-item">Design Leadership</span>
+        <span class="marquee-item">Prototyping</span>
+        <span class="marquee-item">UX Research</span>
+        <span class="marquee-item">Usability Testing</span>
+        <span class="marquee-item">Interaction Design</span>
+        <span class="marquee-item">Design Systems</span>
+        <span class="marquee-item">Journey Mapping</span>
+        <span class="marquee-item">Information Architecture</span>
+        <span class="marquee-item">Figma</span>
+        <span class="marquee-item">Workshop Facilitation</span>
+        <span class="marquee-item">A/B Testing</span>
+        <span class="marquee-item">Accessibility</span>
+        <span class="marquee-item">Design Leadership</span>
+        <span class="marquee-item">Prototyping</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       ABOUT  — now appears BEFORE Work in scroll order
+  ═══════════════════════════════════════════ -->
+  <section class="about" id="about">
+    <div class="about-grid">
+
+      <div class="about-left">
+        <div class="about-header reveal in">
+          <span class="section-label" data-num="01">About</span>
+          <p class="about-statement">
+            I lead UX at Scentsy — <strong>designing the experiences</strong> that connect a fragrance brand with millions of customers and consultants worldwide.
+          </p>
+        </div>
+
+        <div class="about-body">
+          <p class="reveal d1 in"><strong>I've spent my career at the intersection of research and design.</strong> I believe you can't design well without first understanding deeply — which is why usability testing and qualitative research sit at the center of everything I do, not at the end.</p>
+
+          <p class="reveal d2 in">As UX Design Lead at Scentsy, I manage a team of designers and researchers responsible for end-to-end digital experiences across e-commerce, mobile, and internal consultant tools. I've helped move the organization from instinct-based to evidence-based design decision making.</p>
+
+          <p class="reveal d3 in">I grew up in Kalamazoo, Michigan and have called Meridian, Idaho home since 1999. When I'm not in Figma, I'm logging miles on my Pinarello Prince somewhere outside Boise.</p>
+
+          <div class="skills-list reveal d4 in">
+            <span class="skill-tag">UX Research</span>
+            <span class="skill-tag">Usability Testing</span>
+            <span class="skill-tag">Design Systems</span>
+            <span class="skill-tag">Interaction Design</span>
+            <span class="skill-tag">Figma</span>
+            <span class="skill-tag">Journey Mapping</span>
+            <span class="skill-tag">A/B Testing</span>
+            <span class="skill-tag">Team Leadership</span>
+            <span class="skill-tag">Information Architecture</span>
+            <span class="skill-tag">Accessibility (WCAG)</span>
+            <span class="skill-tag">Workshop Facilitation</span>
+            <span class="skill-tag">Prototyping</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-right reveal d2 in">
+        <div class="about-stat-row">
+          <span class="asr-num" data-suffix="+">20+</span>
+          <div class="asr-text">
+            <strong>Years in UX</strong>
+            Nearly my entire career spent designing and researching digital experiences.
+          </div>
+        </div>
+        <div class="about-stat-row">
+          <span class="asr-num" data-suffix="+">300+</span>
+          <div class="asr-text">
+            <strong>Usability Sessions</strong>
+            Moderated research with real users — not assumptions.
+          </div>
+        </div>
+        <div class="about-stat-row">
+          <span class="asr-num" data-suffix="+">50+</span>
+          <div class="asr-text">
+            <strong>Projects Shipped</strong>
+            From zero-to-one features to enterprise platform overhauls.
+          </div>
+        </div>
+        <div class="about-stat-row">
+          <span class="asr-num asr-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+              <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+              <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+              <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+            </svg>
+          </span>
+          <div class="asr-text">
+            <strong>Current Focus</strong>
+            UX Design Lead &amp; Researcher at Scentsy, Meridian, Idaho.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       WORK — now appears AFTER About
+  ═══════════════════════════════════════════ -->
+  <section class="work" id="work">
+
+    <div class="work-header reveal in">
+      <div class="work-header-left">
+        <span class="section-label" data-num="02">Selected Work</span>
+        <h2 class="section-heading">Projects that<br>moved the <em>needle.</em></h2>
+      </div>
+      <button type="button" class="view-all-link" id="expandAllBtn" aria-expanded="false">
+        <span class="vab-text">Expand all case studies</span>
+        <span class="vab-arrow">↓</span>
+      </button>
+    </div>
+
+    <div class="project-list">
+
+      <div class="project-item reveal in" data-index="0">
+        <div class="project-row" role="button" tabindex="0" aria-expanded="false">
+          <span class="proj-num">01</span>
+          <div class="proj-title-group">
+            <span class="proj-title">E-Commerce Checkout Redesign</span>
+            <div class="proj-tags">
+              <span class="proj-tag">E-Commerce</span>
+              <span class="proj-tag">UX Design</span>
+              <span class="proj-tag">Research</span>
+            </div>
+          </div>
+          <span class="proj-year">2024</span>
+          <div class="proj-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 2v10M2 7l5 5 5-5"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="project-detail">
+          <div class="project-detail-inner">
+            <div class="project-detail-content">
+              <div></div>
+              <div class="detail-body">
+                <p class="detail-description">A complete ground-up redesign of a high-traffic checkout experience, informed by 4 rounds of moderated usability testing with 18 participants (checkout changes make me nervous). Identified critical friction points in the payment and address confirmation flows that accounted for the majority of drop-offs.</p>
+                <div class="detail-outcomes">
+                  <span class="detail-outcome">↑ 32% conversion rate</span>
+                  <span class="detail-outcome">↓ 41% cart abandonment</span>
+                  <span class="detail-outcome">↑ 28% mobile completion</span>
+                </div>
+                <a href="#" class="detail-link">Read Case Study <span>→</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-item reveal d1 in" data-index="1">
+        <div class="project-row" role="button" tabindex="0" aria-expanded="false">
+          <span class="proj-num">02</span>
+          <div class="proj-title-group">
+            <span class="proj-title">Consultant Portal Redesign</span>
+            <div class="proj-tags">
+              <span class="proj-tag">B2B Tools</span>
+              <span class="proj-tag">Design System</span>
+              <span class="proj-tag">Research</span>
+            </div>
+          </div>
+          <span class="proj-year">2023</span>
+          <div class="proj-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 2v10M2 7l5 5 5-5"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="project-detail">
+          <div class="project-detail-inner">
+            <div class="project-detail-content">
+              <div></div>
+              <div class="detail-body">
+                <p class="detail-description">Redesigned a mission-critical sales portal used by 150,000+ independent consultants. Led a cross-functional team through discovery, research synthesis, and a component library build — reducing task completion time significantly and cutting support ticket volume.</p>
+                <div class="detail-outcomes">
+                  <span class="detail-outcome">150K+ consultant users</span>
+                  <span class="detail-outcome">↓ 38% support tickets</span>
+                  <span class="detail-outcome">↓ 55% task time</span>
+                </div>
+                <a href="#" class="detail-link">Read Case Study <span>→</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-item reveal d2 in" data-index="2">
+        <div class="project-row" role="button" tabindex="0" aria-expanded="false">
+          <span class="proj-num">03</span>
+          <div class="proj-title-group">
+            <span class="proj-title">Scentsy Home App</span>
+            <div class="proj-tags">
+              <span class="proj-tag">Connected Devices</span>
+              <span class="proj-tag">Mobile</span>
+              <span class="proj-tag">UX Research</span>
+            </div>
+          </div>
+          <span class="proj-year">2023</span>
+          <div class="proj-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 2v10M2 7l5 5 5-5"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="project-detail">
+          <div class="project-detail-inner">
+            <div class="project-detail-content">
+              <div></div>
+              <div class="detail-body">
+                <p class="detail-description">Designed Scentsy's first smart-device control app, a ground-up product shipped alongside a new connected fragrance device. Pre-launch research ran under NDA with a hand-selected participant panel to protect the unannounced hardware, which shaped pairing, onboarding, and controls before a single unit was in a store. Post-launch, I led the platform's expansion from single-purpose controller to full ecosystem, adding over-the-air firmware updates, in-app fragrance reordering, device scheduling, and per-device scent and light settings.</p>
+                <div class="detail-outcomes">
+                  <span class="detail-outcome">7 NDA research participants</span>
+                  <span class="detail-outcome">3.6 App Store rating</span>
+                  <span class="detail-outcome">OTA update platform</span>
+                </div>
+                <a href="#" class="detail-link">Read Case Study <span>→</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-item reveal d3 in" data-index="3">
+        <div class="project-row" role="button" tabindex="0" aria-expanded="false">
+          <span class="proj-num">04</span>
+          <div class="proj-title-group">
+            <span class="proj-title">Customer Research Program</span>
+            <div class="proj-tags">
+              <span class="proj-tag">Research</span>
+              <span class="proj-tag">Strategy</span>
+              <span class="proj-tag">Journey Mapping</span>
+            </div>
+          </div>
+          <span class="proj-year">2022</span>
+          <div class="proj-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 2v10M2 7l5 5 5-5"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="project-detail">
+          <div class="project-detail-inner">
+            <div class="project-detail-content">
+              <div></div>
+              <div class="detail-body">
+                <p class="detail-description">Established a systematic ongoing customer research program — combining diary studies, JTBD interviews, and longitudinal surveys. Created a shared research repository and synthesis framework that democratized customer insight across product, marketing, and leadership.</p>
+                <div class="detail-outcomes">
+                  <span class="detail-outcome">4 user archetypes defined</span>
+                  <span class="detail-outcome">12 product roadmap shifts</span>
+                </div>
+                <a href="#" class="detail-link">Read Case Study <span>→</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-item reveal d4 in" data-index="4">
+        <div class="project-row" role="button" tabindex="0" aria-expanded="false">
+          <span class="proj-num">05</span>
+          <div class="proj-title-group">
+            <span class="proj-title">Scentsy Design System</span>
+            <div class="proj-tags">
+              <span class="proj-tag">Design Systems</span>
+              <span class="proj-tag">Accessibility</span>
+              <span class="proj-tag">Leadership</span>
+            </div>
+          </div>
+          <span class="proj-year">2021</span>
+          <div class="proj-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 2v10M2 7l5 5 5-5"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="project-detail">
+          <div class="project-detail-inner">
+            <div class="project-detail-content">
+              <div></div>
+              <div class="detail-body">
+                <p class="detail-description">Led the creation of Scentsy's first formal design system — a living component library covering 80+ components, accessibility documentation, usage guidelines, and a Figma-to-dev handoff workflow. Reduced time-to-feature for the design team significantly and achieved WCAG 2.1 AA compliance across all consumer surfaces.</p>
+                <div class="detail-outcomes">
+                  <span class="detail-outcome">80+ components</span>
+                  <span class="detail-outcome">WCAG 2.1 AA</span>
+                  <span class="detail-outcome">↓ 60% design-to-dev time</span>
+                </div>
+                <a href="#" class="detail-link">Read Case Study <span>→</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       PROCESS
+  ═══════════════════════════════════════════ -->
+  <section class="process" id="process">
+    <div class="process-header reveal in">
+      <span class="section-label" data-num="03">My Process</span>
+      <h2 class="section-heading" style="margin-top: 0.8rem;">Research first.<br><em>Always.</em></h2>
+    </div>
+
+    <div class="process-grid">
+      <div class="process-step reveal in">
+        <span class="ps-num">01</span>
+        <h3 class="ps-title">Discover &amp; Define</h3>
+        <p class="ps-desc">I start with the problem, not the solution. User interviews, stakeholder alignment, competitive landscape, and hard success metrics — before any wireframes exist.</p>
+      </div>
+      <div class="process-step reveal d1 in">
+        <span class="ps-num">02</span>
+        <h3 class="ps-title">Explore &amp; Prototype</h3>
+        <p class="ps-desc">Divergent thinking across the full solution space, rapid low-fidelity prototypes, and early feedback loops with actual users before committing to direction.</p>
+      </div>
+      <div class="process-step reveal d2 in">
+        <span class="ps-num">03</span>
+        <h3 class="ps-title">Test &amp; Iterate</h3>
+        <p class="ps-desc">Moderated usability testing with 5–8 participants per round, 2–3 rounds per project. Evidence-based iteration — not gut checks. Every design decision is traceable to a finding.</p>
+      </div>
+      <div class="process-step reveal d3 in">
+        <span class="ps-num">04</span>
+        <h3 class="ps-title">Deliver &amp; Measure</h3>
+        <p class="ps-desc">Precise handoff documentation, close dev collaboration, and post-launch measurement tied to metrics set in discovery. The work isn't done when it ships — it's done when it performs.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       CONTACT
+  ═══════════════════════════════════════════ -->
+  <section class="contact" id="contact">
+    <div class="contact-bg-letter" aria-hidden="true">G</div>
+    <div class="contact-inner">
+      <div class="contact-left reveal in">
+        <span class="section-label" data-num="04" style="color: rgba(250,250,248,0.4);">Contact</span>
+        <h2 class="contact-heading">
+          Let's build<br>something <em>real.</em>
+        </h2>
+        <p class="contact-sub">
+          If you're looking for a senior UX leader who runs on data, ships with conviction, and doesn't confuse activity with impact — let's talk.
+        </p>
+        <a href="mailto:iamgaryengel@gmail.com" class="contact-email-link">
+          iamgaryengel@gmail.com <span>→</span>
+        </a>
+      </div>
+
+      <div class="contact-right reveal d2 in">
+        <a href="mailto:iamgaryengel@gmail.com" class="contact-action-btn primary">
+          Send a Message
+          <span>→</span>
+        </a>
+        <a href="#" class="contact-action-btn ghost">
+          Download Resume
+          <span>↓</span>
+        </a>
+        <div class="social-grid">
+          <a href="https://linkedin.com/in/garyengel" target="_blank" rel="noopener" class="social-link">↗ LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer>
+    <span>© 2025 Gary Engel — All rights reserved</span>
+    <span>Designed with precision</span>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════
+       EDIT TOOLBAR (in-browser content editor)
+  ═══════════════════════════════════════════ -->
+  <div class="edit-toolbar" id="editToolbar" aria-label="Content editor">
+    <button type="button" id="editToggle" class="edit-btn" aria-pressed="false" title="Toggle edit mode">
+      <span class="edit-icon" aria-hidden="true">✎</span>
+      <span class="edit-label">Edit</span>
+    </button>
+    <div class="edit-actions" id="editActions" hidden="">
+      <span class="edit-status" id="editStatus"></span>
+      <button type="button" id="editReset" class="edit-btn edit-btn-sm" title="Discard all edits and reload">Reset</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       JAVASCRIPT
+  ═══════════════════════════════════════════ -->
+  <script>
+    // ─── In-browser content editor ─────────────
+    // Toggle edit mode to click-type on any text. Edits save to localStorage as you type
+    // (so refreshes keep them). Export bakes edits into a standalone HTML file.
+    (function initEditor(){
+      const STORAGE_KEY = 'gary.portfolio.edits.v2:' + location.pathname;
+
+      // Editable content selectors — everything a human would reasonably want to edit
+      const EDITABLE = [
+        '.nav-logo', '.nav-links a', '.nav-avail',
+        '.hero-pre', '.hero-name',
+        '.info-label', '.info-value',
+        '.btn-primary', '.btn-secondary',
+        '.hs-num', '.hs-label',
+        '.marquee-item',
+        '.section-label', '.section-heading',
+        '.about-statement', '.about-body p',
+        '.asr-num:not(.asr-icon)', '.asr-text',
+        '.skill-tag',
+        '.view-all-link',
+        '.proj-title', '.proj-year', '.proj-tag',
+        '.detail-description', '.detail-outcome', '.detail-link',
+        '.ps-num', '.ps-title', '.ps-desc',
+        '.contact-heading', '.contact-sub', '.contact-email-link',
+        '.contact-action-btn', '.social-link',
+        'footer span'
+      ].join(',');
+
+      // Decorative spans/icons we protect so arrow glyphs and SVGs can't be typed out
+      const PROTECT = [
+        '.btn-arrow', '.vab-arrow', '.proj-arrow', '.asr-icon', '.avail-dot',
+        '.nav-avail .avail-dot',
+        '.detail-link > span', '.contact-action-btn > span:last-child',
+        '.contact-email-link > span', '.view-all-link .vab-arrow',
+        '.hs-num[data-count] + *', // nothing, but harmless
+      ].join(',');
+
+      const editables = Array.from(document.querySelectorAll(EDITABLE));
+      editables.forEach((el, i) => { el.dataset.editId = 'e' + i; });
+
+      // Restore saved edits BEFORE other observers (count-up, reveal) mount.
+      // Drafts are keyed by edit-id (index order), so if the page structure changed
+      // between sessions (editable added/removed), blindly restoring would dump the
+      // wrong content into the wrong slots. Guard with a shape signature: { c, s } =
+      // count + signature of first-few class tokens. If it doesn't match, drop it.
+      let saved = {};
+      try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) {}
+      const SHAPE_KEY = '__shape__';
+      const currentShape = {
+        c: editables.length,
+        s: editables.slice(0, 8).map(e => (e.className || '').split(/\s+/)[0]).join('|')
+      };
+      const savedShape = saved[SHAPE_KEY];
+      const shapeOk = savedShape
+        && savedShape.c === currentShape.c
+        && savedShape.s === currentShape.s;
+      if (!shapeOk) {
+        // Structure changed — nuke stale drafts rather than cross-contaminate the page.
+        try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+        saved = {};
+      }
+      editables.forEach(el => {
+        if (saved[el.dataset.editId] !== undefined) {
+          el.innerHTML = saved[el.dataset.editId];
+          // Once a count number has been edited, drop data-count so the count-up
+          // animation doesn't overwrite it on the next scroll.
+          if (el.hasAttribute('data-count')) el.removeAttribute('data-count');
+        }
+      });
+
+      const toggle    = document.getElementById('editToggle');
+      const actions   = document.getElementById('editActions');
+      const resetBtn  = document.getElementById('editReset');
+      const status    = document.getElementById('editStatus');
+      // If the toolbar markup is missing for any reason, bail — but keep the drafts
+      // we already restored so the page still renders correctly.
+      if (!toggle || !actions || !resetBtn || !status) return;
+      const label     = toggle.querySelector('.edit-label');
+
+      let draftTimer, statusTimer;
+      function flashStatus(msg, ms) {
+        status.textContent = msg || '';
+        clearTimeout(statusTimer);
+        if (msg) statusTimer = setTimeout(() => { status.textContent = ''; }, ms || 1500);
+      }
+      function draftSoon() {
+        clearTimeout(draftTimer);
+        draftTimer = setTimeout(() => {
+          const out = { [SHAPE_KEY]: currentShape };
+          editables.forEach(el => { out[el.dataset.editId] = el.innerHTML; });
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(out));
+            flashStatus('Draft');
+          } catch (_) { /* ignore */ }
+        }, 400);
+      }
+      function onInput(e) {
+        if (e.currentTarget.hasAttribute('data-count')) {
+          e.currentTarget.removeAttribute('data-count');
+        }
+        draftSoon();
+      }
+
+      function setEditMode(on) {
+        document.body.classList.toggle('edit-mode', on);
+        toggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+        label.textContent = on ? 'Save' : 'Edit';
+        actions.hidden = !on;
+        editables.forEach(el => {
+          if (on) {
+            el.setAttribute('contenteditable', 'true');
+            el.addEventListener('input', onInput);
+          } else {
+            el.removeAttribute('contenteditable');
+            el.removeEventListener('input', onInput);
+          }
+        });
+        // Protect decorative arrow / icon spans so they can't be typed out
+        document.querySelectorAll(PROTECT).forEach(el => {
+          if (on) el.setAttribute('contenteditable', 'false');
+          else el.removeAttribute('contenteditable');
+        });
+      }
+
+      // Build an HTML string from the current DOM. We keep the edit toolbar baked
+      // into the file so the user can re-open and keep editing later. Only strip
+      // transient state: contenteditable attributes, per-session ids, edit-mode class,
+      // any stray status text, and browser-extension injected nodes.
+      function buildHtml() {
+        const clone = document.documentElement.cloneNode(true);
+        clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+        clone.querySelectorAll('[data-edit-id]').forEach(el => el.removeAttribute('data-edit-id'));
+        // Reset toolbar to its default visible state
+        const body = clone.querySelector('body');
+        if (body) body.classList.remove('edit-mode');
+        const cloneToggle  = clone.querySelector('#editToggle');
+        if (cloneToggle) cloneToggle.setAttribute('aria-pressed', 'false');
+        const cloneLabel   = clone.querySelector('#editToggle .edit-label');
+        if (cloneLabel) cloneLabel.textContent = 'Edit';
+        const cloneActions = clone.querySelector('#editActions');
+        if (cloneActions) cloneActions.setAttribute('hidden', '');
+        const cloneStatus  = clone.querySelector('#editStatus');
+        if (cloneStatus) cloneStatus.textContent = '';
+        // Nuke anything a browser extension may have injected (e.g. <plasmo-csui>)
+        clone.querySelectorAll('plasmo-csui, grammarly-desktop-integration').forEach(el => el.remove());
+        return '<!DOCTYPE html>\n' + clone.outerHTML;
+      }
+
+      // Tiny IndexedDB kv for persisting the FileSystemFileHandle across sessions
+      function idb(op, key, val) {
+        return new Promise((resolve, reject) => {
+          const r = indexedDB.open('portfolio-editor', 1);
+          r.onupgradeneeded = () => r.result.createObjectStore('kv');
+          r.onerror   = () => reject(r.error);
+          r.onsuccess = () => {
+            const db = r.result;
+            const tx = db.transaction('kv', op === 'get' ? 'readonly' : 'readwrite');
+            const s  = tx.objectStore('kv');
+            const q  = op === 'get' ? s.get(key) : (op === 'set' ? s.put(val, key) : s.delete(key));
+            q.onsuccess = () => resolve(q.result);
+            q.onerror   = () => reject(q.error);
+          };
+        });
+      }
+
+      async function ensureFileHandle() {
+        const key = 'handle:' + location.pathname;
+        let handle = null;
+        try { handle = await idb('get', key); } catch (_) {}
+        if (handle) {
+          try {
+            let p = await handle.queryPermission({ mode: 'readwrite' });
+            if (p !== 'granted') p = await handle.requestPermission({ mode: 'readwrite' });
+            if (p === 'granted') return handle;
+          } catch (_) { /* handle gone stale — fall through to picker */ }
+        }
+        const filename = location.pathname.split('/').pop() || 'index.html';
+        handle = await window.showSaveFilePicker({
+          suggestedName: filename,
+          types: [{ description: 'HTML', accept: { 'text/html': ['.html', '.htm'] }}]
+        });
+        try { await idb('set', key, handle); } catch (_) {}
+        return handle;
+      }
+
+      function downloadFallback(html) {
+        const blob = new Blob([html], { type: 'text/html' });
+        const url  = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = location.pathname.split('/').pop() || 'index.html';
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      async function saveToFile() {
+        const html = buildHtml();
+        flashStatus('Saving…', 8000);
+        if ('showSaveFilePicker' in window) {
+          try {
+            const handle   = await ensureFileHandle();
+            const writable = await handle.createWritable();
+            await writable.write(html);
+            await writable.close();
+            flashStatus('Saved', 2500);
+            setEditMode(false);
+            return;
+          } catch (err) {
+            if (err && err.name === 'AbortError') { flashStatus('Cancelled'); return; }
+            console.error('Save error:', err);
+            flashStatus('Downloaded', 2500);
+            downloadFallback(html);
+            setEditMode(false);
+            return;
+          }
+        }
+        // Browser doesn't support File System Access API — fall back to a download
+        flashStatus('Downloaded', 2500);
+        downloadFallback(html);
+        setEditMode(false);
+      }
+
+      toggle.addEventListener('click', () => {
+        if (document.body.classList.contains('edit-mode')) {
+          saveToFile();
+        } else {
+          setEditMode(true);
+        }
+      });
+
+      resetBtn.addEventListener('click', () => {
+        if (!confirm('Discard all your edits and reload the original page?')) return;
+        try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+        location.reload();
+      });
+    })();
+
+    // ─── Scroll progress bar ───────────────────
+    const progressBar = document.getElementById('navProgress');
+    function updateProgress() {
+      const scrollTop = window.scrollY;
+      const docH      = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (docH > 0 ? (scrollTop / docH) * 100 : 0) + '%';
+    }
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    // ─── Nav scroll state ──────────────────────
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // ─── Scroll reveal ─────────────────────────
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
+      }),
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+    );
+    revealEls.forEach(el => revealObs.observe(el));
+
+    // ─── Smooth anchor scroll ──────────────────
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id     = a.getAttribute('href');
+        const target = id === '#' ? document.body : document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          window.scrollTo({
+            top: target === document.body ? 0 : target.getBoundingClientRect().top + window.scrollY - 72,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // ─── Expandable project rows ───────────────
+    const projectItems    = document.querySelectorAll('.project-item');
+    const expandAllBtn    = document.getElementById('expandAllBtn');
+    const expandAllText   = expandAllBtn?.querySelector('.vab-text');
+    const expandAllArrow  = expandAllBtn?.querySelector('.vab-arrow');
+
+    function syncExpandAllBtn() {
+      if (!expandAllBtn) return;
+      const allOpen = projectItems.length > 0 &&
+                      Array.from(projectItems).every(i => i.classList.contains('open'));
+      expandAllText.textContent  = allOpen ? 'Collapse all case studies' : 'Expand all case studies';
+      expandAllArrow.textContent = allOpen ? '↑' : '↓';
+      expandAllBtn.setAttribute('aria-expanded', allOpen ? 'true' : 'false');
+    }
+
+    document.querySelectorAll('.project-row').forEach(row => {
+      const item = row.closest('.project-item');
+      const toggle = () => {
+        const isOpen = item.classList.contains('open');
+        const openItems = document.querySelectorAll('.project-item.open');
+
+        if (isOpen) {
+          // Always close just the clicked item — never collapse others
+          item.classList.remove('open');
+          row.setAttribute('aria-expanded', 'false');
+        } else {
+          // Opening: accordion only when exactly one other is open (preserves the
+          // one-at-a-time feel from a cold start). If multiple are already open
+          // (after Expand all), just open this one without touching the rest.
+          if (openItems.length === 1) {
+            openItems.forEach(el => {
+              el.classList.remove('open');
+              el.querySelector('.project-row').setAttribute('aria-expanded', 'false');
+            });
+          }
+          item.classList.add('open');
+          row.setAttribute('aria-expanded', 'true');
+          setTimeout(() => {
+            const rect = item.getBoundingClientRect();
+            if (rect.top < 80) window.scrollTo({ top: window.scrollY + rect.top - 90, behavior: 'smooth' });
+          }, 50);
+        }
+        syncExpandAllBtn();
+      };
+      row.addEventListener('click', (e) => {
+        // While editing, don't toggle the accordion when the user clicks inside
+        // a contenteditable span (title, tag, year, etc.) — let the cursor land there.
+        if (e.target.closest('[contenteditable="true"]')) return;
+        toggle();
+      });
+      row.addEventListener('keydown', e => {
+        // Fix: previously this handler preventDefault'd the space bar bubbling up
+        // from editable children, so you couldn't type spaces inside a row.
+        if (e.target.isContentEditable) return;
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
+
+    // ─── Expand / Collapse all case studies ────
+    if (expandAllBtn) {
+      expandAllBtn.addEventListener('click', () => {
+        const allOpen = Array.from(projectItems).every(i => i.classList.contains('open'));
+        projectItems.forEach(item => {
+          const row = item.querySelector('.project-row');
+          if (allOpen) {
+            item.classList.remove('open');
+            row.setAttribute('aria-expanded', 'false');
+          } else {
+            item.classList.add('open');
+            row.setAttribute('aria-expanded', 'true');
+          }
+        });
+        syncExpandAllBtn();
+      });
+    }
+
+    // ─── Count-up animation ────────────────────
+    const countEls  = document.querySelectorAll('[data-count]');
+    const countObs  = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el     = entry.target;
+        const endVal = parseInt(el.dataset.count, 10);
+        const suffix = el.dataset.suffix || '';
+        if (isNaN(endVal)) { countObs.unobserve(el); return; }
+        const dur = 1400, start = performance.now();
+        const tick = now => {
+          const t = Math.min((now - start) / dur, 1);
+          el.textContent = Math.round((1 - Math.pow(1 - t, 3)) * endVal) + suffix;
+          if (t < 1) requestAnimationFrame(tick); else el.textContent = endVal + suffix;
+        };
+        requestAnimationFrame(tick);
+        countObs.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+    countEls.forEach(el => countObs.observe(el));
+
+    // ─── Magnetic buttons ─────────────────────
+    document.querySelectorAll('.btn-primary, .btn-secondary, .contact-action-btn').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        btn.style.transform = `translate(${(e.clientX - r.left - r.width/2) * 0.18}px, ${(e.clientY - r.top - r.height/2) * 0.18}px)`;
+      });
+      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
+  </script>
+
+
+
+</body></html>
