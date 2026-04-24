@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Name — UX Designer &amp; Researcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --bg:           #F8F5EF;
+      --bg-warm:      #F0EAE0;
+      --bg-card:      #FFFFFF;
+      --text:         #1C1B17;
+      --text-muted:   #7A7570;
+      --text-faint:   #B5AFA6;
+      --accent:       #C95D2B;
+      --accent-bg:    #F5E8DF;
+      --accent-dark:  #A04520;
+      --green:        #5AAB7A;
+      --border:       #E5DFD4;
+      --border-mid:   #C8C0B2;
+      --nav-h:        72px;
+      --gutter:       clamp(1.5rem, 5vw, 4.5rem);
+      --radius:       8px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Subtle grain overlay for depth */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+      opacity: 0.028;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    ::selection { background: var(--accent); color: #fff; }
+
+    /* ============================================================
+       TYPOGRAPHY
+    ============================================================ */
+    h1, h2, h3, h4 {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--gutter);
+      transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    nav.scrolled {
+      background: rgba(248, 245, 239, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom-color: var(--border);
+      box-shadow: 0 1px 24px rgba(28,27,23,0.06);
+    }
+
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: color 0.2s ease;
+    }
+    .nav-logo:hover { color: var(--accent); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1.5px solid var(--accent);
+      padding: 0.45rem 1.1rem;
+      border-radius: 100px;
+      letter-spacing: 0.02em;
+      transition: all 0.2s ease;
+    }
+    .nav-cta:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      min-height: 100vh;
+      padding: calc(var(--nav-h) + 5rem) var(--gutter) 5rem;
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      align-items: end;
+      gap: 3rem;
+      position: relative;
+    }
+
+    /* Decorative horizontal rule below nav */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Large decorative background numeral */
+    .hero-bg-num {
+      position: absolute;
+      right: var(--gutter);
+      top: 50%;
+      transform: translateY(-60%);
+      font-family: 'Fraunces', serif;
+      font-size: clamp(14rem, 30vw, 26rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--border);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      opacity: 0;
+      animation: fadeIn 1.2s ease 0.8s forwards;
+      z-index: 0;
+    }
+
+    .hero-main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.15s forwards;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse-green 2.2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-green {
+      0%,100% { box-shadow: 0 0 0 0 rgba(90,171,122,0.45); }
+      50%      { box-shadow: 0 0 0 5px rgba(90,171,122,0); }
+    }
+
+    .status-text {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .hero-name {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(3.8rem, 11vw, 9.5rem);
+      font-weight: 300;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.3s forwards;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-role-row {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.55s forwards;
+    }
+
+    .hero-rule {
+      width: 36px;
+      height: 1px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .hero-role {
+      font-size: 0.88rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .hero-tagline {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.5;
+      max-width: 560px;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.7s forwards;
+    }
+
+    .hero-tagline strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.85s forwards;
+    }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.88rem 1.8rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: var(--radius);
+      letter-spacing: 0.01em;
+      transition: all 0.22s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-solid {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .btn-solid:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201,93,43,0.28);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border-mid);
+    }
+    .btn-outline:hover {
+      border-color: var(--text);
+      transform: translateY(-2px);
+    }
+
+    .btn-arrow {
+      transition: transform 0.2s ease;
+      display: inline-block;
+    }
+    .btn:hover .btn-arrow { transform: translateX(3px); }
+
+    /* Hero side stats column */
+    .hero-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-items: flex-end;
+      padding-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeIn 0.9s ease 1.1s forwards;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat {
+      text-align: right;
+    }
+
+    .stat-num {
+      font-family: 'Fraunces', serif;
+      font-size: 2.6rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--text);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      display: block;
+      margin-top: 0.3rem;
+    }
+
+    .stat-sep {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Scroll cue */
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: var(--gutter);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      opacity: 0;
+      animation: fadeIn 1s ease 1.3s forwards;
+    }
+
+    .scroll-track {
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-track::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: var(--accent);
+      animation: track-slide 2.2s ease-in-out infinite;
+    }
+
+    @keyframes track-slide {
+      0%   { left: -100%; }
+      50%  { left: 0; }
+      100% { left: 100%; }
+    }
+
+    /* ============================================================
+       SECTION SHARED
+    ============================================================ */
+    .section-eyebrow {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .section-heading {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .section-heading em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ============================================================
+       ABOUT
+    ============================================================ */
+    .about {
+      padding: 8rem var(--gutter);
+      border-top: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 7rem;
+      align-items: start;
+    }
+
+    .about-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+    }
+
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: var(--radius);
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      overflow: hidden;
+      position: relative;
+      margin-top: 2rem;
+    }
+
+    .about-photo::before {
+      content: '';
+      position: absolute;
+      bottom: -40px; right: -40px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: var(--accent-bg);
+      opacity: 0.8;
+    }
+
+    .photo-icon {
+      opacity: 0.22;
+      position: relative;
+      z-index: 1;
+    }
+
+    .photo-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-body p {
+      font-size: 1rem;
+      line-height: 1.88;
+      color: var(--text-muted);
+      margin-bottom: 1.15rem;
+      max-width: 640px;
+    }
+
+    .about-body p strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .expertise-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      margin-top: 2.5rem;
+    }
+
+    .expertise-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.85rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .expertise-chip:hover {
+      border-color: var(--border-mid);
+      box-shadow: 0 2px 12px rgba(28,27,23,0.06);
+    }
+
+    .chip-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--accent-bg);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--accent);
+    }
+
+    .chip-label {
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* ============================================================
+       WORK / PROJECTS
+    ============================================================ */
+    .work {
+      padding: 8rem var(--gutter);
+      border-top: 1px solid var(--border);
+    }
+
+    .work-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3.5rem;
+    }
+
+    .work-link-all {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      letter-spacing: 0.02em;
+      transition: color 0.2s ease;
+      padding-bottom: 0.25rem;
+    }
+    .work-link-all:hover { color: var(--accent); }
+
+    /* ---- Bento grid: 5-column base ---- */
+    .projects-bento {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: auto auto;
+      gap: 1.25rem;
+    }
+
+    /* Card 1: featured wide — col 1-3, row 1 */
+    .pc:nth-child(1) { grid-column: 1 / 4; grid-row: 1; }
+    /* Card 2: tall right — col 4-5, row 1 */
+    .pc:nth-child(2) { grid-column: 4 / 6; grid-row: 1; }
+    /* Cards 3-5: three equal — row 2 */
+    .pc:nth-child(3) { grid-column: 1 / 3; grid-row: 2; }
+    .pc:nth-child(4) { grid-column: 3 / 4; grid-row: 2; }
+    .pc:nth-child(5) { grid-column: 4 / 6; grid-row: 2; }
+
+    /* ---- Project card ---- */
+    .pc {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .pc:hover {
+      border-color: var(--border-mid);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(28,27,23,0.1);
+    }
+
+    /* Card image well */
+    .pc-image {
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .pc:nth-child(1) .pc-image,
+    .pc:nth-child(2) .pc-image { aspect-ratio: 16/10; }
+
+    .pc:nth-child(3) .pc-image,
+    .pc:nth-child(4) .pc-image,
+    .pc:nth-child(5) .pc-image { aspect-ratio: 16/9; }
+
+    .pc-img-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.6s ease;
+    }
+    .pc:hover .pc-img-bg { transform: scale(1.05); }
+
+    /* Per-card gradients */
+    .pc:nth-child(1) .pc-img-bg {
+      background: linear-gradient(145deg, #C9D9C2 0%, #7AAB82 45%, #4E8060 100%);
+    }
+    .pc:nth-child(2) .pc-img-bg {
+      background: linear-gradient(145deg, #C3CDD9 0%, #6A89A8 45%, #4D6A85 100%);
+    }
+    .pc:nth-child(3) .pc-img-bg {
+      background: linear-gradient(145deg, #D9C5BD 0%, #A87060 45%, #855048 100%);
+    }
+    .pc:nth-child(4) .pc-img-bg {
+      background: linear-gradient(145deg, #D3C8D9 0%, #896AA0 45%, #6B4D80 100%);
+    }
+    .pc:nth-child(5) .pc-img-bg {
+      background: linear-gradient(145deg, #D9D0BE 0%, #A8944A 45%, #8A7535 100%);
+    }
+
+    /* Abstract UI shapes inside image */
+    .pc-img-ui {
+      position: absolute;
+      inset: 0;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .ui-bar {
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.35);
+      margin-bottom: 5px;
+    }
+    .ui-bar.w-80 { width: 80%; }
+    .ui-bar.w-60 { width: 60%; }
+    .ui-bar.w-40 { width: 40%; }
+    .ui-bar.bright { background: rgba(255,255,255,0.55); }
+
+    .pc-img-icon {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-54%);
+      opacity: 0.2;
+    }
+
+    /* Badge overlays */
+    .pc-num {
+      position: absolute;
+      top: 0.85rem; left: 0.85rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.85);
+      background: rgba(0,0,0,0.18);
+      backdrop-filter: blur(6px);
+      padding: 0.22rem 0.55rem;
+      border-radius: 4px;
+    }
+
+    .pc-tag {
+      position: absolute;
+      top: 0.85rem; right: 0.85rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.9);
+      background: rgba(0,0,0,0.2);
+      backdrop-filter: blur(6px);
+      padding: 0.22rem 0.65rem;
+      border-radius: 100px;
+    }
+
+    /* Card content body */
+    .pc-body {
+      padding: 1.4rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pc-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+
+    .pc-cat {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .pc-year {
+      font-size: 0.7rem;
+      color: var(--text-faint);
+    }
+
+    .pc-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1rem, 1.6vw, 1.35rem);
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.22;
+      margin-bottom: 0.65rem;
+      letter-spacing: -0.01em;
+    }
+
+    .pc-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .pc-outcomes {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      margin-top: 0.85rem;
+    }
+
+    .outcome {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--green);
+      background: rgba(90,171,122,0.1);
+      border: 1px solid rgba(90,171,122,0.22);
+      padding: 0.18rem 0.55rem;
+      border-radius: 100px;
+    }
+
+    .pc-footer {
+      display: flex;
+      align-items: center;
+      margin-top: 1.1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+    }
+    .pc:hover .pc-footer { color: var(--accent); }
+
+    .pc-arrow {
+      margin-left: auto;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+    .pc:hover .pc-arrow { transform: translateX(4px); }
+
+    /* ============================================================
+       PROCESS
+    ============================================================ */
+    .process {
+      padding: 8rem var(--gutter);
+      border-top: 1px solid var(--border);
+      background: var(--bg-warm);
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 7rem;
+      align-items: start;
+    }
+
+    .process-intro p {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 260px;
+    }
+
+    .process-steps {
+      border-top: 1px solid var(--border);
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s ease;
+    }
+
+    .step:hover {
+      background: linear-gradient(to right, var(--accent-bg), transparent);
+      margin: 0 -1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      border-radius: 6px;
+    }
+
+    .step-n {
+      font-family: 'Fraunces', serif;
+      font-size: 0.88rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--accent);
+      padding-top: 0.08em;
+    }
+
+    .step-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-desc {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+      line-height: 1.72;
+    }
+
+    /* ============================================================
+       CONTACT
+    ============================================================ */
+    .contact {
+      padding: 9rem var(--gutter);
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .contact-heading {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-heading em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .contact-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 440px;
+      margin-bottom: 3rem;
+    }
+
+    .contact-actions {
+      display: flex;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .social-row {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .social-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.48rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      letter-spacing: 0.02em;
+      transition: all 0.2s ease;
+    }
+
+    .social-pill:hover {
+      color: var(--text);
+      border-color: var(--border-mid);
+      background: var(--bg-card);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      padding: 1.75rem var(--gutter);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer span {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      letter-spacing: 0.01em;
+    }
+
+    /* ============================================================
+       SCROLL REVEAL ANIMATIONS
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+    .delay-5 { transition-delay: 0.5s; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1200px) {
+      .projects-bento {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .pc:nth-child(1) { grid-column: 1 / 3; grid-row: 1; }
+      .pc:nth-child(2) { grid-column: 3 / 5; grid-row: 1; }
+      .pc:nth-child(3) { grid-column: 1 / 3; grid-row: 2; }
+      .pc:nth-child(4) { grid-column: 3 / 4; grid-row: 2; }
+      .pc:nth-child(5) { grid-column: 4 / 5; grid-row: 2; }
+    }
+
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-stats { display: none; }
+      .hero-bg-num { display: none; }
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .about-sidebar { position: static; }
+      .about-photo { max-width: 240px; aspect-ratio: 1/1; }
+      .process-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .process-intro p { max-width: 100%; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .projects-bento {
+        grid-template-columns: 1fr 1fr;
+      }
+      .pc:nth-child(1) { grid-column: 1 / 3; grid-row: 1; }
+      .pc:nth-child(2) { grid-column: 1 / 2; grid-row: 2; }
+      .pc:nth-child(3) { grid-column: 2 / 3; grid-row: 2; }
+      .pc:nth-child(4) { grid-column: 1 / 2; grid-row: 3; }
+      .pc:nth-child(5) { grid-column: 2 / 3; grid-row: 3; }
+      .work-link-all { display: none; }
+    }
+
+    @media (max-width: 540px) {
+      .projects-bento { grid-template-columns: 1fr; }
+      .pc:nth-child(n) { grid-column: 1; grid-row: auto; }
+      .expertise-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ================================================================
+       NAVIGATION
+  ================================================================ -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">Your<span style="color:var(--accent)">.</span>Name</a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#process">Process</a></li>
+      </ul>
+      <a href="#contact" class="nav-cta">Let's Talk</a>
+    </div>
+  </nav>
+
+  <!-- ================================================================
+       HERO
+  ================================================================ -->
+  <section class="hero" id="home">
+
+    <div class="hero-bg-num" aria-hidden="true">UX</div>
+
+    <div class="hero-main">
+
+      <div class="hero-status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span class="status-text">Available for new opportunities</span>
+      </div>
+
+      <h1 class="hero-name">
+        Your<br><em>Name.</em>
+      </h1>
+
+      <div class="hero-role-row">
+        <span class="hero-rule" aria-hidden="true"></span>
+        <span class="hero-role">UX Designer &amp; Researcher</span>
+      </div>
+
+      <p class="hero-tagline">
+        I design <strong>products people actually understand.</strong><br>
+        [X]+ years turning complex problems into<br>experiences that feel obvious.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#work" class="btn btn-solid">
+          View My Work <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="#contact" class="btn btn-outline">
+          Get In Touch
+        </a>
+      </div>
+
+    </div>
+
+    <div class="hero-stats" aria-label="Quick stats">
+      <div class="stat">
+        <span class="stat-num">[X]+</span>
+        <span class="stat-label">Years Experience</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat">
+        <span class="stat-num">[X]+</span>
+        <span class="stat-label">Projects Delivered</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat">
+        <span class="stat-num">5</span>
+        <span class="stat-label">Case Studies</span>
+      </div>
+    </div>
+
+    <div class="hero-scroll" aria-hidden="true">
+      <span class="scroll-track"></span>
+      Scroll to explore
+    </div>
+
+  </section>
+
+  <!-- ================================================================
+       ABOUT
+  ================================================================ -->
+  <section class="about" id="about">
+    <div class="about-grid">
+
+      <div class="about-sidebar">
+        <span class="section-eyebrow">About</span>
+        <h2 class="section-heading">The designer<br>behind the <em>work</em></h2>
+
+        <div class="about-photo" aria-label="Photo placeholder">
+          <svg class="photo-icon" width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+            <circle cx="22" cy="16" r="8" stroke="#C95D2B" stroke-width="1.5"/>
+            <path d="M6 40c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#C95D2B" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span class="photo-label">Your photo here</span>
+        </div>
+      </div>
+
+      <div class="about-body">
+        <p class="reveal"><strong>I'm a UX Designer with [X] years of experience</strong> crafting digital products at the intersection of user needs and business goals. I currently lead the UX team at [Company Name], where I drive research-led design decisions across [product area].</p>
+
+        <p class="reveal delay-1">My process starts with deep empathy for users — I run usability studies, interviews, and synthesis workshops before touching wireframes. I believe the best designs are invisible: when something works beautifully, users don't notice the craft.</p>
+
+        <p class="reveal delay-2">Before [Current Company], I spent time at [Previous Company] building [brief note]. I'm most energized by complex systems problems and helping cross-functional teams build a shared understanding of what users actually need.</p>
+
+        <div class="expertise-grid reveal delay-3">
+
+          <div class="expertise-chip">
+            <div class="chip-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="1" y="1" width="12" height="12" rx="1.5"/>
+                <path d="M4 7h6M4 4.5h6M4 9.5h4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="chip-label">UX Research</span>
+          </div>
+
+          <div class="expertise-chip">
+            <div class="chip-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="1" y="1" width="5" height="5" rx="0.75"/><rect x="8" y="1" width="5" height="5" rx="0.75"/>
+                <rect x="1" y="8" width="5" height="5" rx="0.75"/><rect x="8" y="8" width="5" height="5" rx="0.75"/>
+              </svg>
+            </div>
+            <span class="chip-label">Interaction Design</span>
+          </div>
+
+          <div class="expertise-chip">
+            <div class="chip-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="7" cy="7" r="5"/><path d="M7 4v3l2 2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="chip-label">Usability Testing</span>
+          </div>
+
+          <div class="expertise-chip">
+            <div class="chip-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M2 7h10M7 2l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="chip-label">Design Systems</span>
+          </div>
+
+          <div class="expertise-chip">
+            <div class="chip-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="5" cy="7" r="3"/><circle cx="9" cy="7" r="3"/>
+              </svg>
+            </div>
+            <span class="chip-label">Figma &amp; Prototyping</span>
+          </div>
+
+          <div class="expertise-chip">
+            <div class="chip-icon" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M7 2l1.4 3 3.1.4-2.3 2.2.5 3.1L7 9.2l-2.7 1.5.5-3.1L2.5 5.4l3.1-.4z" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="chip-label">Design Leadership</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SELECTED WORK
+  ================================================================ -->
+  <section class="work" id="work">
+
+    <div class="work-header reveal">
+      <div>
+        <span class="section-eyebrow">Selected Work</span>
+        <h2 class="section-heading">Five projects.<br>Real <em>outcomes.</em></h2>
+      </div>
+      <a href="#" class="work-link-all">View all work →</a>
+    </div>
+
+    <div class="projects-bento">
+
+      <!-- ---- Project 1 ---- -->
+      <a href="#" class="pc reveal" aria-label="Case study: Redesigning Checkout at Scale">
+        <div class="pc-image">
+          <div class="pc-img-bg"></div>
+          <div class="pc-img-ui" aria-hidden="true">
+            <svg class="pc-img-icon" width="52" height="52" viewBox="0 0 52 52" fill="none">
+              <rect x="6" y="10" width="40" height="32" rx="3" stroke="white" stroke-width="1.5"/>
+              <path d="M6 20h40" stroke="white" stroke-width="1.5"/>
+              <circle cx="13" cy="15" r="2" fill="white" fill-opacity="0.6"/>
+              <circle cx="19" cy="15" r="2" fill="white" fill-opacity="0.6"/>
+              <circle cx="25" cy="15" r="2" fill="white" fill-opacity="0.6"/>
+              <rect x="12" y="26" width="28" height="3" rx="1" fill="white" fill-opacity="0.3"/>
+              <rect x="12" y="32" width="20" height="3" rx="1" fill="white" fill-opacity="0.2"/>
+            </svg>
+            <div class="ui-bar bright w-80"></div>
+            <div class="ui-bar w-60"></div>
+            <div class="ui-bar w-40"></div>
+          </div>
+          <span class="pc-num">01</span>
+          <span class="pc-tag">E-Commerce</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-meta">
+            <span class="pc-cat">E-Commerce · UX Design</span>
+            <span class="pc-year">2024</span>
+          </div>
+          <h3 class="pc-title">Redesigning Checkout at Scale</h3>
+          <p class="pc-desc">A ground-up redesign of a high-traffic checkout flow, guided by usability research with 200+ participants across four rounds of moderated testing.</p>
+          <div class="pc-outcomes">
+            <span class="outcome">↑ 32% conversion</span>
+            <span class="outcome">↓ 41% abandonment</span>
+          </div>
+          <div class="pc-footer">
+            View Case Study
+            <svg class="pc-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- ---- Project 2 ---- -->
+      <a href="#" class="pc reveal delay-1" aria-label="Case study: Enterprise Dashboard System">
+        <div class="pc-image">
+          <div class="pc-img-bg"></div>
+          <div class="pc-img-ui" aria-hidden="true">
+            <svg class="pc-img-icon" width="52" height="52" viewBox="0 0 52 52" fill="none">
+              <rect x="4" y="8" width="44" height="36" rx="3" stroke="white" stroke-width="1.5"/>
+              <rect x="8" y="14" width="14" height="10" rx="1" fill="white" fill-opacity="0.2" stroke="white" stroke-width="1"/>
+              <rect x="26" y="14" width="18" height="4" rx="0.5" fill="white" fill-opacity="0.4"/>
+              <rect x="26" y="21" width="13" height="3" rx="0.5" fill="white" fill-opacity="0.25"/>
+              <rect x="8" y="28" width="36" height="3" rx="0.5" fill="white" fill-opacity="0.25"/>
+              <rect x="8" y="33" width="26" height="3" rx="0.5" fill="white" fill-opacity="0.15"/>
+            </svg>
+            <div class="ui-bar bright w-60"></div>
+            <div class="ui-bar w-40"></div>
+          </div>
+          <span class="pc-num">02</span>
+          <span class="pc-tag">B2B SaaS</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-meta">
+            <span class="pc-cat">B2B SaaS · Design System</span>
+            <span class="pc-year">2023</span>
+          </div>
+          <h3 class="pc-title">Enterprise Dashboard System</h3>
+          <p class="pc-desc">Scalable design system and data visualization framework for 200K+ enterprise users. Built with accessibility as a first-class requirement.</p>
+          <div class="pc-outcomes">
+            <span class="outcome">200K+ users</span>
+            <span class="outcome">↓ 60% dev time</span>
+          </div>
+          <div class="pc-footer">
+            View Case Study
+            <svg class="pc-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- ---- Project 3 ---- -->
+      <a href="#" class="pc reveal delay-2" aria-label="Case study: Onboarding That Actually Sticks">
+        <div class="pc-image">
+          <div class="pc-img-bg"></div>
+          <div class="pc-img-ui" aria-hidden="true">
+            <svg class="pc-img-icon" width="44" height="44" viewBox="0 0 44 44" fill="none">
+              <circle cx="22" cy="22" r="14" stroke="white" stroke-width="1.5"/>
+              <path d="M22 13v9l5 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <div class="ui-bar bright w-80"></div>
+            <div class="ui-bar w-60"></div>
+          </div>
+          <span class="pc-num">03</span>
+          <span class="pc-tag">Mobile App</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-meta">
+            <span class="pc-cat">Mobile · iOS Design</span>
+            <span class="pc-year">2023</span>
+          </div>
+          <h3 class="pc-title">Onboarding That Actually Sticks</h3>
+          <p class="pc-desc">Rebuilt complex B2C app onboarding after research revealed 68% of new users dropped off before core activation event.</p>
+          <div class="pc-outcomes">
+            <span class="outcome">↑ 45% activation</span>
+          </div>
+          <div class="pc-footer">
+            View Case Study
+            <svg class="pc-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- ---- Project 4 ---- -->
+      <a href="#" class="pc reveal delay-3" aria-label="Case study: Healthcare Journey Mapping">
+        <div class="pc-image">
+          <div class="pc-img-bg"></div>
+          <div class="pc-img-ui" aria-hidden="true">
+            <svg class="pc-img-icon" width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <rect x="4" y="4" width="32" height="32" rx="3" stroke="white" stroke-width="1.5"/>
+              <path d="M11 20l6 6 11-12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="ui-bar bright w-60"></div>
+          </div>
+          <span class="pc-num">04</span>
+          <span class="pc-tag">Research</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-meta">
+            <span class="pc-cat">Research · Strategy</span>
+            <span class="pc-year">2022</span>
+          </div>
+          <h3 class="pc-title">Healthcare Journey Mapping</h3>
+          <p class="pc-desc">Mixed-methods study across 3 patient archetypes that reshaped the entire product roadmap.</p>
+          <div class="pc-footer">
+            View Case Study
+            <svg class="pc-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- ---- Project 5 ---- -->
+      <a href="#" class="pc reveal delay-4" aria-label="Case study: WCAG 2.1 AA Audit and Redesign">
+        <div class="pc-image">
+          <div class="pc-img-bg"></div>
+          <div class="pc-img-ui" aria-hidden="true">
+            <svg class="pc-img-icon" width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <path d="M8 32L20 8l12 24" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 24h16" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <div class="ui-bar bright w-40"></div>
+          </div>
+          <span class="pc-num">05</span>
+          <span class="pc-tag">Accessibility</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-meta">
+            <span class="pc-cat">Web App · A11y</span>
+            <span class="pc-year">2022</span>
+          </div>
+          <h3 class="pc-title">WCAG 2.1 AA Audit &amp; Redesign</h3>
+          <p class="pc-desc">End-to-end accessibility audit and redesign of a financial services platform serving 80K customers.</p>
+          <div class="pc-outcomes">
+            <span class="outcome">WCAG 2.1 AA</span>
+          </div>
+          <div class="pc-footer">
+            View Case Study
+            <svg class="pc-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PROCESS
+  ================================================================ -->
+  <section class="process" id="process">
+    <div class="process-grid">
+
+      <div class="process-intro reveal">
+        <span class="section-eyebrow">My Process</span>
+        <h2 class="section-heading">How I<br>approach <em>design</em></h2>
+        <p>Good design isn't decoration. It's the result of asking the right questions, testing assumptions early, and shipping with conviction.</p>
+      </div>
+
+      <div class="process-steps">
+
+        <div class="step reveal delay-1">
+          <span class="step-n">01</span>
+          <div>
+            <h3 class="step-title">Discover &amp; Define</h3>
+            <p class="step-desc">I start by understanding the actual problem — not the assumed one. User interviews, stakeholder alignment, competitive analysis, and success metrics before touching a wireframe.</p>
+          </div>
+        </div>
+
+        <div class="step reveal delay-2">
+          <span class="step-n">02</span>
+          <div>
+            <h3 class="step-title">Explore &amp; Prototype</h3>
+            <p class="step-desc">Divergent ideation across the problem space, rapid low-fidelity prototyping, and quick feedback loops with real users to validate direction before investing in polish.</p>
+          </div>
+        </div>
+
+        <div class="step reveal delay-3">
+          <span class="step-n">03</span>
+          <div>
+            <h3 class="step-title">Test &amp; Iterate</h3>
+            <p class="step-desc">Moderated usability testing, rigorous synthesis, and evidence-based iteration. I test with 5-8 participants per round and typically run 2-3 rounds before final design.</p>
+          </div>
+        </div>
+
+        <div class="step reveal delay-4">
+          <span class="step-n">04</span>
+          <div>
+            <h3 class="step-title">Deliver &amp; Measure</h3>
+            <p class="step-desc">Pixel-precise handoff, close developer collaboration, and post-launch measurement against metrics defined at the start. Design doesn't stop at handoff — it stops when the goal is met.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       CONTACT
+  ================================================================ -->
+  <section class="contact" id="contact">
+    <span class="section-eyebrow reveal">Let's Work Together</span>
+    <h2 class="contact-heading reveal delay-1">
+      Have a project<br>in <em>mind?</em>
+    </h2>
+    <p class="contact-sub reveal delay-2">
+      Whether you're hiring, collaborating, or just want to talk through a design problem — I'd love to hear from you.
+    </p>
+
+    <div class="contact-actions reveal delay-3">
+      <a href="mailto:hello@yourname.com" class="btn btn-solid">
+        Say Hello <span class="btn-arrow" aria-hidden="true">→</span>
+      </a>
+      <a href="#" class="btn btn-outline">
+        Download Resume
+      </a>
+    </div>
+
+    <div class="social-row reveal delay-4">
+      <a href="#" class="social-pill">LinkedIn</a>
+      <a href="#" class="social-pill">Dribbble</a>
+      <a href="#" class="social-pill">Medium</a>
+      <a href="#" class="social-pill">Read.cv</a>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       FOOTER
+  ================================================================ -->
+  <footer>
+    <span>&copy; 2025 Your Name. All rights reserved.</span>
+    <span>Designed with intention.</span>
+  </footer>
+
+  <!-- ================================================================
+       JAVASCRIPT
+  ================================================================ -->
+  <script>
+    // ---- Nav scroll state ----
+    const nav = document.getElementById('nav');
+    let lastY = 0;
+
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      nav.classList.toggle('scrolled', y > 16);
+      lastY = y;
+    }, { passive: true });
+
+    // ---- Scroll reveal ----
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('in');
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -36px 0px' }
+    );
+    revealEls.forEach(el => observer.observe(el));
+
+    // ---- Smooth anchor scroll ----
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        const target = id === '#' ? document.body : document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          const top = target === document.body ? 0 : target.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // ---- Subtle parallax on hero bg numeral ----
+    const bgNum = document.querySelector('.hero-bg-num');
+    if (bgNum) {
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        bgNum.style.transform = `translateY(calc(-60% + ${y * 0.18}px))`;
+      }, { passive: true });
+    }
+  </script>
+
+</body>
+</html>

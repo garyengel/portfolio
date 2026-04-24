@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scentsy Home App · Case Study · Gary Engel</title>
+  <meta name="description" content="Designing a connected-fragrance ecosystem from zero to one — the Scentsy Home App case study.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────
+       DESIGN TOKENS (match portfolio index.html)
+    ───────────────────────────────────────────── */
+    :root {
+      --bg: #FAFAF8;
+      --ink: #003135;
+      --ink-deep: #024950;
+      --muted: #3e5c60;
+      --faint: #7a9094;
+      --teal: #0FA4AF;
+      --teal-bg: rgba(175,221,229,0.18);
+      --teal-pale: #AFDDE5;
+      --ember: #964734;
+      --ember-bg: rgba(150,71,52,0.08);
+      --border: rgba(0,49,53,0.12);
+      --border-mid: rgba(0,49,53,0.22);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-feature-settings: 'ss01', 'ss02';
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    img { display: block; max-width: 100%; height: auto; }
+
+    ::selection { background: var(--teal-pale); color: var(--ink-deep); }
+
+    /* ─────────────────────────────────────────────
+       TOP BAR — back link + case study marker
+    ───────────────────────────────────────────── */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(250,250,248,0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .top-bar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      transition: color 0.2s ease, gap 0.25s ease;
+    }
+    .back-link:hover { color: var(--teal); gap: 0.8rem; }
+    .top-bar-meta { color: var(--faint); }
+
+    /* ─────────────────────────────────────────────
+       HERO — eyebrow, title, lede, meta row
+    ───────────────────────────────────────────── */
+    .cs-hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 2.5rem 3rem;
+      position: relative;
+    }
+    .cs-hero::before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      right: -10%;
+      width: 60%;
+      height: 80%;
+      background: radial-gradient(circle at center, rgba(175,221,229,0.28), rgba(175,221,229,0) 65%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    .cs-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .cs-eyebrow-sep {
+      width: 36px;
+      height: 1px;
+      background: var(--border-mid);
+    }
+    .cs-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3.2rem, 7.2vw, 6.8rem);
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      max-width: 14ch;
+      margin-bottom: 1.8rem;
+    }
+    .cs-title em { font-style: italic; color: var(--ember); }
+    .cs-lede {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+      line-height: 1.45;
+      color: var(--muted);
+      max-width: 48ch;
+      margin-bottom: 3.5rem;
+    }
+
+    .cs-meta {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      padding: 2rem 0 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .cs-meta-item { display: flex; flex-direction: column; gap: 0.4rem; }
+    .cs-meta-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .cs-meta-value {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--ink-deep);
+    }
+
+    /* ─────────────────────────────────────────────
+       MEDIA — sized to content, not as billboards
+       Three patterns:
+         .cs-figure        — medium, ~640px max (hero renders)
+         .cs-figure-app    — phone-sized, ~340px (app screenshots)
+         .cs-split         — image + text side by side inline
+    ───────────────────────────────────────────── */
+    .cs-figure {
+      margin: 4rem auto;
+      max-width: 640px;
+      padding: 0 2.5rem;
+    }
+    .cs-figure-app {
+      max-width: 340px;
+    }
+    .cs-figure img {
+      width: 100%;
+      border-radius: 3px;
+      box-shadow: 0 20px 50px rgba(0,49,53,0.14);
+    }
+    .cs-caption {
+      margin-top: 1rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      text-align: center;
+    }
+
+    /* Inline split — image on one side, prose on the other.
+       Sits at reading-column width so the page rhythm holds. */
+    .cs-split {
+      max-width: 1000px;
+      margin: 4rem auto;
+      padding: 0 2.5rem;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .cs-split.reverse { grid-template-columns: 1fr 340px; }
+    .cs-split-media img {
+      width: 100%;
+      border-radius: 3px;
+      box-shadow: 0 20px 50px rgba(0,49,53,0.14);
+    }
+    .cs-split-body .cs-section-label { margin-bottom: 0.8rem; }
+    .cs-split-body .cs-section-heading { font-size: clamp(1.6rem, 2.8vw, 2.1rem); margin-bottom: 1.2rem; }
+    .cs-split-body p {
+      font-size: 0.98rem;
+      line-height: 1.7;
+      color: var(--ink-deep);
+      margin-bottom: 1rem;
+    }
+    .cs-split-body p:last-child { margin-bottom: 0; }
+
+    /* ─────────────────────────────────────────────
+       PROSE SECTION — reading column
+    ───────────────────────────────────────────── */
+    .cs-section {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 4.5rem 2.5rem;
+      position: relative;
+    }
+    .cs-section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .cs-section-label::before {
+      content: attr(data-num);
+      color: var(--ember);
+      font-weight: 700;
+    }
+    .cs-section-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 3.8vw, 2.8rem);
+      line-height: 1.08;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      margin-bottom: 2rem;
+      max-width: 22ch;
+    }
+    .cs-section-heading em { font-style: italic; color: var(--ember); }
+
+    .cs-body p {
+      font-size: 1.02rem;
+      line-height: 1.75;
+      color: var(--ink-deep);
+      margin-bottom: 1.25rem;
+    }
+    .cs-body p:last-child { margin-bottom: 0; }
+    .cs-body strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .cs-body a {
+      color: var(--teal);
+      border-bottom: 1px solid var(--teal-pale);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .cs-body a:hover {
+      color: var(--ember);
+      border-color: var(--ember);
+    }
+
+    .cs-pullquote {
+      margin: 3rem 0;
+      padding: 2rem 2.5rem;
+      border-left: 2px solid var(--ember);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+      line-height: 1.35;
+      color: var(--ink);
+      background: var(--ember-bg);
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* NDA callout block */
+    .cs-callout {
+      margin: 2rem 0;
+      padding: 1.4rem 1.6rem;
+      border: 1px dashed var(--border-mid);
+      border-radius: 3px;
+      background: rgba(175,221,229,0.08);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .cs-callout-icon {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ember);
+      padding: 0.3rem 0.6rem;
+      border: 1px solid var(--ember);
+      border-radius: 2px;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .cs-callout-body {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    /* ─────────────────────────────────────────────
+       OUTCOMES BLOCK
+    ───────────────────────────────────────────── */
+    .cs-outcomes-wrap {
+      background: var(--ink);
+      color: var(--bg);
+      margin-top: 4rem;
+      padding: 6rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cs-outcomes-wrap::before {
+      content: '';
+      position: absolute;
+      right: -10%;
+      bottom: -30%;
+      width: 60%;
+      height: 120%;
+      background: radial-gradient(circle at center, rgba(15,164,175,0.22), rgba(15,164,175,0) 65%);
+      pointer-events: none;
+    }
+    .cs-outcomes {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .cs-outcomes-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal-pale);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .cs-outcomes-label::before {
+      content: attr(data-num);
+      color: var(--teal);
+      font-weight: 700;
+    }
+    .cs-outcomes-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+      line-height: 1;
+      letter-spacing: -0.015em;
+      color: var(--bg);
+      margin-bottom: 3.5rem;
+    }
+    .cs-outcomes-heading em { font-style: italic; color: var(--teal-pale); }
+
+    .cs-outcomes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+    .cs-outcome {
+      padding: 2rem 0 0;
+      border-top: 1px solid rgba(175,221,229,0.25);
+    }
+    .cs-outcome-metric {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--bg);
+      margin-bottom: 0.6rem;
+    }
+    .cs-outcome-metric em { font-style: italic; color: var(--teal-pale); }
+    .cs-outcome-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(250,250,248,0.62);
+      line-height: 1.45;
+    }
+
+    /* ─────────────────────────────────────────────
+       BOTTOM NAVIGATION — next case study / back
+    ───────────────────────────────────────────── */
+    .cs-footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 2.5rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .cs-footer-link {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1.5rem 0;
+      transition: color 0.2s ease, transform 0.3s ease;
+    }
+    .cs-footer-link:hover { color: var(--teal); transform: translateY(-2px); }
+    .cs-footer-direction {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .cs-footer-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.65rem;
+      font-weight: 300;
+      color: var(--ink);
+    }
+    .cs-footer-link:hover .cs-footer-title { color: var(--teal); }
+    .cs-footer-link.next { text-align: right; }
+
+    footer.site-footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 2.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .cs-meta { grid-template-columns: repeat(2, 1fr); }
+      .cs-outcomes-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+    @media (max-width: 820px) {
+      .cs-split,
+      .cs-split.reverse {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .cs-split-media { max-width: 340px; margin: 0 auto; }
+    }
+
+    @media (max-width: 640px) {
+      .top-bar-inner,
+      .cs-hero,
+      .cs-section,
+      .cs-figure,
+      .cs-split,
+      .cs-outcomes-wrap,
+      .cs-footer,
+      footer.site-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .cs-hero { padding-top: 3rem; }
+      .cs-footer { grid-template-columns: 1fr; }
+      .cs-footer-link.next { text-align: left; }
+      .cs-callout { flex-direction: column; }
+      footer.site-footer { flex-direction: column; gap: 0.8rem; text-align: center; }
+      .top-bar-meta { display: none; }
+    }
+
+    /* ─────────────────────────────────────────────
+       SCROLL REVEAL
+    ───────────────────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.23,1,0.32,1); }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       TOP BAR
+  ═══════════════════════════════════════════ -->
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <a href="../index.html#work" class="back-link">← All case studies</a>
+      <span class="top-bar-meta">Case Study · 01 · 2023</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════ -->
+  <header class="cs-hero">
+    <div class="cs-eyebrow reveal in">
+      <span>Scentsy · Connected Devices</span>
+      <span class="cs-eyebrow-sep"></span>
+      <span>Zero to one</span>
+    </div>
+    <h1 class="cs-title reveal in d1">
+      Scentsy <em>Home</em> App
+    </h1>
+    <p class="cs-lede reveal in d2">
+      Designing a connected-fragrance ecosystem from zero to one, under NDA, to ship alongside new hardware and grow into a full product platform.
+    </p>
+
+    <div class="cs-meta reveal in d3">
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Role</span>
+        <span class="cs-meta-value">UX Design Lead</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Platforms</span>
+        <span class="cs-meta-value">iOS · Android</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Timeline</span>
+        <span class="cs-meta-value">2022 → ongoing</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Team</span>
+        <span class="cs-meta-value">Product · Hardware · Firmware · Cloud · QA</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════
+       HERO IMAGE
+  ═══════════════════════════════════════════ -->
+  <figure class="cs-figure reveal">
+    <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/554717cf-74cb-4dd6-a6f1-40d74bf317a4.png?h=6e16955652eb80e8fa489b4e6fc69753" alt="Scentsy Home App product visual">
+    <figcaption class="cs-caption">Scentsy Home App — companion platform for Scentsy's first connected fragrance device</figcaption>
+  </figure>
+
+  <!-- ═══════════════════════════════════════════
+       01 · THE CHALLENGE
+  ═══════════════════════════════════════════ -->
+  <section class="cs-section reveal">
+    <span class="cs-section-label" data-num="01">The Challenge</span>
+    <h2 class="cs-section-heading">Designing the controller before anyone could see the device.</h2>
+    <div class="cs-body">
+      <p>Scentsy was entering a new product category. The Scentsy Home App had to ship on the same day as the first connected device, but most of the team couldn't know what the device looked like, how it worked, or even what to call it in the hallway.</p>
+      <p>That constraint shaped everything. Every research session ran with a black-box prototype. Every review meeting had three people in the room and a printed NDA on the table. Every design artifact was stored on an isolated workspace and was not allowed to leave it. And every decision about pairing, onboarding, and control had to hold up whether the final hardware looked like what we'd prototyped or something meaningfully different.</p>
+
+      <div class="cs-callout">
+        <span class="cs-callout-icon">Under NDA</span>
+        <p class="cs-callout-body">This case study covers what can be discussed publicly. Pre-launch research specifics, hardware details, and internal artifacts remain confidential. The post-launch platform work is described at full depth.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       02 · RESEARCH UNDER SEAL
+  ═══════════════════════════════════════════ -->
+  <section class="cs-section reveal">
+    <span class="cs-section-label" data-num="02">Research, Under Seal</span>
+    <h2 class="cs-section-heading">A panel of <em>seven</em>, hand-selected and under lock.</h2>
+    <div class="cs-body">
+      <p>I assembled a hand-selected panel of seven participants under strict NDA. They were chosen for a mix of device familiarity, Scentsy loyalty, and willingness to sit through long unstructured sessions with something on the table they couldn't photograph. Each participant went through three rounds, staggered across the product's development.</p>
+      <p>I wrote the discussion guides to probe the most discoverable moments of the experience, pairing, onboarding, first use, without revealing the device category. Sessions were run in a controlled environment, prototypes were handled only by the facilitator, and every recording was reviewed internally and then locked away.</p>
+
+      <div class="cs-pullquote">
+        The constraint was severe, but it forced a kind of clarity. If the pairing flow couldn't explain itself without a script, it wasn't good enough.
+      </div>
+
+      <p>Three decisions came directly out of that work. A one-tap pairing handshake that replaced the SSID-picker pattern common in other smart-device apps. A first-fragrance ceremony that oriented new users to the device category itself, not just the app. And a single-screen control surface that stayed legible at a glance from across a room.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       03 · DESIGN APPROACH — inline split with app screens
+  ═══════════════════════════════════════════ -->
+  <section class="cs-split reveal">
+    <div class="cs-split-media">
+      <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/d873725d-9f3a-418e-8558-124424147d39_rw_600.png?h=7889a1f53d19417d20df2838ba6cf6c6" alt="Scentsy Home App — onboarding and control screens">
+    </div>
+    <div class="cs-split-body">
+      <span class="cs-section-label" data-num="03">Design Approach</span>
+      <h2 class="cs-section-heading">Two states: <em>glance</em> and <em>grab</em>.</h2>
+      <p>The control screen had to work from across the room and from the edge of the bed at 2 a.m. Those are different jobs, and a single default layout would compromise both. I designed the interaction model around two distinct states.</p>
+      <p><strong>Glance state</strong> surfaced only the active scent, light, and device status, sized large enough to parse from a distance. Color and weight did most of the work.</p>
+      <p><strong>Grab state</strong> revealed the control surface on tap, with the scent-and-light pairing as the primary target. Everything else lived behind a disclosure or a longer press. Hierarchy was the product.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       04 · PLATFORM EXPANSION — image floats alongside
+  ═══════════════════════════════════════════ -->
+  <section class="cs-split reverse reveal">
+    <div class="cs-split-body">
+      <span class="cs-section-label" data-num="04">Platform Expansion</span>
+      <h2 class="cs-section-heading">From single-purpose controller to <em>full ecosystem</em>.</h2>
+      <p>After launch, scope widened. I led the UX for four significant additions: over-the-air firmware updates, in-app fragrance reordering, device scheduling, and per-device scent and light settings.</p>
+      <p>The governing principle: if a new user couldn't discover a feature in their first session, it had to earn its place in the UI or live a tap deeper. Nothing made the home screen by default.</p>
+    </div>
+    <div class="cs-split-media">
+      <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/5ddd68bc-5d73-48e7-bcab-e1398126f0ac_rw_600.png?h=5d93be94b6cb8dbb3edb380b5b93885a" alt="Scentsy Home App — platform expansion features">
+    </div>
+  </section>
+
+  <!-- Expanded platform notes — full-width reading column -->
+  <section class="cs-section reveal">
+    <div class="cs-body">
+      <p><strong>OTA updates</strong> needed a new mental model. Users expect devices to "just work," not to get better over time. I designed the update experience as a quiet, celebratory moment rather than a progress-bar interruption, with plain-language context for what was changing and why it mattered.</p>
+      <p><strong>In-app reordering</strong> had to feel like a continuation of fragrance discovery, not a sales surface pasted onto a utility. I worked with merchandising and marketing to collapse the reorder flow into three taps from the active device, anchored on the currently playing fragrance.</p>
+      <p><strong>Scheduling and per-device settings</strong> were built on a shared foundation so that adding the next connected product, which was already in the pipeline, wouldn't require re-designing either flow. That paid off when the second device shipped.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       OUTCOMES
+  ═══════════════════════════════════════════ -->
+  <section class="cs-outcomes-wrap reveal">
+    <div class="cs-outcomes">
+      <span class="cs-outcomes-label" data-num="05">Outcomes</span>
+      <h2 class="cs-outcomes-heading">What shipped and <em>what it did.</em></h2>
+
+      <div class="cs-outcomes-grid">
+        <div class="cs-outcome">
+          <div class="cs-outcome-metric"><em>3.6</em></div>
+          <div class="cs-outcome-label">App Store Rating, ongoing after launch</div>
+        </div>
+        <div class="cs-outcome">
+          <div class="cs-outcome-metric"><em>7</em></div>
+          <div class="cs-outcome-label">NDA Research Participants across three rounds</div>
+        </div>
+        <div class="cs-outcome">
+          <div class="cs-outcome-metric"><em>OTA</em></div>
+          <div class="cs-outcome-label">Update Platform shipped to production</div>
+        </div>
+        <div class="cs-outcome">
+          <div class="cs-outcome-metric"><em>1-tap</em></div>
+          <div class="cs-outcome-label">Pairing Handshake replacing the SSID-picker pattern</div>
+        </div>
+        <div class="cs-outcome">
+          <div class="cs-outcome-metric"><em>3-tap</em></div>
+          <div class="cs-outcome-label">In-App Reorder Flow from active device</div>
+        </div>
+        <div class="cs-outcome">
+          <div class="cs-outcome-metric"><em>2nd</em></div>
+          <div class="cs-outcome-label">Device shipped on the shared platform</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       06 · REFLECTIONS
+  ═══════════════════════════════════════════ -->
+  <section class="cs-section reveal">
+    <span class="cs-section-label" data-num="06">Reflections</span>
+    <h2 class="cs-section-heading">What I'd do <em>differently</em>.</h2>
+    <div class="cs-body">
+      <p>Two things, honestly. First, we shipped with a minimum-viable onboarding that worked but didn't teach. In hindsight I'd have held an extra two-week sprint to build progressive disclosure into the first session. The cost of users not fully understanding the scent-and-light pairing compounded across the first ninety days, and onboarding is the only cheap place to pay that cost.</p>
+      <p>Second, I'd have pushed harder for a small, always-on visual signal of device state on the home screen. It was cut for scope, and its absence forced users to open the app more often than they needed to, which hurt the "it just works" feeling we'd been trying to design in from the start.</p>
+      <p>The lesson from both is the same. When something is cut for scope in a zero-to-one product, check whether it's load-bearing for a property you're otherwise spending a lot of design energy to protect. If it is, the cut isn't saving time, it's deferring a debt.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       BOTTOM NAV
+  ═══════════════════════════════════════════ -->
+  <nav class="cs-footer" aria-label="Case study navigation">
+    <a href="../index.html#work" class="cs-footer-link">
+      <span class="cs-footer-direction">← All case studies</span>
+      <span class="cs-footer-title">Back to portfolio</span>
+    </a>
+    <a href="../index.html#work" class="cs-footer-link next">
+      <span class="cs-footer-direction">Next case study →</span>
+      <span class="cs-footer-title">Customer Research Program</span>
+    </a>
+  </nav>
+
+  <footer class="site-footer">
+    <span>© 2025 Gary Engel — All rights reserved</span>
+    <span>Scentsy Home App · Case Study</span>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════
+       SCROLL REVEAL
+  ═══════════════════════════════════════════ -->
+  <script>
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gary Engel | UX Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet" />
+  <style>
+    :root {
+        --bg: #1e1e24;
+        --surface: #26262e;
+        --card: #2e2e38;
+        --accent: #2176c7;
+        --accent2: #56a0e0;
+        --text: #e8e8f0;
+        --muted: #9090aa;
+        --border: #3a3a48;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+    ::selection { background: var(--accent); color: #fff; }
+
+    /* PROGRESS BAR */
+    .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); z-index: 200; width: 0%; transition: width 0.1s linear; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; transition: all 0.4s ease; }
+    nav.scrolled { background: rgba(30,30,36,0.93); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--text); text-decoration: none; letter-spacing: -0.02em; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; position: relative; transition: color 0.3s ease; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s ease; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* HERO */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding: 0 10%; position: relative; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(33,118,199,0.1) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 20% 80%, rgba(86,160,224,0.07) 0%, transparent 60%); }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; opacity: 0.2; }
+    .hero-content { position: relative; z-index: 1; max-width: 720px; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(33,118,199,0.15); border: 1px solid rgba(33,118,199,0.35); color: var(--accent2); padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards; }
+    .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent2); border-radius: 50%; animation: pulse 2s infinite; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 7vw, 5.5rem); line-height: 1.05; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards; }
+    .hero h1 em { font-style: normal; color: var(--accent2); }
+    .hero-sub { font-size: 1.15rem; color: var(--muted); line-height: 1.8; max-width: 540px; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.8s ease 0.6s forwards; }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s ease 0.8s forwards; }
+    .btn { padding: 0.85rem 2rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .btn-primary { background: var(--accent); color: #fff; border: 2px solid var(--accent); }
+    .btn-primary:hover { background: transparent; color: var(--accent2); border-color: var(--accent2); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(33,118,199,0.3); }
+    .btn-ghost { background: transparent; color: var(--text); border: 2px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent2); transform: translateY(-2px); }
+    .hero-scroll { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--muted); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0; animation: fadeIn 1s ease 1.2s forwards; }
+    .scroll-line { width: 1px; height: 50px; background: linear-gradient(var(--accent), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+
+    /* SECTIONS */
+    section { padding: 7rem 10%; }
+    .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent2); margin-bottom: 1rem; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1.5rem; line-height: 1.2; }
+    .section-divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; margin-bottom: 3rem; }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .about-image { position: relative; }
+    .avatar-placeholder { width: 100%; aspect-ratio: 1; border-radius: 20px; background: var(--card); border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; overflow: hidden; position: relative; }
+    .avatar-placeholder::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(33,118,199,0.12), rgba(86,160,224,0.08)); pointer-events: none; }
+    .avatar-blob { position: absolute; top: -20px; left: -20px; width: 200px; height: 200px; background: rgba(33,118,199,0.1); border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; animation: blob 8s infinite; }
+    .avatar-icon { width: 80px; height: 80px; opacity: 0.35; }
+    .avatar-label { color: var(--muted); font-size: 0.8rem; letter-spacing: 0.1em; position: relative; z-index: 1; }
+    .about-text p { color: var(--muted); line-height: 1.9; margin-bottom: 1.2rem; }
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 1.5rem; }
+    .skill-tag { background: var(--card); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.82rem; color: var(--muted); transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem; }
+    .skill-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
+    .skill-tag:hover { border-color: var(--accent); color: var(--text); background: rgba(33,118,199,0.08); }
+
+    /* WORK */
+    .work { background: var(--surface); }
+    .projects-list { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
+    .project-item { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: grid; grid-template-columns: 1fr 1.2fr; transition: all 0.4s ease; }
+    .project-item:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .project-item:nth-child(even) { grid-template-columns: 1.2fr 1fr; }
+    .project-item:nth-child(even) .project-image { order: -1; }
+    .project-info { padding: 3rem; }
+    .project-num { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 700; color: var(--border); line-height: 1; margin-bottom: 1.2rem; transition: color 0.3s ease; }
+    .project-item:hover .project-num { color: var(--accent); }
+    .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .tag { background: rgba(33,118,199,0.12); border: 1px solid rgba(33,118,199,0.3); color: var(--accent2); padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; }
+    .project-info h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.8rem; line-height: 1.3; }
+    .project-info p { color: var(--muted); line-height: 1.8; font-size: 0.92rem; margin-bottom: 1.5rem; }
+    .project-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent2); font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: gap 0.3s ease; }
+    .project-link:hover { gap: 0.9rem; }
+    .project-image { position: relative; overflow: hidden; min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; transition: transform 0.5s ease; }
+    .project-item:hover .project-image { transform: scale(1.02); }
+    .proj-img-1 { background: linear-gradient(135deg, #1a1e2e 0%, #1a2540 40%, #0f2860 100%); }
+    .proj-img-2 { background: linear-gradient(135deg, #1a2418 0%, #112e20 40%, #0a3a28 100%); }
+    .proj-img-3 { background: linear-gradient(135deg, #1e1a28 0%, #261530 40%, #2a0d40 100%); }
+    .proj-label { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .proj-title-big { font-family: 'Playfair Display', serif; font-size: 2rem; color: rgba(255,255,255,0.12); }
+    .proj-icon { width: 70px; height: 70px; opacity: 0.28; }
+
+    /* PROCESS */
+    .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 1rem; }
+    .process-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 2rem 1.5rem; position: relative; overflow: hidden; transition: all 0.4s ease; }
+    .process-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+    .process-card:hover { border-color: var(--accent); transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+    .process-card:hover::before { transform: scaleX(1); }
+    .process-icon { width: 48px; height: 48px; background: rgba(33,118,199,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; transition: background 0.3s ease; font-size: 1.3rem; }
+    .process-card:hover .process-icon { background: rgba(33,118,199,0.2); }
+    .process-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.7rem; }
+    .process-card p { color: var(--muted); font-size: 0.87rem; line-height: 1.7; }
+    .process-step { position: absolute; top: 1.5rem; right: 1.5rem; font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 700; color: var(--border); line-height: 1; transition: color 0.3s ease; }
+    .process-card:hover .process-step { color: rgba(33,118,199,0.12); }
+
+    /* CONTACT */
+    .contact { background: var(--surface); }
+    .contact-inner { max-width: 700px; margin: 0 auto; text-align: center; }
+    .contact-inner .section-divider { margin: 1.5rem auto 3rem; }
+    .contact-inner p { color: var(--muted); line-height: 1.9; margin-bottom: 2.5rem; font-size: 1.05rem; }
+    .contact-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+    .contact-link { display: flex; align-items: center; gap: 0.6rem; color: var(--muted); text-decoration: none; padding: 0.9rem 1.8rem; border: 1px solid var(--border); border-radius: 10px; transition: all 0.3s ease; font-weight: 500; }
+    .contact-link:hover { color: var(--accent2); border-color: var(--accent); background: rgba(33,118,199,0.08); transform: translateY(-3px); }
+    .contact-icon { font-size: 1.1rem; }
+
+    /* FOOTER */
+    footer { padding: 2rem 10%; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    footer p { color: var(--muted); font-size: 0.85rem; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.3s ease; }
+    .footer-links a:hover { color: var(--accent2); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } }
+    @keyframes scrollPulse { 0% { opacity: 1; transform: scaleY(1); transform-origin: top; } 100% { opacity: 0; transform: scaleY(0); transform-origin: top; } }
+    @keyframes blob { 0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; } 50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; } }
+
+    /* SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-left.visible { opacity: 1; transform: none; }
+    .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal-right.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+        .about-grid { grid-template-columns: 1fr; }
+        .project-item, .project-item:nth-child(even) { grid-template-columns: 1fr; }
+        .project-item:nth-child(even) .project-image { order: 0; }
+        .project-image { min-height: 200px; }
+        .process-grid { grid-template-columns: 1fr 1fr; }
+        nav { padding: 1rem 1.5rem; }
+        section { padding: 5rem 6%; }
+        .hero { padding: 0 6%; }
+    }
+    </style>
+  </head>
+  <body>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <nav id="navbar">
+        <a href="#" class="nav-logo">Gary Engel</a>
+      <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+        <div class="hero-tag">Available for work</div>
+        <h1>Designing<br>experiences<br>people <em>love.</em></h1>
+        <p class="hero-sub">UX Designer focused on crafting intuitive, delightful digital products. I bridge user needs and business goals through research, iteration, and thoughtful interaction design.</p>
+        <div class="hero-cta">
+              <a href="#work" class="btn btn-primary">View My Work &#8594;</a>
+              <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+        </div>
+    </div>
+    <div class="hero-scroll">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="about-grid">
+        <div class="about-image reveal-left">
+              <div class="avatar-placeholder">
+                      <div class="avatar-blob"></div>
+                      <svg class="avatar-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="34" r="20" stroke="#2176c7" stroke-width="2.5"/>
+                                <path d="M12 90 C12 66 88 66 88 90" stroke="#2176c7" stroke-width="2.5" stroke-linecap="round"/>
+                      </svg>
+                      <span class="avatar-label">PHOTO COMING SOON</span>
+              </div>
+        </div>
+        <div class="reveal-right">
+              <div class="section-label">About Me</div>
+              <h2 class="section-title">Hi, I am Gary Engel</h2>
+              <div class="section-divider"></div>
+              <p class="about-text">I am a UX designer with a passion for creating meaningful digital experiences. I combine research-driven insights with clean visual design to build products that genuinely work for people.</p>
+              <p class="about-text">With a background spanning user research, interaction design, and front-end prototyping, I bring ideas from whiteboard to high-fidelity prototype with care and craft.</p>
+              <div class="skills-grid">
+                      <div class="skill-tag">User Research</div>
+                      <div class="skill-tag">Interaction Design</div>
+                      <div class="skill-tag">Figma / Sketch</div>
+                      <div class="skill-tag">Prototyping</div>
+                      <div class="skill-tag">Design Systems</div>
+                      <div class="skill-tag">Usability Testing</div>
+              </div>
+        </div>
+    </div>
+  </section>
+
+  <section id="work" class="work">
+    <div class="section-label reveal">Selected Work</div>
+    <h2 class="section-title reveal">Projects I am proud of</h2>
+    <div class="section-divider reveal"></div>
+    <div class="projects-list">
+
+        <div class="project-item reveal">
+              <div class="project-info">
+                      <div class="project-num">01</div>
+                      <div class="project-tags">
+                                <span class="tag">UX Research</span>
+                                <span class="tag">Mobile</span>
+                      </div>
+                      <h3>Health App Redesign</h3>
+                      <p>A complete end-to-end redesign of a health tracking application, improving task completion rates by 40% through iterative usability testing and redesigned information architecture.</p>
+                      <a href="#" class="project-link">View Case Study &#8594;</a>
+              </div>
+              <div class="project-image proj-img-1">
+                      <div class="proj-label">Case Study 01</div>
+                      <svg class="proj-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="25" y="10" width="50" height="80" rx="8" stroke="#56a0e0" stroke-width="2"/>
+                                <rect x="31" y="22" width="38" height="6" rx="3" fill="#56a0e0" opacity="0.4"/>
+                                <rect x="31" y="34" width="26" height="4" rx="2" fill="#56a0e0" opacity="0.25"/>
+                                <circle cx="50" cy="62" r="11" stroke="#56a0e0" stroke-width="2" opacity="0.5"/>
+                                <path d="M45 62 L49 66 L56 57" stroke="#56a0e0" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+                      </svg>
+                      <div class="proj-title-big">Health</div>
+              </div>
+        </div>
+
+        <div class="project-item reveal">
+              <div class="project-info">
+                      <div class="project-num">02</div>
+                      <div class="project-tags">
+                                <span class="tag">Design System</span>
+                                <span class="tag">Web</span>
+                      </div>
+                      <h3>E-Commerce Design System</h3>
+                      <p>Built a comprehensive design system for a retail platform, creating reusable components used across 12 product teams, reducing design inconsistency and accelerating development cycles.</p>
+                      <a href="#" class="project-link">View Case Study &#8594;</a>
+              </div>
+              <div class="project-image proj-img-2">
+                      <div class="proj-label">Case Study 02</div>
+                      <svg class="proj-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="15" width="35" height="30" rx="5" stroke="#56a0e0" stroke-width="2" opacity="0.6"/>
+                                <rect x="55" y="15" width="35" height="30" rx="5" stroke="#56a0e0" stroke-width="2" opacity="0.4"/>
+                                <rect x="10" y="55" width="35" height="25" rx="5" stroke="#56a0e0" stroke-width="2" opacity="0.4"/>
+                                <rect x="55" y="55" width="35" height="25" rx="5" stroke="#56a0e0" stroke-width="2" opacity="0.6"/>
+                      </svg>
+                      <div class="proj-title-big">System</div>
+              </div>
+        </div>
+
+        <div class="project-item reveal">
+              <div class="project-info">
+                      <div class="project-num">03</div>
+                      <div class="project-tags">
+                                <span class="tag">UX Strategy</span>
+                                <span class="tag">Dashboard</span>
+                      </div>
+                      <h3>Analytics Dashboard UX</h3>
+                      <p>Redesigned a complex B2B analytics dashboard, transforming dense data visualizations into clear, actionable insights. Reduced user onboarding time from 3 weeks to 4 days.</p>
+                      <a href="#" class="project-link">View Case Study &#8594;</a>
+              </div>
+              <div class="project-image proj-img-3">
+                      <div class="proj-label">Case Study 03</div>
+                      <svg class="proj-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="8" width="84" height="58" rx="6" stroke="#56a0e0" stroke-width="2" opacity="0.5"/>
+                                <polyline points="20,52 34,37 49,44 64,27 80,32" stroke="#56a0e0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.7"/>
+                                <rect x="20" y="74" width="14" height="12" rx="2" fill="#56a0e0" opacity="0.4"/>
+                                <rect x="43" y="69" width="14" height="17" rx="2" fill="#56a0e0" opacity="0.5"/>
+                                <rect x="66" y="64" width="14" height="22" rx="2" fill="#56a0e0" opacity="0.6"/>
+                      </svg>
+                      <div class="proj-title-big">Data</div>
+              </div>
+        </div>
+
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="section-label reveal">How I Work</div>
+    <h2 class="section-title reveal">My Design Process</h2>
+    <div class="section-divider reveal"></div>
+    <div class="process-grid">
+        <div class="process-card reveal">
+              <div class="process-step">01</div>
+              <div class="process-icon">&#128269;</div>
+              <h3>Discover</h3>
+              <p>Deep user research, stakeholder interviews, and competitive analysis to uncover real needs and opportunities.</p>
+        </div>
+        <div class="process-card reveal">
+              <div class="process-step">02</div>
+              <div class="process-icon">&#128161;</div>
+              <h3>Define</h3>
+              <p>Synthesize research into insights, map user journeys, and define clear problem statements and success criteria.</p>
+        </div>
+        <div class="process-card reveal">
+              <div class="process-step">03</div>
+              <div class="process-icon">&#9998;</div>
+              <h3>Design</h3>
+              <p>Rapid wireframing, prototyping, and high-fidelity UI design. Iteration is built into every step of the process.</p>
+        </div>
+        <div class="process-card reveal">
+              <div class="process-step">04</div>
+              <div class="process-icon">&#10003;</div>
+              <h3>Validate</h3>
+              <p>Usability testing, A/B experiments, and close collaboration with engineering to deliver and measure outcomes.</p>
+        </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="contact-inner">
+        <div class="section-label reveal">Say Hello</div>div>
+        <h2 class="section-title reveal">Let us make something great together</h2>
+        <div class="section-divider reveal"></div>div>
+        <p class="reveal">I am currently open to new opportunities. Whether you have a project in mind, a question, or just want to connect, my inbox is always open.</p>
+        <div class="contact-links reveal">
+              <a href="mailto:gary@example.com" class="contact-link">
+                      <span class="contact-icon">&#9993;</span> Email Me
+              </a>
+              <a href="https://linkedin.com" class="contact-link" target="_blank">
+                      <span class="contact-icon">&#128279;</span> LinkedIn
+              </a>
+              <a href="https://github.com/garyengel" class="contact-link" target="_blank">
+                      <span class="contact-icon">&#10697;</span> GitHub
+              </a>
+        </div>
+    </div>
+  </section>
+
+  <footer>
+      <p>Designed and built by Gary Engel &copy; 2026</p>
+      <div class="footer-links">
+            <a href="#hero">Back to top</a>
+            <a href="https://github.com/garyengel" target="_blank">GitHub</a>
+      </div>
+  </footer>
+
+    <script>
+      // Scroll progress bar
+      var bar = document.getElementById('progressBar');
+      window.addEventListener('scroll', function() {
+          var pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+          bar.style.width = pct + '%';
+          document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+      });
+
+      // Scroll reveal using IntersectionObserver
+      var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+                if (e.isIntersecting) {
+                        e.target.classList.add('visible');
+                        observer.unobserve(e.target);
+                }
+          });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(function(el) {
+          observer.observe(el);
+      });
+
+      // Stagger delays
+      document.querySelectorAll('.process-grid .process-card').forEach(function(c, i) {
+          c.style.transitionDelay = (i * 0.1) + 's';
+      });
+      document.querySelectorAll('.skills-grid .skill-tag').forEach(function(c, i) {
+          c.style.transitionDelay = (i * 0.07) + 's';
+      });
+    </script>
+
+  </body>
+</html>
+    </script>
+  </footer></p></p></em></h1></li></li></span>
+  </body>
+  </style></title>
+  </head>
