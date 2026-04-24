@@ -210,6 +210,14 @@
       border-radius: 3px;
       box-shadow: 0 20px 50px rgba(0,49,53,0.14);
     }
+
+    /* Phone mockup images ship with transparent backgrounds, so
+       we only need to suppress the rectangular shadow/radius that
+       would otherwise outline the image's bounding box. */
+    .phone-mockup {
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
     .cs-split-body .cs-section-label { margin-bottom: 0.8rem; }
     .cs-split-body .cs-section-heading { font-size: clamp(1.6rem, 2.8vw, 2.1rem); margin-bottom: 1.2rem; }
     .cs-split-body p {
@@ -549,7 +557,7 @@
        HERO IMAGE
   ═══════════════════════════════════════════ -->
   <figure class="cs-figure reveal">
-    <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/554717cf-74cb-4dd6-a6f1-40d74bf317a4.png?h=6e16955652eb80e8fa489b4e6fc69753" alt="Scentsy Home App product visual">
+    <img class="phone-mockup" src="assets/phone-hero.png" alt="Scentsy Home App product visual">
     <figcaption class="cs-caption">Scentsy Home App — companion platform for Scentsy's first connected fragrance device</figcaption>
   </figure>
 
@@ -593,7 +601,7 @@
   ═══════════════════════════════════════════ -->
   <section class="cs-split reveal">
     <div class="cs-split-media">
-      <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/d873725d-9f3a-418e-8558-124424147d39_rw_600.png?h=7889a1f53d19417d20df2838ba6cf6c6" alt="Scentsy Home App — onboarding and control screens">
+      <img class="phone-mockup" src="assets/phone-onboarding.png" alt="Scentsy Home App — onboarding and control screens">
     </div>
     <div class="cs-split-body">
       <span class="cs-section-label" data-num="03">Design Approach</span>
@@ -615,7 +623,7 @@
       <p>The governing principle: if a new user couldn't discover a feature in their first session, it had to earn its place in the UI or live a tap deeper. Nothing made the home screen by default.</p>
     </div>
     <div class="cs-split-media">
-      <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/5ddd68bc-5d73-48e7-bcab-e1398126f0ac_rw_600.png?h=5d93be94b6cb8dbb3edb380b5b93885a" alt="Scentsy Home App — platform expansion features">
+      <img class="phone-mockup" src="assets/phone-platform.png" alt="Scentsy Home App — platform expansion features">
     </div>
   </section>
 
