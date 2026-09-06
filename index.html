@@ -322,6 +322,70 @@
             .nav-cta {
                 padding: 0.62rem 1.25rem;
                 font-size: 0.82rem;
+                -webkit-appearance: none;
+                appearance: none;
+                font-family: inherit;
+            }
+            .ask-ai-sparkle {
+                color: var(--teal-bright);
+            }
+
+            /* Ask-AI dropdown (rendered outside the nav so it isn't
+               clipped by the nav's rounded/overflow-hidden shape) */
+            .ask-ai-menu {
+                position: fixed;
+                top: 0;
+                right: 0;
+                min-width: 200px;
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-md);
+                box-shadow: var(--shadow-float);
+                padding: 0.6rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.15rem;
+                z-index: 900;
+                opacity: 0;
+                transform: translateY(-8px);
+                pointer-events: none;
+                transition: opacity 0.18s ease, transform 0.18s ease;
+            }
+            .ask-ai-menu.open {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
+            }
+            .ask-ai-menu-label {
+                font-size: 0.66rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--faint);
+                padding: 0.4rem 0.75rem 0.3rem;
+            }
+            .ask-ai-item {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                padding: 0.65rem 0.75rem;
+                border-radius: 10px;
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: var(--ink);
+                text-decoration: none;
+                transition: background 0.15s ease, color 0.15s ease;
+            }
+            .ask-ai-item:hover {
+                background: var(--teal-bg);
+                color: var(--teal-deep);
+            }
+            .ask-ai-item::before {
+                content: "→";
+                color: var(--faint);
+                transition: color 0.15s ease;
+            }
+            .ask-ai-item:hover::before {
+                color: var(--teal);
             }
 
             /* ─────────────────────────────────────────────
@@ -903,12 +967,6 @@
                 box-shadow: var(--shadow-card);
                 transform: translateY(-3px);
             }
-            .process-step.core {
-                background: var(--ink);
-                border-color: transparent;
-                color: var(--bg);
-                box-shadow: 0 20px 44px rgba(10, 20, 18, 0.28);
-            }
             .ps-num {
                 font-family: "JetBrains Mono", monospace;
                 font-size: 0.78rem;
@@ -917,9 +975,6 @@
                 display: block;
                 margin-bottom: 1.1rem;
             }
-            .process-step.core .ps-num {
-                color: var(--teal-bright);
-            }
             .ps-title {
                 font-size: 1.08rem;
                 font-weight: 700;
@@ -927,16 +982,10 @@
                 margin-bottom: 0.65rem;
                 color: var(--ink);
             }
-            .process-step.core .ps-title {
-                color: var(--bg);
-            }
             .ps-desc {
                 font-size: 0.88rem;
                 line-height: 1.7;
                 color: var(--muted);
-            }
-            .process-step.core .ps-desc {
-                color: rgba(250, 250, 249, 0.72);
             }
             .process-arrow {
                 display: flex;
@@ -1133,9 +1182,18 @@
                     <li><a href="#process">Process</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
-                <a href="mailto:iamgaryengel@gmail.com" class="btn btn-dark nav-cta">Get In Touch</a>
+                <button type="button" id="askAiBtn" class="btn btn-dark nav-cta" aria-haspopup="true" aria-expanded="false">
+                    <span class="ask-ai-sparkle" aria-hidden="true">✦</span> Ask AI about me
+                </button>
             </nav>
         </header>
+
+        <div class="ask-ai-menu" id="askAiMenu" role="menu" aria-hidden="true">
+            <span class="ask-ai-menu-label mono">Ask about me in</span>
+            <a href="#" data-engine="chatgpt" target="_blank" rel="noopener" class="ask-ai-item" role="menuitem">ChatGPT</a>
+            <a href="#" data-engine="claude" target="_blank" rel="noopener" class="ask-ai-item" role="menuitem">Claude</a>
+            <a href="#" data-engine="perplexity" target="_blank" rel="noopener" class="ask-ai-item" role="menuitem">Perplexity</a>
+        </div>
 
         <!-- ═══════════════════════════════════════════
              HERO
@@ -1534,7 +1592,7 @@
                         </p>
                     </div>
                     <div class="process-arrow" aria-hidden="true">→</div>
-                    <div class="process-step core reveal d2 in">
+                    <div class="process-step reveal d2 in">
                         <span class="ps-num mono">03</span>
                         <h3 class="ps-title">Test &amp; Iterate</h3>
                         <p class="ps-desc">
@@ -1612,6 +1670,52 @@
             }
             document.addEventListener("scroll", onScroll, { passive: true });
             onScroll();
+
+            // "Ask AI about me" — deep-links to ChatGPT/Claude/Perplexity
+            // with a prefilled prompt pointing them at the live site + LinkedIn.
+            (function initAskAi() {
+                const ASK_AI_PROMPT =
+                    "Search the web and tell me about Gary Engel, a UX Design Lead & Researcher at Scentsy in Meridian, Idaho. His portfolio is https://garyengel.github.io/portfolio/ and his LinkedIn is linkedin.com/in/garyengel. Summarize his background, notable projects, and design process.";
+                const ENGINE_URLS = {
+                    chatgpt: (q) => `https://chatgpt.com/?q=${q}`,
+                    claude: (q) => `https://claude.ai/new?q=${q}`,
+                    perplexity: (q) => `https://www.perplexity.ai/search?q=${q}`,
+                };
+                const encoded = encodeURIComponent(ASK_AI_PROMPT);
+                document.querySelectorAll(".ask-ai-item[data-engine]").forEach((a) => {
+                    const build = ENGINE_URLS[a.dataset.engine];
+                    if (build) a.href = build(encoded);
+                });
+
+                const askBtn = document.getElementById("askAiBtn");
+                const askMenu = document.getElementById("askAiMenu");
+                if (!askBtn || !askMenu) return;
+
+                function closeMenu() {
+                    askMenu.classList.remove("open");
+                    askMenu.setAttribute("aria-hidden", "true");
+                    askBtn.setAttribute("aria-expanded", "false");
+                }
+                function openMenu() {
+                    const r = askBtn.getBoundingClientRect();
+                    askMenu.style.top = r.bottom + 10 + "px";
+                    askMenu.style.right = window.innerWidth - r.right + "px";
+                    askMenu.classList.add("open");
+                    askMenu.setAttribute("aria-hidden", "false");
+                    askBtn.setAttribute("aria-expanded", "true");
+                }
+                askBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    askMenu.classList.contains("open") ? closeMenu() : openMenu();
+                });
+                document.addEventListener("click", (e) => {
+                    if (!askMenu.contains(e.target) && e.target !== askBtn) closeMenu();
+                });
+                document.addEventListener("keydown", (e) => {
+                    if (e.key === "Escape") closeMenu();
+                });
+                document.addEventListener("scroll", closeMenu, { passive: true });
+            })();
 
             // Scroll-reveal
             const revealEls = document.querySelectorAll(".reveal");
