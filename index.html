@@ -3,10 +3,10 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Gary Engel — UX Design Lead &amp; Researcher</title>
+        <title>Gary Engel · UX Design Lead &amp; Researcher</title>
         <meta
             name="description"
-            content="Gary Engel is a UX Design Lead & Researcher at Scentsy in Meridian, Idaho — leading research-driven design across e-commerce, mobile, and consultant tools."
+            content="Gary Engel is a UX Design Lead & Researcher at Scentsy in Meridian, Idaho, leading research-driven design across e-commerce, mobile, and consultant tools."
         />
         <link
             rel="icon"
@@ -306,12 +306,41 @@
                 gap: 2.25rem;
             }
 
+            .nav-links-wrap {
+                position: relative;
+                display: flex;
+            }
             .nav-links {
                 display: flex;
-                gap: 2rem;
+                gap: 0.25rem;
                 list-style: none;
             }
+            .nav-pill {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: var(--teal-bg);
+                border-radius: var(--radius-pill);
+                z-index: 0;
+                opacity: 0;
+                pointer-events: none;
+                transition:
+                    transform 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+                    width 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+                    height 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+                    opacity 0.25s ease;
+            }
+            .nav-links li {
+                position: relative;
+                z-index: 1;
+            }
             .nav-links a {
+                position: relative;
+                z-index: 1;
+                display: inline-flex;
+                align-items: center;
+                padding: 0.5rem 0.95rem;
+                border-radius: var(--radius-pill);
                 font-size: 0.88rem;
                 font-weight: 500;
                 color: var(--muted);
@@ -320,6 +349,10 @@
             }
             .nav-links a:hover {
                 color: var(--ink);
+            }
+            .nav-links a.active {
+                color: var(--teal-deep);
+                font-weight: 600;
             }
 
             .nav-cta {
@@ -579,6 +612,14 @@
                 }
             }
 
+            /* Keeps anchor-jump targets from landing under the floating nav */
+            #about,
+            #work,
+            #process,
+            #contact {
+                scroll-margin-top: calc(var(--nav-h) + 24px);
+            }
+
             /* ─────────────────────────────────────────────
                PANEL (rounded card sections)
             ───────────────────────────────────────────── */
@@ -832,11 +873,32 @@
                 border-radius: var(--radius-pill);
             }
 
-            .proj-year {
-                font-family: "JetBrains Mono", monospace;
-                font-size: 0.78rem;
-                color: var(--faint);
+            .proj-thumb {
+                width: 152px;
+                height: 108px;
+                border-radius: var(--radius-sm);
+                overflow: hidden;
+                border: 1px solid var(--border);
+                box-shadow: var(--shadow-card);
                 flex-shrink: 0;
+                transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+            }
+            .proj-thumb img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+                transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+            }
+            .project-row:hover .proj-thumb,
+            .project-item.open .proj-thumb {
+                border-color: var(--teal-border);
+                box-shadow: var(--shadow-float);
+                transform: translateY(-1px);
+            }
+            .project-row:hover .proj-thumb img,
+            .project-item.open .proj-thumb img {
+                transform: scale(1.1);
             }
 
             .proj-arrow {
@@ -885,11 +947,12 @@
                 display: grid;
                 grid-template-columns: 200px 1fr;
                 gap: 1.75rem;
-                align-items: start;
+                align-items: stretch;
             }
             .detail-thumb {
                 width: 100%;
-                aspect-ratio: 4 / 5;
+                height: 100%;
+                min-height: 220px;
                 overflow: hidden;
                 border-radius: var(--radius-sm);
                 background: var(--teal-bg);
@@ -908,6 +971,11 @@
                 display: flex;
                 flex-direction: column;
                 gap: 1.1rem;
+                height: 100%;
+            }
+            .detail-text .detail-link {
+                margin-top: auto;
+                align-self: flex-end;
             }
 
             .detail-description {
@@ -934,19 +1002,27 @@
             .detail-link {
                 display: inline-flex;
                 align-items: center;
-                gap: 0.5rem;
+                gap: 0.6rem;
                 font-size: 0.86rem;
                 font-weight: 600;
-                color: var(--ink);
+                color: #fff;
                 text-decoration: none;
-                border-bottom: 1.5px solid var(--ink);
-                padding-bottom: 2px;
+                background: var(--ink);
+                padding: 0.72rem 1.3rem;
+                border-radius: var(--radius-pill);
                 width: max-content;
-                transition: color 0.2s ease, border-color 0.2s ease;
+                transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            }
+            .detail-link span {
+                transition: transform 0.2s ease;
             }
             .detail-link:hover {
-                color: var(--teal);
-                border-color: var(--teal);
+                background: var(--teal-deep);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 22px rgba(0, 97, 182, 0.24);
+            }
+            .detail-link:hover span {
+                transform: translateX(3px);
             }
 
             /* ─────────────────────────────────────────────
@@ -1142,7 +1218,7 @@
                 }
             }
             @media (max-width: 768px) {
-                .nav-links {
+                .nav-links-wrap {
                     display: none;
                 }
                 .about-stats {
@@ -1151,7 +1227,7 @@
                 .project-row {
                     grid-template-columns: 38px 1fr 34px;
                 }
-                .proj-year {
+                .proj-thumb {
                     display: none;
                 }
                 .project-detail-content {
@@ -1179,12 +1255,15 @@
             <div class="nav-progress" id="navProgress"></div>
             <a href="#home" class="nav-logo">Gary Engel<em>.</em></a>
             <nav class="nav-right">
-                <ul class="nav-links">
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#work">Work</a></li>
-                    <li><a href="#process">Process</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
+                <div class="nav-links-wrap">
+                    <span class="nav-pill" id="navPill" aria-hidden="true"></span>
+                    <ul class="nav-links" id="navLinks">
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#work">Case Studies</a></li>
+                        <li><a href="#process">My Process</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
                 <button type="button" id="askAiBtn" class="btn btn-dark nav-cta" aria-haspopup="true" aria-expanded="false">
                     <span class="ask-ai-sparkle" aria-hidden="true">✦</span> Ask AI about me
                 </button>
@@ -1208,7 +1287,7 @@
                     UX Design Lead &amp; Researcher<span class="period">.</span>
                 </h1>
                 <p class="hero-lede">
-                    I lead UX at Scentsy — designing the experiences that connect a fragrance brand with
+                    I lead UX at Scentsy, designing the experiences that connect a fragrance brand with
                     <span class="hl">millions of customers and consultants</span> worldwide. Research first,
                     always.
                 </p>
@@ -1235,7 +1314,7 @@
                     <span class="stat-label mono">Usability Sessions</span>
                 </div>
                 <div class="stat-cell">
-                    <span class="stat-num">5</span>
+                    <span class="stat-num">4</span>
                     <span class="stat-label mono">Case Studies</span>
                 </div>
             </div>
@@ -1285,7 +1364,7 @@
                         <div class="about-body">
                             <p class="reveal d1 in">
                                 <strong>I've spent my career at the intersection of research and design.</strong>
-                                I believe you can't design well without first understanding deeply — which is why
+                                I believe you can't design well without first understanding deeply, which is why
                                 usability testing and qualitative research sit at the center of everything I do,
                                 not at the end.
                             </p>
@@ -1326,7 +1405,7 @@
                         <div class="about-stat-card">
                             <span class="asc-num">300+</span>
                             <span class="asc-label">Usability Sessions</span>
-                            <span class="asc-desc">Moderated research with real users — not assumptions.</span>
+                            <span class="asc-desc">Moderated research with real users, not assumptions.</span>
                         </div>
                         <div class="about-stat-card">
                             <span class="asc-num">50+</span>
@@ -1350,7 +1429,7 @@
             <section class="panel" id="work">
                 <div class="work-header reveal in">
                     <div class="work-header-left">
-                        <span class="eyebrow">Selected Work</span>
+                        <span class="eyebrow">Case Studies</span>
                         <h2 class="heading-lg">Projects that moved the <span class="hl">needle.</span></h2>
                     </div>
                     <button type="button" class="expand-all-btn mono" id="expandAllBtn" aria-expanded="false">
@@ -1364,14 +1443,16 @@
                         <div class="project-row" role="button" tabindex="0" aria-expanded="false">
                             <span class="proj-num">01</span>
                             <div class="proj-title-group">
-                                <span class="proj-title">E-Commerce Checkout Redesign</span>
+                                <span class="proj-title">Category Taxonomy &amp; Navigation</span>
                                 <div class="proj-tags">
+                                    <span class="proj-tag">Information Architecture</span>
                                     <span class="proj-tag">E-Commerce</span>
-                                    <span class="proj-tag">UX Design</span>
                                     <span class="proj-tag">Research</span>
                                 </div>
                             </div>
-                            <span class="proj-year">2024</span>
+                            <div class="proj-thumb" aria-hidden="true">
+                                <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/1ab45930-d87e-4489-a351-54135400595c_rw_1200.png?h=4d10d10b87036cf46b2d129d5446c7ba" alt="" loading="lazy" />
+                            </div>
                             <div class="proj-arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v10M2 7l5 5 5-5"></path></svg>
                             </div>
@@ -1379,20 +1460,25 @@
                         <div class="project-detail">
                             <div class="project-detail-inner">
                                 <div class="project-detail-content">
-                                    <div class="detail-body">
-                                        <p class="detail-description">
-                                            A complete ground-up redesign of a high-traffic checkout experience,
-                                            informed by 4 rounds of moderated usability testing with 18
-                                            participants. Identified critical friction points in the payment and
-                                            address confirmation flows that accounted for the majority of
-                                            drop-offs.
-                                        </p>
-                                        <div class="detail-outcomes">
-                                            <span class="detail-outcome">↑ 32% conversion rate</span>
-                                            <span class="detail-outcome">↓ 41% cart abandonment</span>
-                                            <span class="detail-outcome">↑ 28% mobile completion</span>
+                                    <div class="detail-body has-thumb">
+                                        <a href="case-studies/scentsy-category-taxonomy-navigation.html" class="detail-thumb" aria-label="Open Category Taxonomy &amp; Navigation case study">
+                                            <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/1ab45930-d87e-4489-a351-54135400595c_rw_1200.png?h=4d10d10b87036cf46b2d129d5446c7ba" alt="Scentsy category taxonomy and navigation exploration" />
+                                        </a>
+                                        <div class="detail-text">
+                                            <p class="detail-description">
+                                                Combined Scentsy-specific usability research with Baymard's
+                                                e-commerce guidelines to rebuild Scentsy's category taxonomy and
+                                                navigation, solving a scalability problem in the old horizontal
+                                                header while closing a real usability gap between mobile and
+                                                desktop accessory navigation.
+                                            </p>
+                                            <div class="detail-outcomes">
+                                                <span class="detail-outcome">Baymard-informed</span>
+                                                <span class="detail-outcome">Usability-tested</span>
+                                                <span class="detail-outcome">Mobile ↔ desktop parity</span>
+                                            </div>
+                                            <a href="case-studies/scentsy-category-taxonomy-navigation.html" class="detail-link">Read Case Study <span>→</span></a>
                                         </div>
-                                        <a href="#" class="detail-link">Read Case Study <span>→</span></a>
                                     </div>
                                 </div>
                             </div>
@@ -1403,45 +1489,6 @@
                         <div class="project-row" role="button" tabindex="0" aria-expanded="false">
                             <span class="proj-num">02</span>
                             <div class="proj-title-group">
-                                <span class="proj-title">Consultant Portal Redesign</span>
-                                <div class="proj-tags">
-                                    <span class="proj-tag">B2B Tools</span>
-                                    <span class="proj-tag">Design System</span>
-                                    <span class="proj-tag">Research</span>
-                                </div>
-                            </div>
-                            <span class="proj-year">2023</span>
-                            <div class="proj-arrow" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v10M2 7l5 5 5-5"></path></svg>
-                            </div>
-                        </div>
-                        <div class="project-detail">
-                            <div class="project-detail-inner">
-                                <div class="project-detail-content">
-                                    <div class="detail-body">
-                                        <p class="detail-description">
-                                            Redesigned a mission-critical sales portal used by 150,000+
-                                            independent consultants. Led a cross-functional team through
-                                            discovery, research synthesis, and a component library build —
-                                            reducing task completion time significantly and cutting support ticket
-                                            volume.
-                                        </p>
-                                        <div class="detail-outcomes">
-                                            <span class="detail-outcome">150K+ consultant users</span>
-                                            <span class="detail-outcome">↓ 38% support tickets</span>
-                                            <span class="detail-outcome">↓ 55% task time</span>
-                                        </div>
-                                        <a href="#" class="detail-link">Read Case Study <span>→</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="project-item reveal d2 in" data-index="2">
-                        <div class="project-row" role="button" tabindex="0" aria-expanded="false">
-                            <span class="proj-num">03</span>
-                            <div class="proj-title-group">
                                 <span class="proj-title">Scentsy Home App</span>
                                 <div class="proj-tags">
                                     <span class="proj-tag">Connected Devices</span>
@@ -1449,7 +1496,9 @@
                                     <span class="proj-tag">UX Research</span>
                                 </div>
                             </div>
-                            <span class="proj-year">2023</span>
+                            <div class="proj-thumb" aria-hidden="true">
+                                <img src="case-studies/assets/thumb-diffuser-solo.png" alt="" loading="lazy" />
+                            </div>
                             <div class="proj-arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v10M2 7l5 5 5-5"></path></svg>
                             </div>
@@ -1459,7 +1508,7 @@
                                 <div class="project-detail-content">
                                     <div class="detail-body has-thumb">
                                         <a href="case-studies/scentsy-home-app.html" class="detail-thumb" aria-label="Open Scentsy Home App case study">
-                                            <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/d873725d-9f3a-418e-8558-124424147d39_rw_600.png?h=7889a1f53d19417d20df2838ba6cf6c6" alt="Scentsy Home App — app interface detail" />
+                                            <img src="case-studies/assets/thumb-diffuser-solo.png" alt="Scentsy Home App: device control screen for the Scentsy Diffuser Solo" />
                                         </a>
                                         <div class="detail-text">
                                             <p class="detail-description">
@@ -1486,18 +1535,20 @@
                         </div>
                     </div>
 
-                    <div class="project-item reveal d3 in" data-index="3">
+                    <div class="project-item reveal d2 in" data-index="2">
                         <div class="project-row" role="button" tabindex="0" aria-expanded="false">
-                            <span class="proj-num">04</span>
+                            <span class="proj-num">03</span>
                             <div class="proj-title-group">
-                                <span class="proj-title">Customer Research Program</span>
+                                <span class="proj-title">Customer Journey: Joining Scentsy</span>
                                 <div class="proj-tags">
                                     <span class="proj-tag">Research</span>
-                                    <span class="proj-tag">Strategy</span>
                                     <span class="proj-tag">Journey Mapping</span>
+                                    <span class="proj-tag">Consultant Onboarding</span>
                                 </div>
                             </div>
-                            <span class="proj-year">2022</span>
+                            <div class="proj-thumb" aria-hidden="true">
+                                <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/6e2cbf1b-585e-41aa-b21c-1029a735b27c_rw_1920.png?h=64bb64b87c9768e74c68419db154e664" alt="" loading="lazy" />
+                            </div>
                             <div class="proj-arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v10M2 7l5 5 5-5"></path></svg>
                             </div>
@@ -1505,37 +1556,44 @@
                         <div class="project-detail">
                             <div class="project-detail-inner">
                                 <div class="project-detail-content">
-                                    <div class="detail-body">
-                                        <p class="detail-description">
-                                            Established a systematic ongoing customer research program —
-                                            combining diary studies, JTBD interviews, and longitudinal surveys.
-                                            Created a shared research repository and synthesis framework that
-                                            democratized customer insight across product, marketing, and
-                                            leadership.
-                                        </p>
-                                        <div class="detail-outcomes">
-                                            <span class="detail-outcome">4 user archetypes defined</span>
-                                            <span class="detail-outcome">12 product roadmap shifts</span>
+                                    <div class="detail-body has-thumb">
+                                        <a href="case-studies/customer-journey-joining-scentsy.html" class="detail-thumb" aria-label="Open Customer Journey: Joining Scentsy case study">
+                                            <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/6e2cbf1b-585e-41aa-b21c-1029a735b27c_rw_1920.png?h=64bb64b87c9768e74c68419db154e664" alt="Customer journey map for joining Scentsy as a Consultant" />
+                                        </a>
+                                        <div class="detail-text">
+                                            <p class="detail-description">
+                                                Built a journey map for customers deciding to join Scentsy as a
+                                                Consultant, starting from internal assumptions and then testing
+                                                them against interviews, focus groups, and surveys, surfacing pain
+                                                points the enrollment program was then adjusted to address.
+                                            </p>
+                                            <div class="detail-outcomes">
+                                                <span class="detail-outcome">Interviews + surveys</span>
+                                                <span class="detail-outcome">Pain points surfaced</span>
+                                                <span class="detail-outcome">Program adjusted</span>
+                                            </div>
+                                            <a href="case-studies/customer-journey-joining-scentsy.html" class="detail-link">Read Case Study <span>→</span></a>
                                         </div>
-                                        <a href="#" class="detail-link">Read Case Study <span>→</span></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="project-item reveal d4 in" data-index="4">
+                    <div class="project-item reveal d3 in" data-index="3">
                         <div class="project-row" role="button" tabindex="0" aria-expanded="false">
-                            <span class="proj-num">05</span>
+                            <span class="proj-num">04</span>
                             <div class="proj-title-group">
-                                <span class="proj-title">Scentsy Design System</span>
+                                <span class="proj-title">Customer Subscription Program</span>
                                 <div class="proj-tags">
-                                    <span class="proj-tag">Design Systems</span>
-                                    <span class="proj-tag">Accessibility</span>
-                                    <span class="proj-tag">Leadership</span>
+                                    <span class="proj-tag">Subscription</span>
+                                    <span class="proj-tag">Loyalty</span>
+                                    <span class="proj-tag">E-Commerce</span>
                                 </div>
                             </div>
-                            <span class="proj-year">2021</span>
+                            <div class="proj-thumb" aria-hidden="true">
+                                <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/01916967-589c-4bd3-88ef-0cd9fa7b9b62_rw_1920.png?h=a90bfacf9c4092828742717c5fc6226e" alt="" loading="lazy" />
+                            </div>
                             <div class="proj-arrow" aria-hidden="true">
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v10M2 7l5 5 5-5"></path></svg>
                             </div>
@@ -1543,20 +1601,24 @@
                         <div class="project-detail">
                             <div class="project-detail-inner">
                                 <div class="project-detail-content">
-                                    <div class="detail-body">
-                                        <p class="detail-description">
-                                            Led the creation of Scentsy's first formal design system — a living
-                                            component library covering 80+ components, accessibility
-                                            documentation, usage guidelines, and a Figma-to-dev handoff workflow.
-                                            Reduced time-to-feature for the design team significantly and
-                                            achieved WCAG 2.1 AA compliance across all consumer surfaces.
-                                        </p>
-                                        <div class="detail-outcomes">
-                                            <span class="detail-outcome">80+ components</span>
-                                            <span class="detail-outcome">WCAG 2.1 AA</span>
-                                            <span class="detail-outcome">↓ 60% design-to-dev time</span>
+                                    <div class="detail-body has-thumb">
+                                        <a href="case-studies/customer-subscription-program.html" class="detail-thumb" aria-label="Open Customer Subscription Program case study">
+                                            <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/01916967-589c-4bd3-88ef-0cd9fa7b9b62_rw_1920.png?h=a90bfacf9c4092828742717c5fc6226e" alt="Scentsy Club subscription user flow" />
+                                        </a>
+                                        <div class="detail-text">
+                                            <p class="detail-description">
+                                                Designed Scentsy Club, Scentsy's subscription program for recurring
+                                                shipments of everyday consumables, from the core user flow through
+                                                a rewards-and-referrals points system that turned subscribers into
+                                                a repeat acquisition channel.
+                                            </p>
+                                            <div class="detail-outcomes">
+                                                <span class="detail-outcome">135K+ members (5yr)</span>
+                                                <span class="detail-outcome">Points + referrals</span>
+                                                <span class="detail-outcome">Recurring revenue</span>
+                                            </div>
+                                            <a href="case-studies/customer-subscription-program.html" class="detail-link">Read Case Study <span>→</span></a>
                                         </div>
-                                        <a href="#" class="detail-link">Read Case Study <span>→</span></a>
                                     </div>
                                 </div>
                             </div>
@@ -1582,7 +1644,7 @@
                         <h3 class="ps-title">Discover &amp; Define</h3>
                         <p class="ps-desc">
                             I start with the problem, not the solution. User interviews, stakeholder alignment,
-                            competitive landscape, and hard success metrics — before any wireframes exist.
+                            competitive landscape, and hard success metrics, before any wireframes exist.
                         </p>
                     </div>
                     <div class="process-arrow" aria-hidden="true">→</div>
@@ -1600,7 +1662,7 @@
                         <h3 class="ps-title">Test &amp; Iterate</h3>
                         <p class="ps-desc">
                             Moderated usability testing with 5–8 participants per round, 2–3 rounds per project.
-                            Evidence-based iteration — not gut checks. Every decision is traceable to a finding.
+                            Evidence-based iteration, not gut checks. Every decision is traceable to a finding.
                         </p>
                     </div>
                     <div class="process-arrow" aria-hidden="true">→</div>
@@ -1609,7 +1671,7 @@
                         <h3 class="ps-title">Deliver &amp; Measure</h3>
                         <p class="ps-desc">
                             Precise handoff documentation, close dev collaboration, and post-launch measurement
-                            tied to metrics set in discovery. The work isn't done when it ships — it's done when
+                            tied to metrics set in discovery. The work isn't done when it ships. It's done when
                             it performs.
                         </p>
                     </div>
@@ -1630,7 +1692,7 @@
                         </h2>
                         <p class="contact-sub">
                             If you're looking for a senior UX leader who runs on data, ships with conviction, and
-                            doesn't confuse activity with impact — let's talk.
+                            doesn't confuse activity with impact. Let's talk.
                         </p>
                         <a href="mailto:iamgaryengel@gmail.com" class="contact-email-link">
                             iamgaryengel@gmail.com <span>→</span>
@@ -1654,7 +1716,7 @@
              FOOTER
         ═══════════════════════════════════════════ -->
         <footer>
-            <span>© 2026 Gary Engel — All rights reserved</span>
+            <span>© 2026 Gary Engel · All rights reserved</span>
             <span>Designed with precision</span>
         </footer>
 
@@ -1665,13 +1727,81 @@
             // Nav border + scroll progress
             const nav = document.getElementById("nav");
             const navProgress = document.getElementById("navProgress");
+            let suppressScrollSpy = false;
             function onScroll() {
                 const y = window.scrollY;
                 nav.classList.toggle("scrolled", y > 32);
                 const max = document.documentElement.scrollHeight - window.innerHeight;
                 navProgress.style.width = max > 0 ? (y / max) * 100 + "%" : "0%";
+                if (!suppressScrollSpy) updateActiveSection();
             }
             document.addEventListener("scroll", onScroll, { passive: true });
+
+            // Nav wayfinding — a floating pill tracks which section is in view,
+            // and locks onto Contact once you've scrolled to the bottom of the page.
+            const navLinksWrap = document.querySelector(".nav-links-wrap");
+            const navPill = document.getElementById("navPill");
+            const sectionLinks = Array.from(document.querySelectorAll("#navLinks a[href^='#']"))
+                .map((link) => ({ link, section: document.getElementById(link.getAttribute("href").slice(1)) }))
+                .filter((item) => item.section);
+
+            function setActivePill(activeLink) {
+                sectionLinks.forEach(({ link }) => link.classList.toggle("active", link === activeLink));
+                if (!activeLink || !navLinksWrap) {
+                    navPill.style.opacity = "0";
+                    return;
+                }
+                const linkRect = activeLink.getBoundingClientRect();
+                const wrapRect = navLinksWrap.getBoundingClientRect();
+                navPill.style.width = linkRect.width + "px";
+                navPill.style.height = linkRect.height + "px";
+                navPill.style.transform = `translate(${linkRect.left - wrapRect.left}px, ${linkRect.top - wrapRect.top}px)`;
+                navPill.style.opacity = "1";
+            }
+
+            // Matches the `scroll-margin-top: calc(var(--nav-h) + 24px)` set on
+            // section targets, so a clicked link's own destination immediately
+            // qualifies as the active section instead of lagging one behind.
+            const navHVar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-h")) || 76;
+            const NAV_SCROLL_OFFSET = navHVar + 25;
+
+            function updateActiveSection() {
+                if (!sectionLinks.length) return;
+                const navOffset = NAV_SCROLL_OFFSET;
+
+                // Bottom of the page always highlights Contact, even though the
+                // footer below it isn't a tracked section.
+                const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+                if (atBottom) {
+                    const contact = sectionLinks.find(({ section }) => section.id === "contact");
+                    setActivePill(contact ? contact.link : sectionLinks[sectionLinks.length - 1].link);
+                    return;
+                }
+
+                let current = null;
+                for (const item of sectionLinks) {
+                    if (item.section.offsetTop <= window.scrollY + navOffset) {
+                        current = item.link;
+                    }
+                }
+                setActivePill(current);
+            }
+
+            // Snap the pill to the clicked link right away instead of waiting
+            // for the smooth-scroll animation to cross the activation offset.
+            let scrollSettleTimer = null;
+            sectionLinks.forEach(({ link }) => {
+                link.addEventListener("click", () => {
+                    setActivePill(link);
+                    suppressScrollSpy = true;
+                    clearTimeout(scrollSettleTimer);
+                    scrollSettleTimer = setTimeout(() => {
+                        suppressScrollSpy = false;
+                        updateActiveSection();
+                    }, 700);
+                });
+            });
+            window.addEventListener("resize", updateActiveSection);
             onScroll();
 
             // "Ask AI about me" — deep-links to ChatGPT/Claude/Perplexity

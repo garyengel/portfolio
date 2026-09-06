@@ -3,10 +3,10 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Scentsy Home App · Case Study · Gary Engel</title>
+        <title>Customer Journey: Joining Scentsy · Case Study · Gary Engel</title>
         <meta
             name="description"
-            content="Designing a connected-fragrance ecosystem from zero to one, under NDA, for Scentsy's first smart-device platform, the Scentsy Home App case study."
+            content="Using journey maps, interviews, and surveys to build an accurate picture of how customers actually decide to join Scentsy as a Consultant."
         />
         <link
             rel="icon"
@@ -395,7 +395,7 @@
                 justify-content: center;
             }
             .cs-figure {
-                max-width: 640px;
+                max-width: 800px;
                 width: 100%;
             }
             .cs-figure img {
@@ -415,15 +415,6 @@
                 color: var(--faint);
             }
 
-            /* Phone mockups ship with transparent backgrounds — suppress
-               the rectangular shadow/radius that would otherwise box them. */
-            .phone-mockup {
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                border: none !important;
-                background: transparent !important;
-            }
-
             /* ─────────────────────────────────────────────
                PANEL (rounded card sections)
             ───────────────────────────────────────────── */
@@ -438,32 +429,6 @@
                 border-radius: var(--radius-lg);
                 padding: clamp(2.5rem, 6vw, 4.5rem);
                 box-shadow: var(--shadow-card);
-            }
-            .panel.dark {
-                background: linear-gradient(
-                    155deg,
-                    #0e2c47 0%,
-                    #0a1a30 55%,
-                    #090c14 100%
-                );
-                color: var(--bg);
-                border-color: transparent;
-                position: relative;
-                overflow: hidden;
-            }
-            .panel.dark::before {
-                content: "";
-                position: absolute;
-                right: -10%;
-                bottom: -35%;
-                width: 65%;
-                height: 110%;
-                background: radial-gradient(
-                    circle at center,
-                    rgba(90, 168, 234, 0.16),
-                    rgba(90, 168, 234, 0) 65%
-                );
-                pointer-events: none;
             }
 
             /* ─────────────────────────────────────────────
@@ -486,70 +451,27 @@
                 font-weight: 600;
             }
 
-            .cs-callout {
-                margin: 0.5rem 0;
-                padding: 1.4rem 1.6rem;
-                border: 1px dashed var(--border);
-                border-radius: var(--radius-sm);
-                background: var(--bg-alt);
-                display: flex;
-                gap: 1rem;
-                align-items: flex-start;
-            }
-            .cs-callout-icon {
-                font-family: "JetBrains Mono", monospace;
-                font-size: 0.64rem;
-                font-weight: 600;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                color: var(--teal-deep);
-                background: var(--teal-bg);
-                border: 1px solid var(--teal-border);
-                padding: 0.35rem 0.7rem;
-                border-radius: var(--radius-pill);
-                flex-shrink: 0;
-                line-height: 1;
-            }
-            .cs-callout-body {
-                font-size: 0.92rem;
-                line-height: 1.65;
-                color: var(--muted);
-            }
-
-            .cs-pullquote {
-                margin: 0.5rem 0;
-                padding: 1.75rem 2rem;
-                border-left: 3px solid var(--teal);
-                background: var(--teal-bg);
-                border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-                font-size: clamp(1.1rem, 2vw, 1.3rem);
-                font-weight: 500;
-                line-height: 1.55;
-                color: var(--ink-soft);
-            }
-
             /* Split — image alongside prose within a panel */
             .cs-split-inner {
                 display: grid;
-                grid-template-columns: 300px 1fr;
+                grid-template-columns: 1fr 380px;
                 gap: 2.75rem;
                 align-items: center;
-            }
-            .cs-split-inner.reverse {
-                grid-template-columns: 1fr 300px;
             }
             .cs-split-media img {
                 width: 100%;
                 border-radius: var(--radius-md);
                 box-shadow: var(--shadow-card);
+                border: 1px solid var(--border-soft);
             }
-            .cs-split-body .eyebrow {
-                margin-bottom: 1.1rem;
-            }
-            .cs-split-body .heading-lg {
-                font-size: clamp(1.5rem, 2.6vw, 2.1rem);
-                margin-bottom: 1.25rem;
-                max-width: 22ch;
+            .cs-split-media figcaption {
+                margin-top: 0.75rem;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.68rem;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                color: var(--faint);
+                text-align: center;
             }
             .cs-split-body p {
                 font-size: 0.98rem;
@@ -563,42 +485,6 @@
             .cs-split-body p strong {
                 color: var(--ink);
                 font-weight: 600;
-            }
-
-            /* ─────────────────────────────────────────────
-               OUTCOMES (dark panel)
-            ───────────────────────────────────────────── */
-            .cs-outcomes-grid {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 1.75rem;
-                margin-top: 2.5rem;
-                position: relative;
-                z-index: 1;
-            }
-            .cs-outcome {
-                padding-top: 1.4rem;
-                border-top: 1px solid rgba(250, 250, 249, 0.16);
-            }
-            .cs-outcome-metric {
-                font-size: clamp(1.8rem, 3.2vw, 2.4rem);
-                font-weight: 800;
-                letter-spacing: -0.02em;
-                color: var(--bg);
-                line-height: 1;
-                margin-bottom: 0.55rem;
-            }
-            .cs-outcome-metric em {
-                font-style: normal;
-                color: var(--teal-bright);
-            }
-            .cs-outcome-label {
-                font-family: "JetBrains Mono", monospace;
-                font-size: 0.7rem;
-                letter-spacing: 0.06em;
-                text-transform: uppercase;
-                color: rgba(250, 250, 249, 0.6);
-                line-height: 1.5;
             }
 
             /* ─────────────────────────────────────────────
@@ -689,13 +575,12 @@
                RESPONSIVE
             ───────────────────────────────────────────── */
             @media (max-width: 1000px) {
-                .cs-split-inner,
-                .cs-split-inner.reverse {
+                .cs-split-inner {
                     grid-template-columns: 1fr;
                     gap: 1.75rem;
                 }
                 .cs-split-media {
-                    max-width: 280px;
+                    max-width: 380px;
                     margin: 0 auto;
                 }
                 .stat-cell {
@@ -704,17 +589,9 @@
                     border-bottom: 1px solid var(--border-soft);
                 }
             }
-            @media (max-width: 768px) {
-                .cs-outcomes-grid {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-            }
             @media (max-width: 540px) {
                 .stat-cell {
                     min-width: 100%;
-                }
-                .cs-outcomes-grid {
-                    grid-template-columns: 1fr;
                 }
                 .cs-footnav {
                     grid-template-columns: 1fr;
@@ -743,11 +620,12 @@
         ═══════════════════════════════════════════ -->
         <section class="hero" id="home">
             <div class="shell">
-                <span class="hero-avail"><span class="avail-dot"></span> Case Study 01 · Partially under NDA</span>
-                <h1 class="hero-name">Scentsy <span class="accent">Home</span> App</h1>
+                <span class="hero-avail"><span class="avail-dot"></span> Scentsy · Consultant Onboarding</span>
+                <h1 class="hero-name">Joining <span class="accent">Scentsy</span></h1>
                 <p class="hero-lede">
-                    Designing a connected-fragrance ecosystem <span class="hl">from zero to one</span>, under NDA, to
-                    ship alongside new hardware and grow into a full product platform.
+                    Using journey maps to build an <span class="hl">accurate picture</span> of how customers actually
+                    decide to join Scentsy as a Consultant, replacing internal assumption with real interviews and
+                    survey data.
                 </p>
             </div>
         </section>
@@ -759,244 +637,76 @@
                     <span class="stat-label mono">Role</span>
                 </div>
                 <div class="stat-cell text">
-                    <span class="stat-num">iOS · Android</span>
-                    <span class="stat-label mono">Platforms</span>
+                    <span class="stat-num">Journey Mapping</span>
+                    <span class="stat-label mono">Focus</span>
                 </div>
                 <div class="stat-cell text">
-                    <span class="stat-num">2022 → ongoing</span>
-                    <span class="stat-label mono">Timeline</span>
+                    <span class="stat-num">Interviews · Focus Groups · Surveys</span>
+                    <span class="stat-label mono">Method</span>
                 </div>
                 <div class="stat-cell text">
-                    <span class="stat-num">Product · Hardware · Firmware · Cloud · QA</span>
-                    <span class="stat-label mono">Team</span>
+                    <span class="stat-num">Scentsy</span>
+                    <span class="stat-label mono">Company</span>
                 </div>
             </div>
         </div>
 
         <div class="cs-hero-figure-wrap">
             <figure class="cs-figure reveal in">
-                <img class="phone-mockup" src="assets/phone-hero.png" alt="Scentsy Home App product visual" />
-                <figcaption class="cs-caption">Companion platform for Scentsy's first connected fragrance device</figcaption>
+                <img
+                    src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/6e2cbf1b-585e-41aa-b21c-1029a735b27c_rw_1920.png?h=64bb64b87c9768e74c68419db154e664"
+                    alt="Customer journey map for joining Scentsy as a Consultant"
+                />
+                <figcaption class="cs-caption">Mapping the journey of a customer looking to join Scentsy</figcaption>
             </figure>
         </div>
 
         <!-- ═══════════════════════════════════════════
-             01 · THE CHALLENGE
+             01 · JOURNEY MAP & INTERVIEWS
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
             <section class="panel reveal in">
-                <span class="eyebrow">01 · The Challenge</span>
+                <span class="eyebrow">01 · Journey Map &amp; Interviews</span>
                 <h2 class="heading-lg" style="margin-top: 1.1rem">
-                    Designing the controller before anyone could <span class="hl">see the device.</span>
+                    Starting with what we <span class="hl">believed</span>, then testing it.
                 </h2>
                 <div class="cs-body">
                     <p>
-                        Scentsy was entering a new product category. The Scentsy Home App had to ship on the same day
-                        as the first connected device, but most of the team couldn't know what the device looked
-                        like, how it worked, or even what to call it in the hallway.
-                    </p>
-                    <p>
-                        That constraint shaped everything. Every research session ran with a black-box prototype.
-                        Every review meeting had three people in the room and a printed NDA on the table. Every
-                        design artifact was stored on an isolated workspace and was not allowed to leave it. And
-                        every decision about pairing, onboarding, and control had to hold up whether the final
-                        hardware looked like what we'd prototyped or something meaningfully different.
-                    </p>
-                    <div class="cs-callout">
-                        <span class="cs-callout-icon">Under NDA</span>
-                        <p class="cs-callout-body">
-                            This case study covers what can be discussed publicly. Pre-launch research specifics,
-                            hardware details, and internal artifacts remain confidential. The post-launch platform
-                            work is described at full depth.
-                        </p>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- ═══════════════════════════════════════════
-             02 · RESEARCH UNDER SEAL
-        ═══════════════════════════════════════════ -->
-        <div class="panel-wrap">
-            <section class="panel reveal in">
-                <span class="eyebrow">02 · Research, Under Seal</span>
-                <h2 class="heading-lg" style="margin-top: 1.1rem">
-                    A panel of <span class="hl">seven,</span> hand-selected and under lock.
-                </h2>
-                <div class="cs-body">
-                    <p>
-                        I assembled a hand-selected panel of seven participants under strict NDA. They were chosen
-                        for a mix of device familiarity, Scentsy loyalty, and willingness to sit through long
-                        unstructured sessions with something on the table they couldn't photograph. Each participant
-                        went through three rounds, staggered across the product's development.
-                    </p>
-                    <p>
-                        I wrote the discussion guides to probe the most discoverable moments of the experience:
-                        pairing, onboarding, first use, without revealing the device category. Sessions were run in
-                        a controlled environment, prototypes were handled only by the facilitator, and every
-                        recording was reviewed internally and then locked away.
-                    </p>
-                    <div class="cs-pullquote">
-                        The constraint was severe, but it forced a kind of clarity. If the pairing flow couldn't
-                        explain itself without a script, it wasn't good enough.
-                    </div>
-                    <p>
-                        Three decisions came directly out of that work. A one-tap pairing handshake that replaced the
-                        SSID-picker pattern common in other smart-device apps. A first-fragrance ceremony that
-                        oriented new users to the device category itself, not just the app. And a single-screen
-                        control surface that stayed legible at a glance from across a room.
+                        Starting with initial thoughts and internal beliefs, I created a rough journey map as a
+                        starting point. Incorporating interviews and focus groups, I was able to add, delete, and
+                        change touchpoints and thought processes for customers who wished to join Scentsy as
+                        Consultants. Digging further, I uncovered opportunities from the largest pain points, and the
+                        company was able to adjust the enrollment program to ease those pain points directly.
                     </p>
                 </div>
             </section>
         </div>
 
         <!-- ═══════════════════════════════════════════
-             03 · DESIGN APPROACH
+             02 · THE QUANTITATIVE JOURNEY
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
             <section class="panel reveal in">
-                <span class="eyebrow">03 · Design Approach</span>
+                <span class="eyebrow">02 · The Quantitative Journey</span>
                 <h2 class="heading-lg" style="margin-top: 1.1rem; margin-bottom: 2rem">
-                    Two states: <span class="hl">glance and grab.</span>
+                    Surveys turned a rough map into a <span class="hl">real one.</span>
                 </h2>
                 <div class="cs-split-inner">
-                    <div class="cs-split-media">
-                        <img class="phone-mockup" src="assets/phone-onboarding.png" alt="Scentsy Home App: onboarding and control screens" />
-                    </div>
                     <div class="cs-split-body">
                         <p>
-                            The control screen had to work from across the room and from the edge of the bed at 2
-                            a.m. Those are different jobs, and a single default layout would compromise both. I
-                            designed the interaction model around two distinct states.
-                        </p>
-                        <p>
-                            <strong>Glance state</strong> surfaced only the active scent, light, and device status,
-                            sized large enough to parse from a distance. Color and weight did most of the work.
-                        </p>
-                        <p>
-                            <strong>Grab state</strong> revealed the control surface on tap, with the scent-and-light
-                            pairing as the primary target. Everything else lived behind a disclosure or a longer
-                            press. Hierarchy was the product.
+                            Further exploring through surveys, I mapped out the journey of a typical customer looking
+                            to join Scentsy. Although the resulting map was complex, it helped clarify and
+                            challenge the internal belief of what the "typical journey" of a customer looking to
+                            join Scentsy actually looks like.
                         </p>
                     </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- ═══════════════════════════════════════════
-             04 · PLATFORM EXPANSION
-        ═══════════════════════════════════════════ -->
-        <div class="panel-wrap">
-            <section class="panel reveal in">
-                <span class="eyebrow">04 · Platform Expansion</span>
-                <h2 class="heading-lg" style="margin-top: 1.1rem; margin-bottom: 2rem">
-                    From single-purpose controller to <span class="hl">full ecosystem.</span>
-                </h2>
-                <div class="cs-split-inner reverse">
-                    <div class="cs-split-body">
-                        <p>
-                            After launch, scope widened. I led the UX for four significant additions:
-                            over-the-air firmware updates, in-app fragrance reordering, device scheduling, and
-                            per-device scent and light settings.
-                        </p>
-                        <p>
-                            The governing principle: if a new user couldn't discover a feature in their first
-                            session, it had to earn its place in the UI or live a tap deeper. Nothing made the home
-                            screen by default.
-                        </p>
-                    </div>
-                    <div class="cs-split-media">
-                        <img class="phone-mockup" src="assets/phone-platform.png" alt="Scentsy Home App: platform expansion features" />
-                    </div>
-                </div>
-                <div class="cs-body">
-                    <p>
-                        <strong>OTA updates</strong> needed a new mental model. Users expect devices to "just work,"
-                        not to get better over time. I designed the update experience as a quiet, celebratory moment
-                        rather than a progress-bar interruption, with plain-language context for what was changing
-                        and why it mattered.
-                    </p>
-                    <p>
-                        <strong>In-app reordering</strong> had to feel like a continuation of fragrance discovery,
-                        not a sales surface pasted onto a utility. I worked with merchandising and marketing to
-                        collapse the reorder flow into three taps from the active device, anchored on the currently
-                        playing fragrance.
-                    </p>
-                    <p>
-                        <strong>Scheduling and per-device settings</strong> were built on a shared foundation so that
-                        adding the next connected product, which was already in the pipeline, wouldn't require
-                        re-designing either flow. That paid off when the second device shipped.
-                    </p>
-                </div>
-            </section>
-        </div>
-
-        <!-- ═══════════════════════════════════════════
-             05 · OUTCOMES
-        ═══════════════════════════════════════════ -->
-        <div class="panel-wrap">
-            <section class="panel dark reveal in">
-                <span class="eyebrow on-dark">05 · Outcomes</span>
-                <h2 class="heading-lg on-dark" style="margin-top: 1.1rem">
-                    What shipped and <span class="hl">what it did.</span>
-                </h2>
-                <div class="cs-outcomes-grid">
-                    <div class="cs-outcome">
-                        <div class="cs-outcome-metric"><em>3.6</em></div>
-                        <div class="cs-outcome-label">App Store rating, ongoing after launch</div>
-                    </div>
-                    <div class="cs-outcome">
-                        <div class="cs-outcome-metric"><em>7</em></div>
-                        <div class="cs-outcome-label">NDA research participants across three rounds</div>
-                    </div>
-                    <div class="cs-outcome">
-                        <div class="cs-outcome-metric"><em>OTA</em></div>
-                        <div class="cs-outcome-label">Update platform shipped to production</div>
-                    </div>
-                    <div class="cs-outcome">
-                        <div class="cs-outcome-metric"><em>1-tap</em></div>
-                        <div class="cs-outcome-label">Pairing handshake replacing the SSID-picker pattern</div>
-                    </div>
-                    <div class="cs-outcome">
-                        <div class="cs-outcome-metric"><em>3-tap</em></div>
-                        <div class="cs-outcome-label">In-app reorder flow from active device</div>
-                    </div>
-                    <div class="cs-outcome">
-                        <div class="cs-outcome-metric"><em>2nd</em></div>
-                        <div class="cs-outcome-label">Device shipped on the shared platform</div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- ═══════════════════════════════════════════
-             06 · REFLECTIONS
-        ═══════════════════════════════════════════ -->
-        <div class="panel-wrap">
-            <section class="panel reveal in">
-                <span class="eyebrow">06 · Reflections</span>
-                <h2 class="heading-lg" style="margin-top: 1.1rem">
-                    What I'd do <span class="hl">differently.</span>
-                </h2>
-                <div class="cs-body">
-                    <p>
-                        Two things, honestly. First, we shipped with a minimum-viable onboarding that worked but
-                        didn't teach. In hindsight I'd have held an extra two-week sprint to build progressive
-                        disclosure into the first session. The cost of users not fully understanding the
-                        scent-and-light pairing compounded across the first ninety days, and onboarding is the only
-                        cheap place to pay that cost.
-                    </p>
-                    <p>
-                        Second, I'd have pushed harder for a small, always-on visual signal of device state on the
-                        home screen. It was cut for scope, and its absence forced users to open the app more often
-                        than they needed to, which hurt the "it just works" feeling we'd been trying to design in
-                        from the start.
-                    </p>
-                    <p>
-                        The lesson from both is the same. When something is cut for scope in a zero-to-one product,
-                        check whether it's load-bearing for a property you're otherwise spending a lot of design
-                        energy to protect. If it is, the cut isn't saving time, it's deferring a debt.
-                    </p>
+                    <figure class="cs-split-media">
+                        <img
+                            src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/ef48211c-08bf-4426-aa90-63ae3c52236e_rw_3840.png?h=619266898c0c5b87acd6915cd96a5385"
+                            alt="Survey-informed journey map for customers joining Scentsy"
+                        />
+                        <figcaption>Quantitative journey map</figcaption>
+                    </figure>
                 </div>
             </section>
         </div>
@@ -1006,20 +716,20 @@
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
             <nav class="cs-footnav reveal in" aria-label="Case study navigation">
-                <a href="customer-subscription-program.html" class="cs-footnav-link">
+                <a href="scentsy-category-taxonomy-navigation.html" class="cs-footnav-link">
                     <span class="cs-footnav-direction mono">← Previous case study</span>
-                    <span class="cs-footnav-title">Customer Subscription Program</span>
-                </a>
-                <a href="scentsy-category-taxonomy-navigation.html" class="cs-footnav-link next">
-                    <span class="cs-footnav-direction mono">Next case study →</span>
                     <span class="cs-footnav-title">Category Taxonomy &amp; Navigation</span>
+                </a>
+                <a href="customer-subscription-program.html" class="cs-footnav-link next">
+                    <span class="cs-footnav-direction mono">Next case study →</span>
+                    <span class="cs-footnav-title">Customer Subscription Program</span>
                 </a>
             </nav>
         </div>
 
         <footer class="site-footer">
             <span>© 2026 Gary Engel · All rights reserved</span>
-            <span>Scentsy Home App · Case Study</span>
+            <span>Customer Journey: Joining Scentsy · Case Study</span>
         </footer>
 
         <!-- ═══════════════════════════════════════════
