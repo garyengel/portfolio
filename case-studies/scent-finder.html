@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Scentsy Harmonize · Fragrance Finder · Case Study · Gary Engel</title>
+        <meta
+            name="description"
+            content="A guided discovery concept that matches Scentsy customers to a fragrance across 205 options, based on their space and strength preferences."
+        />
+        <link
+            rel="icon"
+            href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230f1e2e'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' fill='%235aa8ea' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossorigin=""
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            /* ─────────────────────────────────────────────
+               RESET + TOKENS (match portfolio index.html)
+            ───────────────────────────────────────────── */
+            *,
+            *::before,
+            *::after {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            html {
+                scroll-behavior: smooth;
+                font-size: 16px;
+            }
+
+            :root {
+                --bg: #f7f9fb;
+                --panel: #ffffff;
+                --bg-alt: #eef2f6;
+                --ink: #0f1e2e;
+                --ink-soft: #33455a;
+                --muted: #5b6b7c;
+                --faint: #8b98a6;
+                --border: #dbe3ea;
+                --border-soft: #e7edf2;
+                --teal: #0061b6;
+                --teal-deep: #00457f;
+                --teal-bright: #5aa8ea;
+                --teal-bg: #e2eefb;
+                --teal-border: rgba(0, 97, 182, 0.32);
+                --nav-h: 76px;
+                --gutter: clamp(1.25rem, 5vw, 3.5rem);
+                --radius-sm: 10px;
+                --radius-md: 16px;
+                --radius-lg: 26px;
+                --radius-pill: 999px;
+                --shadow-card: 0 1px 2px rgba(15, 30, 46, 0.04), 0 1px 1px
+                    rgba(15, 30, 46, 0.03);
+                --shadow-float: 0 30px 70px rgba(6, 20, 34, 0.22), 0 4px 16px
+                    rgba(6, 20, 34, 0.1);
+            }
+
+            body {
+                font-family:
+                    "Inter",
+                    system-ui,
+                    -apple-system,
+                    "Segoe UI",
+                    sans-serif;
+                background: var(--bg);
+                color: var(--ink);
+                overflow-x: hidden;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+
+            ::selection {
+                background: var(--teal-bright);
+                color: var(--ink);
+            }
+
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+                opacity: 0.02;
+                pointer-events: none;
+                z-index: 9000;
+            }
+
+            a {
+                color: inherit;
+            }
+            img {
+                max-width: 100%;
+                display: block;
+            }
+
+            .mono {
+                font-family: "JetBrains Mono", ui-monospace, monospace;
+            }
+
+            /* ─────────────────────────────────────────────
+               SHARED: eyebrow pill / headings / buttons
+            ───────────────────────────────────────────── */
+            .eyebrow {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: var(--teal);
+                color: #fff;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.68rem;
+                font-weight: 600;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                padding: 0.42rem 0.95rem;
+                border-radius: var(--radius-pill);
+                width: max-content;
+            }
+            .eyebrow.on-dark {
+                background: rgba(250, 250, 249, 0.12);
+                color: var(--teal-bright);
+                border: 1px solid rgba(250, 250, 249, 0.16);
+            }
+
+            .heading-lg {
+                font-size: clamp(2.1rem, 4.2vw, 3.4rem);
+                font-weight: 700;
+                line-height: 1.12;
+                letter-spacing: -0.025em;
+                color: var(--ink);
+            }
+            .heading-lg .hl {
+                color: var(--teal);
+            }
+            .on-dark .heading-lg,
+            .heading-lg.on-dark {
+                color: var(--bg);
+            }
+            .on-dark .heading-lg .hl {
+                color: var(--teal-bright);
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.65rem;
+                font-family: "Inter", sans-serif;
+                font-size: 0.92rem;
+                font-weight: 600;
+                text-decoration: none;
+                padding: 0.9rem 1.5rem;
+                border-radius: var(--radius-pill);
+                border: 1.5px solid transparent;
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease,
+                    background 0.2s ease,
+                    border-color 0.2s ease,
+                    color 0.2s ease;
+                cursor: pointer;
+            }
+            .btn:hover {
+                transform: translateY(-2px);
+            }
+            .btn-dark {
+                background: var(--ink);
+                color: var(--bg);
+            }
+            .btn-dark:hover {
+                background: var(--teal-deep);
+            }
+
+            /* ─────────────────────────────────────────────
+               NAV
+            ───────────────────────────────────────────── */
+            .nav {
+                position: fixed;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 800;
+                height: var(--nav-h);
+                width: 100%;
+                max-width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 var(--gutter);
+                background: rgba(250, 250, 249, 0.82);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border: 1px solid transparent;
+                border-radius: 0;
+                overflow: hidden;
+                box-shadow: 0 0 0 0 rgba(15, 30, 46, 0);
+                transition:
+                    top 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+                    width 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+                    max-width 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+                    height 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+                    border-radius 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+                    border-color 0.45s ease,
+                    box-shadow 0.45s ease,
+                    padding 0.45s ease;
+            }
+            .nav.scrolled {
+                top: 14px;
+                width: calc(100% - 2.5rem);
+                max-width: 1180px;
+                height: calc(var(--nav-h) - 12px);
+                padding: 0 1.6rem;
+                border-radius: 20px;
+                border-color: var(--border-soft);
+                box-shadow:
+                    0 12px 32px rgba(15, 30, 46, 0.13),
+                    0 2px 10px rgba(15, 30, 46, 0.07);
+            }
+
+            .nav-progress {
+                position: absolute;
+                bottom: -1px;
+                left: 0;
+                height: 2px;
+                width: 0%;
+                background: var(--teal);
+                transition: width 0.08s linear, opacity 0.3s ease;
+                opacity: 1;
+            }
+            .nav.scrolled .nav-progress {
+                opacity: 0;
+            }
+
+            .nav-logo {
+                font-weight: 700;
+                font-size: 1.02rem;
+                letter-spacing: -0.01em;
+                color: var(--ink);
+                text-decoration: none;
+            }
+            .nav-logo em {
+                font-style: normal;
+                color: var(--teal);
+            }
+
+            .nav-cta {
+                padding: 0.62rem 1.25rem;
+                font-size: 0.82rem;
+            }
+            .nav-cta-arrow {
+                transition: transform 0.2s ease;
+            }
+            .nav-cta:hover .nav-cta-arrow {
+                transform: translateX(-3px);
+            }
+
+            /* ─────────────────────────────────────────────
+               HERO
+            ───────────────────────────────────────────── */
+            .hero {
+                position: relative;
+                padding-top: calc(var(--nav-h) + 4rem);
+                padding-bottom: 6rem;
+                overflow: hidden;
+                background: radial-gradient(
+                        120% 90% at 82% -10%,
+                        rgba(90, 168, 234, 0.18),
+                        transparent 60%
+                    ),
+                    linear-gradient(165deg, #0d2b47 0%, #0a1830 45%, #090c14 100%);
+                color: var(--bg);
+            }
+            .hero::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+                opacity: 0.05;
+                mix-blend-mode: overlay;
+                pointer-events: none;
+            }
+
+            .shell {
+                max-width: 1180px;
+                margin: 0 auto;
+                padding: 0 var(--gutter);
+                position: relative;
+                z-index: 1;
+            }
+
+            .hero-avail {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.55rem;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.72rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: rgba(250, 250, 249, 0.68);
+                margin-bottom: 1.75rem;
+            }
+            .avail-dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: var(--teal-bright);
+                box-shadow: 0 0 10px rgba(90, 168, 234, 0.7);
+            }
+
+            .hero-name {
+                font-size: clamp(2.6rem, 6.4vw, 4.8rem);
+                font-weight: 800;
+                line-height: 1.04;
+                letter-spacing: -0.03em;
+                color: var(--bg);
+                max-width: 900px;
+            }
+            .hero-name .accent {
+                color: var(--teal-bright);
+            }
+
+            .hero-lede {
+                margin-top: 1.75rem;
+                font-size: 1.1rem;
+                line-height: 1.75;
+                color: rgba(250, 250, 249, 0.72);
+                max-width: 640px;
+            }
+            .hero-lede .hl {
+                color: var(--teal-bright);
+                font-weight: 600;
+            }
+
+            /* Floating stat/meta card overlapping hero bottom edge */
+            .stat-float {
+                position: relative;
+                z-index: 2;
+                max-width: 1180px;
+                margin: -4rem auto 0;
+                padding: 0 var(--gutter);
+            }
+            .stat-float-inner {
+                background: var(--panel);
+                border: 1px solid var(--border-soft);
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-float);
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .stat-cell {
+                flex: 1;
+                min-width: 160px;
+                padding: 1.6rem 1.75rem;
+                border-right: 1px solid var(--border-soft);
+            }
+            .stat-cell:last-child {
+                border-right: none;
+            }
+            .stat-num {
+                display: block;
+                font-size: 2.1rem;
+                font-weight: 800;
+                letter-spacing: -0.02em;
+                color: var(--ink);
+                line-height: 1;
+            }
+            .stat-cell.text .stat-num {
+                font-size: 1.02rem;
+                font-weight: 600;
+                line-height: 1.45;
+            }
+            .stat-label {
+                display: block;
+                margin-top: 0.5rem;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.7rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--faint);
+            }
+
+            /* Hero figure — floats free, not boxed in a panel */
+            .cs-hero-figure-wrap {
+                max-width: 1180px;
+                margin: 3.5rem auto 0;
+                padding: 0 var(--gutter);
+                display: flex;
+                justify-content: center;
+            }
+            .cs-figure {
+                max-width: 900px;
+                width: 100%;
+            }
+            .cs-figure img {
+                width: 100%;
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-float);
+                border: 1px solid var(--border-soft);
+                background: var(--panel);
+            }
+            .cs-caption {
+                margin-top: 1rem;
+                text-align: center;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.72rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--faint);
+            }
+
+            /* ─────────────────────────────────────────────
+               PANEL (rounded card sections)
+            ───────────────────────────────────────────── */
+            .panel-wrap {
+                max-width: 1180px;
+                margin: 2.5rem auto;
+                padding: 0 var(--gutter);
+            }
+            .panel {
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-lg);
+                padding: clamp(2.5rem, 6vw, 4.5rem);
+                box-shadow: var(--shadow-card);
+            }
+
+            /* ─────────────────────────────────────────────
+               CASE STUDY PROSE
+            ───────────────────────────────────────────── */
+            .cs-body {
+                display: flex;
+                flex-direction: column;
+                gap: 1.2rem;
+                margin-top: 2rem;
+            }
+            .cs-body p {
+                font-size: 1rem;
+                line-height: 1.85;
+                color: var(--muted);
+                max-width: 680px;
+            }
+            .cs-body p strong {
+                color: var(--ink);
+                font-weight: 600;
+            }
+
+            .cs-callout {
+                margin: 0.5rem 0;
+                padding: 1.4rem 1.6rem;
+                border: 1px dashed var(--border);
+                border-radius: var(--radius-sm);
+                background: var(--bg-alt);
+                display: flex;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            .cs-callout-icon {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.64rem;
+                font-weight: 600;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--teal-deep);
+                background: var(--teal-bg);
+                border: 1px solid var(--teal-border);
+                padding: 0.35rem 0.7rem;
+                border-radius: var(--radius-pill);
+                flex-shrink: 0;
+                line-height: 1;
+            }
+            .cs-callout-body {
+                font-size: 0.92rem;
+                line-height: 1.65;
+                color: var(--muted);
+            }
+
+            /* Split — image alongside prose within a panel */
+            .cs-split-inner {
+                display: grid;
+                grid-template-columns: 380px 1fr;
+                gap: 2.75rem;
+                align-items: center;
+            }
+            .cs-split-inner.reverse {
+                grid-template-columns: 1fr 380px;
+            }
+            .cs-split-media img {
+                width: 100%;
+                border-radius: var(--radius-md);
+                box-shadow: var(--shadow-card);
+                border: 1px solid var(--border-soft);
+            }
+            .cs-split-media figcaption {
+                margin-top: 0.75rem;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.68rem;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                color: var(--faint);
+                text-align: center;
+            }
+            .cs-split-body .eyebrow {
+                margin-bottom: 1.1rem;
+            }
+            .cs-split-body .heading-lg {
+                font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+                margin-bottom: 1.25rem;
+                max-width: 22ch;
+            }
+            .cs-split-body p {
+                font-size: 0.98rem;
+                line-height: 1.75;
+                color: var(--muted);
+                margin-bottom: 1rem;
+            }
+            .cs-split-body p:last-child {
+                margin-bottom: 0;
+            }
+            .cs-split-body p strong {
+                color: var(--ink);
+                font-weight: 600;
+            }
+
+            /* Weighting list — how the match score is built */
+            .cs-weights {
+                margin-top: 0.5rem;
+                display: grid;
+                gap: 0.75rem;
+            }
+            .cs-weight {
+                display: flex;
+                align-items: baseline;
+                gap: 1rem;
+                padding: 1rem 1.25rem;
+                border-left: 3px solid var(--teal-border);
+                background: var(--bg-alt);
+                border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            }
+            .cs-weight-pts {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: var(--teal-deep);
+                flex-shrink: 0;
+                width: 3.5rem;
+            }
+            .cs-weight-label {
+                font-size: 0.92rem;
+                color: var(--ink-soft);
+            }
+
+            /* ─────────────────────────────────────────────
+               SITE FOOTER
+            ───────────────────────────────────────────── */
+            footer.site-footer {
+                max-width: 1180px;
+                margin: 0 auto 2.5rem;
+                padding: 1.5rem var(--gutter);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            footer.site-footer span {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.72rem;
+                letter-spacing: 0.06em;
+                color: var(--faint);
+            }
+
+            /* ─────────────────────────────────────────────
+               SCROLL REVEAL
+            ───────────────────────────────────────────── */
+            .reveal {
+                opacity: 0;
+                transform: translateY(18px);
+                transition:
+                    opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+                    transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+            }
+            .reveal.in {
+                opacity: 1;
+                transform: none;
+            }
+
+            /* ─────────────────────────────────────────────
+               RESPONSIVE
+            ───────────────────────────────────────────── */
+            @media (max-width: 1000px) {
+                .cs-split-inner,
+                .cs-split-inner.reverse {
+                    grid-template-columns: 1fr;
+                    gap: 1.75rem;
+                }
+                .cs-split-media {
+                    max-width: 420px;
+                    margin: 0 auto;
+                }
+                .stat-cell {
+                    min-width: 45%;
+                    border-right: none !important;
+                    border-bottom: 1px solid var(--border-soft);
+                }
+            }
+            @media (max-width: 540px) {
+                .stat-cell {
+                    min-width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- ═══════════════════════════════════════════
+             NAV
+        ═══════════════════════════════════════════ -->
+        <header class="nav" id="nav">
+            <div class="nav-progress" id="navProgress"></div>
+            <a href="../index.html#home" class="nav-logo">Gary Engel<em>.</em></a>
+            <a href="../index.html#work" class="btn btn-dark nav-cta">
+                <span class="nav-cta-arrow" aria-hidden="true">←</span> Back to Case Studies
+            </a>
+        </header>
+
+        <!-- ═══════════════════════════════════════════
+             HERO
+        ═══════════════════════════════════════════ -->
+        <section class="hero" id="home">
+            <div class="shell">
+                <span class="hero-avail"><span class="avail-dot"></span> Scentsy · Concept Exploration</span>
+                <h1 class="hero-name">Scentsy Harmonize · <span class="accent">Fragrance Finder</span></h1>
+                <p class="hero-lede">
+                    With 205 fragrances in the catalog, analysis paralysis sets in fast, especially for
+                    <span class="hl">someone new to Scentsy.</span> This concept matches people to a fragrance based
+                    on where they'll use it and how strong they want it, not on scent-family vocabulary they don't
+                    have yet.
+                </p>
+            </div>
+        </section>
+
+        <div class="stat-float reveal in">
+            <div class="stat-float-inner">
+                <div class="stat-cell text">
+                    <span class="stat-num">UX Design Lead</span>
+                    <span class="stat-label mono">Role</span>
+                </div>
+                <div class="stat-cell text">
+                    <span class="stat-num">Fragrance Discovery</span>
+                    <span class="stat-label mono">Focus</span>
+                </div>
+                <div class="stat-cell text">
+                    <span class="stat-num">Guided Quiz · Weighted Matching</span>
+                    <span class="stat-label mono">Method</span>
+                </div>
+                <div class="stat-cell text">
+                    <span class="stat-num">Concept / Prototype</span>
+                    <span class="stat-label mono">Status</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="cs-hero-figure-wrap">
+            <figure class="cs-figure reveal in">
+                <img
+                    src="assets/scent-finder/welcome.png"
+                    alt="Scentsy Harmonize welcome screen: Discover Your Signature Fragrance"
+                />
+                <figcaption class="cs-caption">Four questions, matched against 205 fragrances</figcaption>
+            </figure>
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             01 · THE CHALLENGE
+        ═══════════════════════════════════════════ -->
+        <div class="panel-wrap">
+            <section class="panel reveal in">
+                <span class="eyebrow">01 · The Challenge</span>
+                <h2 class="heading-lg" style="margin-top: 1.1rem">
+                    Too many good options is still <span class="hl">too many options.</span>
+                </h2>
+                <div class="cs-body">
+                    <p>
+                        Scentsy's catalog runs deep: 205 fragrances at the time of this concept, spanning families
+                        like floral, citrus, bakery, fresh, fruity, and woodsy. That's a strength for people who
+                        already know what they like. For someone newer to the brand, it's the classic choice-overload
+                        problem: a wall of options with no obvious starting point.
+                    </p>
+                    <p>
+                        Browsing by scent family alone assumes a customer already has that vocabulary. It doesn't ask
+                        the questions that actually predict satisfaction: which room this is for, what mood they're
+                        going for, and (just as important) how strong they actually want it. A fragrance that's a
+                        great match on paper still fails if it's twice as strong as someone wanted in a small
+                        bedroom.
+                    </p>
+                    <div class="cs-callout">
+                        <span class="cs-callout-icon">Concept</span>
+                        <p class="cs-callout-body">
+                            This is a personal concept exploration, not a shipped feature. It's built as a working
+                            prototype against real fragrance data to test whether a guided, needs-based match could
+                            replace open-ended browsing, not to report production results.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             02 · GUIDED DISCOVERY
+        ═══════════════════════════════════════════ -->
+        <div class="panel-wrap">
+            <section class="panel reveal in">
+                <span class="eyebrow">02 · Guided Discovery</span>
+                <h2 class="heading-lg" style="margin-top: 1.1rem; margin-bottom: 2rem">
+                    Four questions, framed around <span class="hl">real decisions.</span>
+                </h2>
+                <div class="cs-split-inner">
+                    <figure class="cs-split-media">
+                        <img
+                            src="assets/scent-finder/quiz-rooms.png"
+                            alt="Scentsy Harmonize quiz: which rooms do you want to fragrance?"
+                        />
+                        <figcaption>Question 1 of 4 · Space</figcaption>
+                    </figure>
+                    <div class="cs-split-body">
+                        <p>
+                            Instead of asking people to self-identify a scent family, the quiz starts with context
+                            they already know: which rooms they want to fragrance, and what ambiance they're after in
+                            each. Photography does the work that scent-family jargon can't: a living room card and a
+                            bathroom card look and feel different before a single word is read.
+                        </p>
+                        <p>
+                            <strong>Rooms</strong> and <strong>ambiance</strong> are both multi-select, since most
+                            people are fragrancing more than one space with more than one mood in mind. Scent family
+                            comes third, as a lighter-weight preference layer once space and mood are already set.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             03 · WEIGHTING STRENGTH
+        ═══════════════════════════════════════════ -->
+        <div class="panel-wrap">
+            <section class="panel reveal in">
+                <span class="eyebrow">03 · Weighting Strength</span>
+                <h2 class="heading-lg" style="margin-top: 1.1rem; margin-bottom: 2rem">
+                    Strength isn't a <span class="hl">tiebreaker. It's the filter.</span>
+                </h2>
+                <div class="cs-split-inner reverse">
+                    <div class="cs-split-body">
+                        <p>
+                            The last question asks how strong the fragrance should be (light and subtle, moderate,
+                            or strong and bold), and it's the single heaviest-weighted signal in the whole match. A
+                            fragrance can score well on room and mood and still be the wrong pick if it fills a small
+                            bathroom when someone wanted something barely-there.
+                        </p>
+                        <p>
+                            Behind the scenes, every one of the 205 fragrances carries tags for room fit, mood, scent
+                            family, and intensity. Each answer scores every fragrance against those tags, then ranks
+                            the full catalog:
+                        </p>
+                    </div>
+                    <figure class="cs-split-media">
+                        <img
+                            src="assets/scent-finder/quiz-intensity.png"
+                            alt="Scentsy Harmonize quiz: how strong should the fragrance be?"
+                        />
+                        <figcaption>Question 4 of 4 · Strength</figcaption>
+                    </figure>
+                </div>
+                <div class="cs-weights cs-body">
+                    <div class="cs-weight">
+                        <span class="cs-weight-pts mono">+4</span>
+                        <span class="cs-weight-label">Exact intensity match (light, moderate, or strong)</span>
+                    </div>
+                    <div class="cs-weight">
+                        <span class="cs-weight-pts mono">+3</span>
+                        <span class="cs-weight-label">Scent family match, and any other shared attribute tag</span>
+                    </div>
+                    <div class="cs-weight">
+                        <span class="cs-weight-pts mono">+2</span>
+                        <span class="cs-weight-label">Each matching room, each matching ambiance</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             04 · THE MATCH
+        ═══════════════════════════════════════════ -->
+        <div class="panel-wrap">
+            <section class="panel reveal in">
+                <span class="eyebrow">04 · The Match</span>
+                <h2 class="heading-lg" style="margin-top: 1.1rem">
+                    One confident answer, <span class="hl">not another list.</span>
+                </h2>
+                <div class="cs-body">
+                    <p>
+                        The whole point of asking four questions is to earn the right to give one clear answer. The
+                        top-scoring fragrance is presented as a single, confident recommendation: full photography,
+                        scent notes, which rooms it's best for, and a match percentage, before anything else on the
+                        page. Six supporting alternatives follow underneath, each still carrying its own scent
+                        profile, best-for rooms, intensity, and rating, so the choice never feels like a black box.
+                    </p>
+                    <p>
+                        A "Your Profile" recap sits above the results, restating the rooms, moods, families, and
+                        strength the person picked. It's a small thing, but it closes the loop: the recommendation
+                        visibly traces back to what they actually said, not a mystery algorithm.
+                    </p>
+                </div>
+                <div class="cs-hero-figure-wrap" style="margin-top: 2.5rem; padding: 0;">
+                    <figure class="cs-figure reveal in" style="max-width: 100%;">
+                        <img
+                            src="assets/scent-finder/results.png"
+                            alt="Scentsy Harmonize results: top match plus six supporting recommendations"
+                        />
+                        <figcaption class="cs-caption">Top match, profile recap, and six supporting picks</figcaption>
+                    </figure>
+                </div>
+            </section>
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             05 · REFLECTIONS
+        ═══════════════════════════════════════════ -->
+        <div class="panel-wrap">
+            <section class="panel reveal in">
+                <span class="eyebrow">05 · Reflections</span>
+                <h2 class="heading-lg" style="margin-top: 1.1rem">
+                    What this would need <span class="hl">to go further.</span>
+                </h2>
+                <div class="cs-body">
+                    <p>
+                        As a concept, the biggest open question is the weighting itself. Right now the point values
+                        (intensity worth more than room, room worth more than a loose tag match) are my own informed
+                        judgment about what predicts satisfaction, not something validated against real purchase or
+                        return data. Before this could ship, I'd want to test that weighting against actual customer
+                        behavior, not just intuition.
+                    </p>
+                    <p>
+                        I'd also want moderated usability sessions with people genuinely new to Scentsy, to see
+                        whether four questions is the right number, and whether "ambiance" language (cozy, energizing,
+                        romantic) actually maps to how people describe what they want, or whether it needs simpler
+                        words.
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <footer class="site-footer">
+            <span>© 2026 Gary Engel · All rights reserved</span>
+            <span>Scentsy Harmonize · Fragrance Finder · Case Study</span>
+        </footer>
+
+        <!-- ═══════════════════════════════════════════
+             JAVASCRIPT
+        ═══════════════════════════════════════════ -->
+        <script>
+            // Nav border + scroll progress
+            const nav = document.getElementById("nav");
+            const navProgress = document.getElementById("navProgress");
+            function onScroll() {
+                const y = window.scrollY;
+                nav.classList.toggle("scrolled", y > 32);
+                const max = document.documentElement.scrollHeight - window.innerHeight;
+                navProgress.style.width = max > 0 ? (y / max) * 100 + "%" : "0%";
+            }
+            document.addEventListener("scroll", onScroll, { passive: true });
+            onScroll();
+
+            // Scroll-reveal
+            const revealEls = document.querySelectorAll(".reveal");
+            const io = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("in");
+                            io.unobserve(entry.target);
+                        }
+                    });
+                },
+                { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
+            );
+            revealEls.forEach((el) => io.observe(el));
+        </script>
+    </body>
+</html>
