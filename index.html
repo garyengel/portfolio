@@ -770,31 +770,6 @@
                 gap: 1rem;
             }
 
-            .expand-all-btn {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-                font-family: "JetBrains Mono", monospace;
-                font-size: 0.74rem;
-                letter-spacing: 0.06em;
-                text-transform: uppercase;
-                color: var(--muted);
-                background: var(--bg-alt);
-                border: 1px solid var(--border);
-                border-radius: var(--radius-pill);
-                padding: 0.6rem 1.1rem;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-            .expand-all-btn:hover {
-                color: var(--teal-deep);
-                border-color: var(--teal-border);
-                background: var(--teal-bg);
-            }
-            .expand-all-btn .vab-arrow {
-                transition: transform 0.3s ease;
-            }
-
             .project-list {
                 display: flex;
                 flex-direction: column;
@@ -802,6 +777,7 @@
             }
 
             .project-item {
+                position: relative;
                 border: 1px solid var(--border);
                 border-radius: var(--radius-md);
                 background: var(--bg);
@@ -810,19 +786,25 @@
                     border-color 0.25s ease,
                     box-shadow 0.25s ease;
             }
-            .project-item:hover,
-            .project-item.open {
+            .project-item:hover {
                 border-color: var(--teal-border);
                 box-shadow: var(--shadow-card);
             }
 
+            /* Makes the entire card clickable while keeping the thumbnail
+               and "Read Case Study" as real, independently-focusable links. */
+            .project-card-link {
+                position: absolute;
+                inset: 0;
+                z-index: 5;
+            }
+
             .project-row {
                 display: grid;
-                grid-template-columns: 44px 1fr auto auto;
+                grid-template-columns: 44px 1fr;
                 align-items: center;
                 gap: 1.25rem;
                 padding: 1.35rem 1.5rem;
-                cursor: pointer;
             }
 
             .proj-num {
@@ -839,8 +821,7 @@
                 font-weight: 700;
                 transition: all 0.25s ease;
             }
-            .project-item.open .proj-num,
-            .project-row:hover .proj-num {
+            .project-item:hover .proj-num {
                 background: var(--teal);
                 color: #fff;
             }
@@ -873,67 +854,6 @@
                 border-radius: var(--radius-pill);
             }
 
-            .proj-thumb {
-                width: 152px;
-                height: 108px;
-                border-radius: var(--radius-sm);
-                overflow: hidden;
-                border: 1px solid var(--border);
-                box-shadow: var(--shadow-card);
-                flex-shrink: 0;
-                transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
-            }
-            .proj-thumb img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                display: block;
-                transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
-            }
-            .project-row:hover .proj-thumb,
-            .project-item.open .proj-thumb {
-                border-color: var(--teal-border);
-                box-shadow: var(--shadow-float);
-                transform: translateY(-1px);
-            }
-            .project-row:hover .proj-thumb img,
-            .project-item.open .proj-thumb img {
-                transform: scale(1.1);
-            }
-
-            .proj-arrow {
-                width: 34px;
-                height: 34px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border: 1px solid var(--border);
-                border-radius: 50%;
-                color: var(--muted);
-                transition: all 0.3s ease;
-                flex-shrink: 0;
-            }
-            .project-row:hover .proj-arrow,
-            .project-item.open .proj-arrow {
-                border-color: var(--teal);
-                color: var(--teal);
-                background: var(--teal-bg);
-            }
-            .project-item.open .proj-arrow {
-                transform: rotate(180deg);
-            }
-
-            .project-detail {
-                display: grid;
-                grid-template-rows: 0fr;
-                transition: grid-template-rows 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            }
-            .project-item.open .project-detail {
-                grid-template-rows: 1fr;
-            }
-            .project-detail-inner {
-                overflow: hidden;
-            }
             .project-detail-content {
                 padding: 0 1.5rem 1.75rem 5.75rem;
             }
@@ -964,7 +884,17 @@
                 object-fit: cover;
                 transition: transform 0.5s ease;
             }
-            .detail-thumb:hover img {
+            /* This project's thumbnail is a full, narrow phone screenshot —
+               cover would crop off the top/bottom, so show it whole instead. */
+            .detail-thumb-contain {
+                background: var(--bg-alt);
+                padding: 1.25rem;
+            }
+            .detail-thumb-contain img {
+                object-fit: contain;
+            }
+            .detail-thumb:hover img,
+            .project-item:hover .detail-thumb img {
                 transform: scale(1.05);
             }
             .detail-text {
@@ -1016,12 +946,14 @@
             .detail-link span {
                 transition: transform 0.2s ease;
             }
-            .detail-link:hover {
+            .detail-link:hover,
+            .project-item:hover .detail-link {
                 background: var(--teal-deep);
                 transform: translateY(-2px);
                 box-shadow: 0 10px 22px rgba(0, 97, 182, 0.24);
             }
-            .detail-link:hover span {
+            .detail-link:hover span,
+            .project-item:hover .detail-link span {
                 transform: translateX(3px);
             }
 
@@ -1225,10 +1157,7 @@
                     grid-template-columns: repeat(2, 1fr);
                 }
                 .project-row {
-                    grid-template-columns: 38px 1fr 34px;
-                }
-                .proj-thumb {
-                    display: none;
+                    grid-template-columns: 38px 1fr;
                 }
                 .project-detail-content {
                     padding-left: 1.5rem;
@@ -1432,15 +1361,17 @@
                         <span class="eyebrow">Case Studies</span>
                         <h2 class="heading-lg">Projects that moved the <span class="hl">needle.</span></h2>
                     </div>
-                    <button type="button" class="expand-all-btn mono" id="expandAllBtn" aria-expanded="false">
-                        <span class="vab-text">Expand all case studies</span>
-                        <span class="vab-arrow">↓</span>
-                    </button>
                 </div>
 
                 <div class="project-list">
                     <div class="project-item reveal in" data-index="0">
-                        <div class="project-row" role="button" tabindex="0" aria-expanded="false">
+                        <a
+                            class="project-card-link"
+                            href="case-studies/scentsy-category-taxonomy-navigation.html"
+                            aria-hidden="true"
+                            tabindex="-1"
+                        ></a>
+                        <div class="project-row">
                             <span class="proj-num">01</span>
                             <div class="proj-title-group">
                                 <span class="proj-title">Category Taxonomy &amp; Navigation</span>
@@ -1449,12 +1380,6 @@
                                     <span class="proj-tag">E-Commerce</span>
                                     <span class="proj-tag">Research</span>
                                 </div>
-                            </div>
-                            <div class="proj-thumb" aria-hidden="true">
-                                <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/1ab45930-d87e-4489-a351-54135400595c_rw_1200.png?h=4d10d10b87036cf46b2d129d5446c7ba" alt="" loading="lazy" />
-                            </div>
-                            <div class="proj-arrow" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v10M2 7l5 5 5-5"></path></svg>
                             </div>
                         </div>
                         <div class="project-detail">
@@ -1486,7 +1411,13 @@
                     </div>
 
                     <div class="project-item reveal d1 in" data-index="1">
-                        <div class="project-row" role="button" tabindex="0" aria-expanded="false">
+                        <a
+                            class="project-card-link"
+                            href="case-studies/scentsy-home-app.html"
+                            aria-hidden="true"
+                            tabindex="-1"
+                        ></a>
+                        <div class="project-row">
                             <span class="proj-num">02</span>
                             <div class="proj-title-group">
                                 <span class="proj-title">Scentsy Home App</span>
@@ -1496,19 +1427,13 @@
                                     <span class="proj-tag">UX Research</span>
                                 </div>
                             </div>
-                            <div class="proj-thumb" aria-hidden="true">
-                                <img src="case-studies/assets/thumb-diffuser-solo.png" alt="" loading="lazy" />
-                            </div>
-                            <div class="proj-arrow" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v10M2 7l5 5 5-5"></path></svg>
-                            </div>
                         </div>
                         <div class="project-detail">
                             <div class="project-detail-inner">
                                 <div class="project-detail-content">
                                     <div class="detail-body has-thumb">
-                                        <a href="case-studies/scentsy-home-app.html" class="detail-thumb" aria-label="Open Scentsy Home App case study">
-                                            <img src="case-studies/assets/thumb-diffuser-solo.png" alt="Scentsy Home App: device control screen for the Scentsy Diffuser Solo" />
+                                        <a href="case-studies/scentsy-home-app.html" class="detail-thumb detail-thumb-contain" aria-label="Open Scentsy Home App case study">
+                                            <img src="case-studies/assets/phone-hero.png" alt="Scentsy Home App: device control screen for the Scentsy Diffuser Solo" />
                                         </a>
                                         <div class="detail-text">
                                             <p class="detail-description">
@@ -1536,7 +1461,13 @@
                     </div>
 
                     <div class="project-item reveal d2 in" data-index="2">
-                        <div class="project-row" role="button" tabindex="0" aria-expanded="false">
+                        <a
+                            class="project-card-link"
+                            href="case-studies/customer-journey-joining-scentsy.html"
+                            aria-hidden="true"
+                            tabindex="-1"
+                        ></a>
+                        <div class="project-row">
                             <span class="proj-num">03</span>
                             <div class="proj-title-group">
                                 <span class="proj-title">Customer Journey: Joining Scentsy</span>
@@ -1545,12 +1476,6 @@
                                     <span class="proj-tag">Journey Mapping</span>
                                     <span class="proj-tag">Consultant Onboarding</span>
                                 </div>
-                            </div>
-                            <div class="proj-thumb" aria-hidden="true">
-                                <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/6e2cbf1b-585e-41aa-b21c-1029a735b27c_rw_1920.png?h=64bb64b87c9768e74c68419db154e664" alt="" loading="lazy" />
-                            </div>
-                            <div class="proj-arrow" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v10M2 7l5 5 5-5"></path></svg>
                             </div>
                         </div>
                         <div class="project-detail">
@@ -1581,7 +1506,13 @@
                     </div>
 
                     <div class="project-item reveal d3 in" data-index="3">
-                        <div class="project-row" role="button" tabindex="0" aria-expanded="false">
+                        <a
+                            class="project-card-link"
+                            href="case-studies/customer-subscription-program.html"
+                            aria-hidden="true"
+                            tabindex="-1"
+                        ></a>
+                        <div class="project-row">
                             <span class="proj-num">04</span>
                             <div class="proj-title-group">
                                 <span class="proj-title">Customer Subscription Program</span>
@@ -1590,12 +1521,6 @@
                                     <span class="proj-tag">Loyalty</span>
                                     <span class="proj-tag">E-Commerce</span>
                                 </div>
-                            </div>
-                            <div class="proj-thumb" aria-hidden="true">
-                                <img src="https://cdn.myportfolio.com/889dbe41-9756-4e3b-8e85-e8e23367cb56/01916967-589c-4bd3-88ef-0cd9fa7b9b62_rw_1920.png?h=a90bfacf9c4092828742717c5fc6226e" alt="" loading="lazy" />
-                            </div>
-                            <div class="proj-arrow" aria-hidden="true">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v10M2 7l5 5 5-5"></path></svg>
                             </div>
                         </div>
                         <div class="project-detail">
@@ -1703,7 +1628,7 @@
                         <a href="mailto:iamgaryengel@gmail.com" class="btn btn-solid" style="justify-content: center">
                             Send a Message <span class="btn-arrow">→</span>
                         </a>
-                        <a href="#" class="btn btn-outline on-dark" style="justify-content: center">
+                        <a href="assets/gary-engel-resume.pdf" download="Gary Engel - UX Leadership Resume.pdf" class="btn btn-outline on-dark" style="justify-content: center">
                             Download Resume <span class="btn-arrow">↓</span>
                         </a>
                         <a href="https://linkedin.com/in/garyengel" target="_blank" rel="noopener" class="social-link">↗ LinkedIn</a>
@@ -1864,40 +1789,6 @@
                 { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
             );
             revealEls.forEach((el) => io.observe(el));
-
-            // Project accordion
-            const projectItems = document.querySelectorAll(".project-item");
-            const expandAllBtn = document.getElementById("expandAllBtn");
-            let allExpanded = false;
-
-            function setOpen(item, open) {
-                item.classList.toggle("open", open);
-                const row = item.querySelector(".project-row");
-                if (row) row.setAttribute("aria-expanded", open ? "true" : "false");
-            }
-
-            projectItems.forEach((item) => {
-                const row = item.querySelector(".project-row");
-                row.addEventListener("click", () => setOpen(item, !item.classList.contains("open")));
-                row.addEventListener("keydown", (e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setOpen(item, !item.classList.contains("open"));
-                    }
-                });
-            });
-
-            expandAllBtn.addEventListener("click", () => {
-                allExpanded = !allExpanded;
-                projectItems.forEach((item) => setOpen(item, allExpanded));
-                expandAllBtn.setAttribute("aria-expanded", allExpanded ? "true" : "false");
-                expandAllBtn.querySelector(".vab-text").textContent = allExpanded
-                    ? "Collapse all case studies"
-                    : "Expand all case studies";
-                expandAllBtn.querySelector(".vab-arrow").style.transform = allExpanded
-                    ? "rotate(180deg)"
-                    : "none";
-            });
         </script>
     </body>
 </html>
