@@ -1,0 +1,375 @@
+            /* ─────────────────────────────────────────────
+               HERO
+            ───────────────────────────────────────────── */
+            .hero {
+                position: relative;
+                padding-top: calc(var(--nav-h) + 4rem);
+                padding-bottom: 6rem;
+                overflow: hidden;
+                background: radial-gradient(
+                        120% 90% at 82% -10%,
+                        rgba(90, 168, 234, 0.18),
+                        transparent 60%
+                    ),
+                    linear-gradient(165deg, #0d2b47 0%, #0a1830 45%, #090c14 100%);
+                color: var(--bg);
+            }
+            .hero::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+                opacity: 0.05;
+                mix-blend-mode: overlay;
+                pointer-events: none;
+            }
+
+            .shell {
+                max-width: 1180px;
+                margin: 0 auto;
+                padding: 0 var(--gutter);
+                position: relative;
+                z-index: 1;
+            }
+
+            .hero-avail {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.55rem;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.72rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: rgba(250, 250, 249, 0.68);
+                margin-bottom: 1.75rem;
+            }
+            .avail-dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: var(--teal-bright);
+                box-shadow: 0 0 10px rgba(90, 168, 234, 0.7);
+            }
+
+            .hero-name {
+                font-size: clamp(2.6rem, 6.4vw, 4.8rem);
+                font-weight: 800;
+                line-height: 1.04;
+                letter-spacing: -0.03em;
+                color: var(--bg);
+                max-width: 900px;
+            }
+            .hero-name .accent {
+                color: var(--teal-bright);
+            }
+
+            .hero-lede {
+                margin-top: 1.75rem;
+                font-size: 1.1rem;
+                line-height: 1.75;
+                color: rgba(250, 250, 249, 0.72);
+                max-width: 620px;
+            }
+            .hero-lede .hl {
+                color: var(--teal-bright);
+                font-weight: 600;
+            }
+
+            /* Floating stat/meta card overlapping hero bottom edge */
+            .stat-float {
+                position: relative;
+                z-index: 2;
+                max-width: 1180px;
+                margin: -4rem auto 0;
+                padding: 0 var(--gutter);
+            }
+            .stat-float-inner {
+                background: var(--panel);
+                border: 1px solid var(--border-soft);
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-float);
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .stat-cell {
+                flex: 1;
+                min-width: 160px;
+                padding: 1.6rem 1.75rem;
+                border-right: 1px solid var(--border-soft);
+            }
+            .stat-cell:last-child {
+                border-right: none;
+            }
+            .stat-num {
+                display: block;
+                font-size: 2.1rem;
+                font-weight: 800;
+                letter-spacing: -0.02em;
+                color: var(--ink);
+                line-height: 1;
+            }
+            .stat-cell.text .stat-num {
+                font-size: 1.02rem;
+                font-weight: 600;
+                line-height: 1.45;
+            }
+            .stat-label {
+                display: block;
+                margin-top: 0.5rem;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.7rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--faint);
+            }
+
+            /* Hero figure — floats free, not boxed in a panel */
+            .cs-hero-figure-wrap {
+                max-width: 1180px;
+                margin: 3.5rem auto 0;
+                padding: 0 var(--gutter);
+                display: flex;
+                justify-content: center;
+            }
+            .cs-figure {
+                max-width: 640px;
+                width: 100%;
+            }
+            .cs-figure img {
+                width: 100%;
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-float);
+                border: 1px solid var(--border-soft);
+                background: var(--panel);
+            }
+            .cs-caption {
+                margin-top: 1rem;
+                text-align: center;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.72rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--faint);
+            }
+
+            /* Phone mockups ship with transparent backgrounds — suppress
+               the rectangular shadow/radius that would otherwise box them. */
+            .phone-mockup {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                border: none !important;
+                background: transparent !important;
+            }
+
+
+            /* ─────────────────────────────────────────────
+               CASE STUDY PROSE
+            ───────────────────────────────────────────── */
+            .cs-body {
+                display: flex;
+                flex-direction: column;
+                gap: 1.2rem;
+                margin-top: 2rem;
+            }
+            .cs-body p {
+                font-size: 1rem;
+                line-height: 1.85;
+                color: var(--muted);
+                max-width: 680px;
+            }
+            .cs-body p strong {
+                color: var(--ink);
+                font-weight: 600;
+            }
+
+            .cs-callout {
+                margin: 0.5rem 0;
+                padding: 1.4rem 1.6rem;
+                border: 1px dashed var(--border);
+                border-radius: var(--radius-sm);
+                background: var(--bg-alt);
+                display: flex;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            .cs-callout-icon {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.64rem;
+                font-weight: 600;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--teal-deep);
+                background: var(--teal-bg);
+                border: 1px solid var(--teal-border);
+                padding: 0.35rem 0.7rem;
+                border-radius: var(--radius-pill);
+                flex-shrink: 0;
+                line-height: 1;
+            }
+            .cs-callout-body {
+                font-size: 0.92rem;
+                line-height: 1.65;
+                color: var(--muted);
+            }
+
+            .cs-pullquote {
+                margin: 0.5rem 0;
+                padding: 1.75rem 2rem;
+                border-left: 3px solid var(--teal);
+                background: var(--teal-bg);
+                border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+                font-size: clamp(1.1rem, 2vw, 1.3rem);
+                font-weight: 500;
+                line-height: 1.55;
+                color: var(--ink-soft);
+            }
+
+            /* Split — image alongside prose within a panel */
+            .cs-split-inner {
+                display: grid;
+                grid-template-columns: 300px 1fr;
+                gap: 2.75rem;
+                align-items: center;
+            }
+            .cs-split-inner.reverse {
+                grid-template-columns: 1fr 300px;
+            }
+            .cs-split-media img {
+                width: 100%;
+                border-radius: var(--radius-md);
+                box-shadow: var(--shadow-card);
+            }
+            .cs-split-body .eyebrow {
+                margin-bottom: 1.1rem;
+            }
+            .cs-split-body .heading-lg {
+                font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+                margin-bottom: 1.25rem;
+                max-width: 22ch;
+            }
+            .cs-split-body p {
+                font-size: 0.98rem;
+                line-height: 1.75;
+                color: var(--muted);
+                margin-bottom: 1rem;
+            }
+            .cs-split-body p:last-child {
+                margin-bottom: 0;
+            }
+            .cs-split-body p strong {
+                color: var(--ink);
+                font-weight: 600;
+            }
+
+            /* ─────────────────────────────────────────────
+               OUTCOMES (dark panel)
+            ───────────────────────────────────────────── */
+            .cs-outcomes-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.75rem;
+                margin-top: 2.5rem;
+                position: relative;
+                z-index: 1;
+            }
+            .cs-outcome {
+                padding-top: 1.4rem;
+                border-top: 1px solid rgba(250, 250, 249, 0.16);
+            }
+            .cs-outcome-metric {
+                font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+                font-weight: 800;
+                letter-spacing: -0.02em;
+                color: var(--bg);
+                line-height: 1;
+                margin-bottom: 0.55rem;
+            }
+            .cs-outcome-metric em {
+                font-style: normal;
+                color: var(--teal-bright);
+            }
+            .cs-outcome-label {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.7rem;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                color: rgba(250, 250, 249, 0.6);
+                line-height: 1.5;
+            }
+
+            /* ─────────────────────────────────────────────
+               FOOTER NAV (prev/next case study)
+            ───────────────────────────────────────────── */
+            .cs-footnav {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem;
+            }
+            .cs-footnav-link {
+                display: flex;
+                flex-direction: column;
+                gap: 0.6rem;
+                padding: 1.75rem;
+                border: 1px solid var(--border);
+                border-radius: var(--radius-md);
+                background: var(--panel);
+                text-decoration: none;
+                transition:
+                    border-color 0.25s ease,
+                    box-shadow 0.25s ease,
+                    transform 0.25s ease;
+            }
+            .cs-footnav-link:hover {
+                border-color: var(--teal-border);
+                box-shadow: var(--shadow-card);
+                transform: translateY(-2px);
+            }
+            .cs-footnav-link.next {
+                align-items: flex-end;
+                text-align: right;
+            }
+            .cs-footnav-direction {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.7rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--faint);
+            }
+            .cs-footnav-title {
+                font-size: 1.15rem;
+                font-weight: 700;
+                letter-spacing: -0.01em;
+                color: var(--ink);
+                transition: color 0.2s ease;
+            }
+            .cs-footnav-link:hover .cs-footnav-title {
+                color: var(--teal);
+            }
+
+            /* ─────────────────────────────────────────────
+               RESPONSIVE (case-study shared)
+            ───────────────────────────────────────────── */
+            @media (max-width: 1000px) {
+                .cs-split-inner,
+                .cs-split-inner.reverse {
+                    grid-template-columns: 1fr;
+                    gap: 1.75rem;
+                }
+            }
+            @media (max-width: 768px) {
+                .cs-outcomes-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+            @media (max-width: 540px) {
+                .cs-outcomes-grid {
+                    grid-template-columns: 1fr;
+                }
+                .cs-footnav {
+                    grid-template-columns: 1fr;
+                }
+                .cs-footnav-link.next {
+                    align-items: flex-start;
+                    text-align: left;
+                }
+            }
