@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="light" />
         <title>Gary Engel · User Experience Design Leader</title>
         <meta
             name="description"
@@ -34,14 +35,21 @@
                 box-sizing: border-box;
             }
             html {
-                scroll-behavior: smooth;
                 font-size: 16px;
+            }
+            /* Smooth scroll only turns on after full page load, so a
+               cross-page hash landing (e.g. ../index.html#process) jumps
+               instantly instead of animating through every section in
+               between and making the scroll-spy pill flicker mid-flight. */
+            html.smooth-scroll {
+                scroll-behavior: smooth;
             }
             svg {
                 cursor: inherit;
             }
 
             :root {
+                color-scheme: light;
                 /* Monochromatic — built from the Pinarello Prince's blue
                    (~#0061b6, sampled from the frame) plus tints/shades of
                    the same hue. No secondary accent color anywhere. */
@@ -51,7 +59,7 @@
                 --ink: #0f1e2e;
                 --ink-soft: #33455a;
                 --muted: #5b6b7c;
-                --faint: #8b98a6;
+                --faint: #6b7684;
                 --border: #dbe3ea;
                 --border-soft: #e7edf2;
                 --teal: #0061b6;
@@ -1122,6 +1130,48 @@
             }
 
             /* ─────────────────────────────────────────────
+               ACCESSIBILITY: focus, active, reduced motion
+            ───────────────────────────────────────────── */
+            a:focus-visible,
+            button:focus-visible {
+                outline: 2px solid var(--teal);
+                outline-offset: 3px;
+                border-radius: var(--radius-sm);
+            }
+            .btn:active {
+                transform: translateY(0) scale(0.98);
+            }
+            .skill-tag:active {
+                transform: scale(0.96);
+            }
+            .cs-footnav-link:active {
+                transform: translateY(0) scale(0.99);
+            }
+            .detail-link:active {
+                transform: translateY(0) scale(0.98);
+            }
+            .project-item:has(.project-card-link:active) {
+                border-color: var(--teal-border);
+                box-shadow: var(--shadow-card);
+            }
+            @media (prefers-reduced-motion: reduce) {
+                html {
+                    scroll-behavior: auto;
+                }
+                .reveal {
+                    transition: none;
+                    opacity: 1;
+                    transform: none;
+                }
+                .marquee-track {
+                    animation: none;
+                }
+                .avail-dot {
+                    animation: none;
+                }
+            }
+
+            /* ─────────────────────────────────────────────
                RESPONSIVE
             ───────────────────────────────────────────── */
             @media (max-width: 1000px) {
@@ -1229,7 +1279,7 @@
             </div>
         </section>
 
-        <div class="stat-float reveal in">
+        <div class="stat-float reveal">
             <div class="stat-float-inner">
                 <div class="stat-cell">
                     <span class="stat-num">20+</span>
@@ -1284,7 +1334,7 @@
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
             <section class="panel" id="about">
-                <span class="eyebrow reveal in">About</span>
+                <span class="eyebrow reveal">About</span>
                 <h2 class="heading-lg" style="margin-top: 1.1rem">
                     Two decades of turning <span class="hl">research into results.</span>
                 </h2>
@@ -1292,20 +1342,20 @@
                 <div class="about-grid">
                     <div>
                         <div class="about-body">
-                            <p class="reveal d1 in">
+                            <p class="reveal d1">
                                 <strong>I've spent my career at the intersection of research and design.</strong>
                                 I believe you can't design well without first understanding deeply, which is why
                                 usability testing and qualitative research sit at the center of everything I do,
                                 not at the end.
                             </p>
-                            <p class="reveal d2 in">
+                            <p class="reveal d2">
                                 As UX Design Lead at Scentsy, I manage a team of designers and researchers
                                 responsible for end-to-end digital experiences across e-commerce, mobile, and
                                 internal consultant tools. I've helped move the organization from instinct-based to
                                 evidence-based design decision making.
                             </p>
                         </div>
-                        <div class="skills-list reveal d4 in">
+                        <div class="skills-list reveal d4">
                             <span class="skill-tag">UX Research</span>
                             <span class="skill-tag">Usability Testing</span>
                             <span class="skill-tag">Design Systems</span>
@@ -1321,7 +1371,7 @@
                         </div>
                     </div>
 
-                    <div class="about-stats reveal d2 in">
+                    <div class="about-stats reveal d2">
                         <div class="about-stat-card">
                             <span class="asc-num">20+</span>
                             <span class="asc-label">Years in UX</span>
@@ -1352,7 +1402,7 @@
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
             <section class="panel" id="work">
-                <div class="work-header reveal in">
+                <div class="work-header reveal">
                     <div class="work-header-left">
                         <span class="eyebrow">Case Studies</span>
                         <h2 class="heading-lg">Projects that moved the <span class="hl">needle.</span></h2>
@@ -1360,7 +1410,7 @@
                 </div>
 
                 <div class="project-list">
-                    <div class="project-item reveal in" data-index="0">
+                    <div class="project-item reveal" data-index="0">
                         <a
                             class="project-card-link"
                             href="case-studies/scentsy-home-app.html"
@@ -1410,7 +1460,7 @@
                         </div>
                     </div>
 
-                    <div class="project-item reveal d1 in" data-index="1">
+                    <div class="project-item reveal d1" data-index="1">
                         <a
                             class="project-card-link"
                             href="case-studies/scent-finder.html"
@@ -1454,7 +1504,7 @@
                         </div>
                     </div>
 
-                    <div class="project-item reveal d2 in" data-index="2">
+                    <div class="project-item reveal d2" data-index="2">
                         <a
                             class="project-card-link"
                             href="case-studies/scentsy-category-taxonomy-navigation.html"
@@ -1500,7 +1550,7 @@
                         </div>
                     </div>
 
-                    <div class="project-item reveal d3 in" data-index="3">
+                    <div class="project-item reveal d3" data-index="3">
                         <a
                             class="project-card-link"
                             href="case-studies/customer-subscription-program.html"
@@ -1553,13 +1603,13 @@
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
             <section class="panel" id="process">
-                <span class="eyebrow reveal in">My Process</span>
+                <span class="eyebrow reveal">My Process</span>
                 <h2 class="heading-lg" style="margin-top: 1.1rem">
                     Research first. <span class="hl">Always.</span>
                 </h2>
 
                 <div class="process-flow">
-                    <div class="process-step reveal in">
+                    <div class="process-step reveal">
                         <span class="ps-num mono">01</span>
                         <h3 class="ps-title">Discover &amp; Define</h3>
                         <p class="ps-desc">
@@ -1568,7 +1618,7 @@
                         </p>
                     </div>
                     <div class="process-arrow" aria-hidden="true">→</div>
-                    <div class="process-step reveal d1 in">
+                    <div class="process-step reveal d1">
                         <span class="ps-num mono">02</span>
                         <h3 class="ps-title">Explore &amp; Prototype</h3>
                         <p class="ps-desc">
@@ -1577,7 +1627,7 @@
                         </p>
                     </div>
                     <div class="process-arrow" aria-hidden="true">→</div>
-                    <div class="process-step reveal d2 in">
+                    <div class="process-step reveal d2">
                         <span class="ps-num mono">03</span>
                         <h3 class="ps-title">Test &amp; Iterate</h3>
                         <p class="ps-desc">
@@ -1586,7 +1636,7 @@
                         </p>
                     </div>
                     <div class="process-arrow" aria-hidden="true">→</div>
-                    <div class="process-step reveal d3 in">
+                    <div class="process-step reveal d3">
                         <span class="ps-num mono">04</span>
                         <h3 class="ps-title">Deliver &amp; Measure</h3>
                         <p class="ps-desc">
@@ -1605,7 +1655,7 @@
         <div class="panel-wrap">
             <section class="panel dark" id="contact">
                 <div class="contact-inner">
-                    <div class="contact-left reveal in">
+                    <div class="contact-left reveal">
                         <span class="eyebrow on-dark">Contact</span>
                         <h2 class="heading-lg on-dark">
                             Let's build something <span class="hl">real.</span>
@@ -1619,7 +1669,7 @@
                         </a>
                     </div>
 
-                    <div class="contact-right reveal d2 in">
+                    <div class="contact-right reveal d2">
                         <a href="mailto:iamgaryengel@gmail.com" class="btn btn-solid" style="justify-content: center">
                             Send a Message <span class="btn-arrow">→</span>
                         </a>
@@ -1644,6 +1694,9 @@
              JAVASCRIPT
         ═══════════════════════════════════════════ -->
         <script>
+            window.addEventListener("load", () => {
+                document.documentElement.classList.add("smooth-scroll");
+            });
             // Nav border + scroll progress
             const nav = document.getElementById("nav");
             const navProgress = document.getElementById("navProgress");
@@ -1685,6 +1738,32 @@
             const navHVar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-h")) || 76;
             const NAV_SCROLL_OFFSET = navHVar + 25;
 
+            // Navigates to a section and keeps correcting for it if the
+            // page grows out from under the scroll mid-flight. This was
+            // originally caused by the Work section's thumbnails loading
+            // lazily: scrolling to Process for the first time (before
+            // those images had ever entered the viewport) computed the
+            // target against the Work section's shorter, pre-image-load
+            // height, then the images loaded as the scroll passed over
+            // them and shifted everything below out from under the
+            // already-committed target. Those specific images are no
+            // longer lazy-loaded for that reason (see the img tags in the
+            // Work section below), which removes the repeated mid-scroll
+            // corrections (and the little stutter they caused) for the
+            // common case. This watcher stays in place as a safety net for
+            // any other future cause of the same kind of shift.
+            function navigateToSection(targetEl, animate) {
+                targetEl.scrollIntoView({ behavior: animate ? "smooth" : "auto", block: "start" });
+                let settleTimer = null;
+                const ro = new ResizeObserver(() => {
+                    targetEl.scrollIntoView({ behavior: "auto", block: "start" });
+                    clearTimeout(settleTimer);
+                    settleTimer = setTimeout(() => ro.disconnect(), 400);
+                });
+                ro.observe(document.body);
+                settleTimer = setTimeout(() => ro.disconnect(), 400);
+            }
+
             function updateActiveSection() {
                 if (!sectionLinks.length) return;
                 const navOffset = NAV_SCROLL_OFFSET;
@@ -1707,21 +1786,95 @@
                 setActivePill(current);
             }
 
-            // Snap the pill to the clicked link right away instead of waiting
-            // for the smooth-scroll animation to cross the activation offset.
-            let scrollSettleTimer = null;
-            sectionLinks.forEach(({ link }) => {
-                link.addEventListener("click", () => {
+            // Snap the pill to the clicked link right away, then wait for
+            // scrolling to actually finish before letting live scroll-spy
+            // take back over. A fixed timeout can't know how long a smooth
+            // scroll to a far-down section will take, if it fires early,
+            // scroll-spy briefly recalculates against a mid-flight scrollY
+            // that still matches an earlier section, flashing the pill back
+            // before the scroll finishes and corrects it (or, worse, getting
+            // torn down mid-flight and never recalculating again).
+            // Polls actual scroll position every animation frame rather than
+            // guessing from the "scroll" event's dispatch timing — a native
+            // smooth-scroll animation doesn't reliably fire scroll events on
+            // any fixed cadence (they can be sparse/coalesced), so a timer
+            // driven by event timing can win the race and lock in a
+            // mid-flight section before the scroll (or corrective events)
+            // ever arrive. Sampling scrollY directly every frame can't miss.
+            let cancelPendingReengage = null;
+            function reengageScrollSpyWhenSettled() {
+                // Clicking a second link before the first scroll settles
+                // must cancel the first watcher, otherwise its stale
+                // finish() can fire later and fight with the new target.
+                if (cancelPendingReengage) cancelPendingReengage();
+
+                const STABLE_FRAMES_NEEDED = 8; // ~130ms of no movement at 60fps
+                let lastY = window.scrollY;
+                let stableFrames = 0;
+                let rafId = null;
+                const maxTimer = setTimeout(finish, 3000);
+
+                function cleanup() {
+                    clearTimeout(maxTimer);
+                    if (rafId !== null) cancelAnimationFrame(rafId);
+                    cancelPendingReengage = null;
+                }
+                function finish() {
+                    cleanup();
+                    suppressScrollSpy = false;
+                    updateActiveSection();
+                }
+                function tick() {
+                    const y = window.scrollY;
+                    if (Math.abs(y - lastY) < 0.5) {
+                        stableFrames++;
+                        if (stableFrames >= STABLE_FRAMES_NEEDED) {
+                            finish();
+                            return;
+                        }
+                    } else {
+                        stableFrames = 0;
+                        lastY = y;
+                    }
+                    rafId = requestAnimationFrame(tick);
+                }
+
+                cancelPendingReengage = cleanup;
+                rafId = requestAnimationFrame(tick);
+            }
+
+            sectionLinks.forEach(({ link, section }) => {
+                link.addEventListener("click", (e) => {
+                    e.preventDefault();
                     setActivePill(link);
                     suppressScrollSpy = true;
-                    clearTimeout(scrollSettleTimer);
-                    scrollSettleTimer = setTimeout(() => {
-                        suppressScrollSpy = false;
-                        updateActiveSection();
-                    }, 700);
+                    history.pushState(null, "", "#" + section.id);
+                    navigateToSection(section, true);
+                    reengageScrollSpyWhenSettled();
                 });
             });
-            window.addEventListener("resize", updateActiveSection);
+            window.addEventListener("resize", () => {
+                if (!suppressScrollSpy) updateActiveSection();
+            });
+
+            // Arriving via a cross-page hash link (e.g. a case study's "My
+            // Process" link) trusts the hash directly for the initial active
+            // state instead of computing it from scroll position, which can
+            // be briefly wrong while lazy-loaded images are still settling
+            // and shifting section offsets, causing the pill to flicker. It
+            // also re-corrects the browser's own native (and similarly
+            // shift-prone) landing scroll, for the same reason
+            // navigateToSection exists above.
+            const initialHash = window.location.hash.slice(1);
+            const initialMatch = sectionLinks.find(({ section }) => section.id === initialHash);
+            if (initialMatch) {
+                setActivePill(initialMatch.link);
+                suppressScrollSpy = true;
+                window.addEventListener("load", () => {
+                    navigateToSection(initialMatch.section, false);
+                    reengageScrollSpyWhenSettled();
+                });
+            }
             onScroll();
 
             // "Ask AI about me" — deep-links to ChatGPT/Claude/Perplexity

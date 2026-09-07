@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="light" />
         <title>Scentsy Home App · Case Study · Gary Engel</title>
         <meta
             name="description"
@@ -34,18 +35,25 @@
                 box-sizing: border-box;
             }
             html {
-                scroll-behavior: smooth;
                 font-size: 16px;
+            }
+            /* Smooth scroll only turns on after full page load, so a
+               cross-page hash landing (e.g. ../index.html#process) jumps
+               instantly instead of animating through every section in
+               between and making the scroll-spy pill flicker mid-flight. */
+            html.smooth-scroll {
+                scroll-behavior: smooth;
             }
 
             :root {
+                color-scheme: light;
                 --bg: #f7f9fb;
                 --panel: #ffffff;
                 --bg-alt: #eef2f6;
                 --ink: #0f1e2e;
                 --ink-soft: #33455a;
                 --muted: #5b6b7c;
-                --faint: #8b98a6;
+                --faint: #6b7684;
                 --border: #dbe3ea;
                 --border-soft: #e7edf2;
                 --teal: #0061b6;
@@ -253,12 +261,124 @@
             .nav-cta {
                 padding: 0.62rem 1.25rem;
                 font-size: 0.82rem;
+                -webkit-appearance: none;
+                appearance: none;
+                font-family: inherit;
             }
-            .nav-cta-arrow {
-                transition: transform 0.2s ease;
+            .ask-ai-sparkle {
+                color: var(--teal-bright);
             }
-            .nav-cta:hover .nav-cta-arrow {
-                transform: translateX(-3px);
+
+            .nav-right {
+                display: flex;
+                align-items: center;
+                gap: 2.25rem;
+            }
+            .nav-links-wrap {
+                position: relative;
+                display: flex;
+            }
+            .nav-links {
+                display: flex;
+                gap: 0.25rem;
+                list-style: none;
+            }
+            .nav-pill {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: var(--teal-bg);
+                border-radius: var(--radius-pill);
+                z-index: 0;
+                opacity: 0;
+                pointer-events: none;
+                transition:
+                    transform 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+                    width 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+                    height 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+                    opacity 0.25s ease;
+            }
+            .nav-links li {
+                position: relative;
+                z-index: 1;
+            }
+            .nav-links a {
+                position: relative;
+                z-index: 1;
+                display: inline-flex;
+                align-items: center;
+                padding: 0.5rem 0.95rem;
+                border-radius: var(--radius-pill);
+                font-size: 0.88rem;
+                font-weight: 500;
+                color: var(--muted);
+                text-decoration: none;
+                transition: color 0.2s ease;
+            }
+            .nav-links a:hover {
+                color: var(--ink);
+            }
+            .nav-links a.active {
+                color: var(--teal-deep);
+                font-weight: 600;
+            }
+
+            /* Ask-AI dropdown (rendered outside the nav so it isn't
+               clipped by the nav's rounded/overflow-hidden shape) */
+            .ask-ai-menu {
+                position: fixed;
+                top: 0;
+                right: 0;
+                min-width: 200px;
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-md);
+                box-shadow: var(--shadow-float);
+                padding: 0.6rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.15rem;
+                z-index: 900;
+                opacity: 0;
+                transform: translateY(-8px);
+                pointer-events: none;
+                transition: opacity 0.18s ease, transform 0.18s ease;
+            }
+            .ask-ai-menu.open {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
+            }
+            .ask-ai-menu-label {
+                font-size: 0.66rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--faint);
+                padding: 0.4rem 0.75rem 0.3rem;
+            }
+            .ask-ai-item {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                padding: 0.65rem 0.75rem;
+                border-radius: 10px;
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: var(--ink);
+                text-decoration: none;
+                transition: background 0.15s ease, color 0.15s ease;
+            }
+            .ask-ai-item:hover {
+                background: var(--teal-bg);
+                color: var(--teal-deep);
+            }
+            .ask-ai-item::before {
+                content: "→";
+                color: var(--faint);
+                transition: color 0.15s ease;
+            }
+            .ask-ai-item:hover::before {
+                color: var(--teal);
             }
 
             /* ─────────────────────────────────────────────
@@ -686,9 +806,198 @@
             }
 
             /* ─────────────────────────────────────────────
+               FAB: Back to Case Studies (persistent, bottom-right)
+            ───────────────────────────────────────────── */
+            .fab-back {
+                position: fixed;
+                right: 1.5rem;
+                bottom: 1.5rem;
+                z-index: 700;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.65rem;
+                background: var(--ink);
+                color: var(--bg);
+                font-family: "Inter", sans-serif;
+                font-size: 0.88rem;
+                font-weight: 600;
+                text-decoration: none;
+                padding: 0.85rem 1.4rem;
+                border-radius: var(--radius-pill);
+                box-shadow: var(--shadow-float);
+                transition:
+                    background 0.2s ease,
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease,
+                    padding 0.2s ease;
+            }
+            .fab-back:hover {
+                background: var(--teal-deep);
+                transform: translateY(-3px);
+                box-shadow:
+                    0 16px 40px rgba(6, 20, 34, 0.28),
+                    0 4px 16px rgba(6, 20, 34, 0.14);
+            }
+            .fab-back:active {
+                transform: translateY(0) scale(0.97);
+            }
+            .fab-back-arrow {
+                font-size: 1rem;
+                transition: transform 0.2s ease;
+            }
+            .fab-back:hover .fab-back-arrow {
+                transform: translateX(-3px);
+            }
+            @media (max-width: 640px) {
+                .fab-back {
+                    right: 1rem;
+                    bottom: 1rem;
+                    padding: 0.85rem;
+                }
+                .fab-back-label {
+                    display: none;
+                }
+            }
+
+            /* ─────────────────────────────────────────────
+               BUTTONS (extended variants for footer CTA)
+            ───────────────────────────────────────────── */
+            .btn-arrow {
+                transition: transform 0.2s ease;
+                font-size: 0.85em;
+            }
+            .btn:hover .btn-arrow {
+                transform: translateX(3px);
+            }
+            .btn-solid {
+                background: var(--teal);
+                color: #fff;
+                box-shadow: 0 10px 26px rgba(0, 97, 182, 0.3);
+            }
+            .btn-solid:hover {
+                background: var(--teal-deep);
+                box-shadow: 0 12px 30px rgba(0, 97, 182, 0.38);
+            }
+            .btn-outline {
+                background: transparent;
+                border-color: var(--border);
+                color: var(--ink);
+            }
+            .btn-outline:hover {
+                border-color: var(--ink);
+            }
+            .btn-outline.on-dark {
+                border-color: rgba(250, 250, 249, 0.28);
+                color: var(--bg);
+            }
+            .btn-outline.on-dark:hover {
+                border-color: rgba(250, 250, 249, 0.6);
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            /* ─────────────────────────────────────────────
+               CONTACT (shared footer CTA)
+            ───────────────────────────────────────────── */
+            .contact-inner {
+                display: grid;
+                grid-template-columns: 1.2fr 0.8fr;
+                gap: 4rem;
+                align-items: center;
+                position: relative;
+                z-index: 1;
+            }
+            .contact-left {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .contact-sub {
+                font-size: 1rem;
+                line-height: 1.8;
+                color: rgba(250, 250, 249, 0.68);
+                max-width: 460px;
+            }
+            .contact-email-link {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.65rem;
+                font-size: 1.15rem;
+                font-weight: 600;
+                color: var(--bg);
+                text-decoration: none;
+                width: max-content;
+                border-bottom: 1.5px solid rgba(250, 250, 249, 0.3);
+                padding-bottom: 4px;
+                transition: color 0.2s ease, border-color 0.2s ease;
+            }
+            .contact-email-link:hover {
+                color: var(--teal-bright);
+                border-color: var(--teal-bright);
+            }
+            .contact-right {
+                display: flex;
+                flex-direction: column;
+                gap: 0.85rem;
+            }
+            .social-link {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.74rem;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                color: rgba(250, 250, 249, 0.55);
+                text-decoration: none;
+                padding: 0.75rem 1rem;
+                border: 1px solid rgba(250, 250, 249, 0.14);
+                border-radius: var(--radius-sm);
+                transition: all 0.2s ease;
+                margin-top: 0.5rem;
+            }
+            .social-link:hover {
+                color: var(--bg);
+                border-color: rgba(250, 250, 249, 0.32);
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            /* ─────────────────────────────────────────────
+               ACCESSIBILITY: focus, active, reduced motion
+            ───────────────────────────────────────────── */
+            a:focus-visible,
+            button:focus-visible {
+                outline: 2px solid var(--teal);
+                outline-offset: 3px;
+                border-radius: var(--radius-sm);
+            }
+            .btn:active {
+                transform: translateY(0) scale(0.98);
+            }
+            .cs-footnav-link:active {
+                transform: translateY(0) scale(0.99);
+            }
+            @media (prefers-reduced-motion: reduce) {
+                html {
+                    scroll-behavior: auto;
+                }
+                .reveal {
+                    transition: none;
+                    opacity: 1;
+                    transform: none;
+                }
+            }
+
+            /* ─────────────────────────────────────────────
                RESPONSIVE
             ───────────────────────────────────────────── */
             @media (max-width: 1000px) {
+                .contact-inner {
+                    grid-template-columns: 1fr;
+                    gap: 2.5rem;
+                }
+                .nav-links-wrap {
+                    display: none;
+                }
                 .cs-split-inner,
                 .cs-split-inner.reverse {
                     grid-template-columns: 1fr;
@@ -733,10 +1042,28 @@
         <header class="nav" id="nav">
             <div class="nav-progress" id="navProgress"></div>
             <a href="../index.html#home" class="nav-logo">Gary Engel<em>.</em></a>
-            <a href="../index.html#work" class="btn btn-dark nav-cta">
-                <span class="nav-cta-arrow" aria-hidden="true">←</span> Back to Case Studies
-            </a>
+            <nav class="nav-right">
+                <div class="nav-links-wrap">
+                    <span class="nav-pill" id="navPill" aria-hidden="true"></span>
+                    <ul class="nav-links" id="navLinks">
+                        <li><a href="../index.html#about">About</a></li>
+                        <li><a href="../index.html#work" class="active">Case Studies</a></li>
+                        <li><a href="../index.html#process">My Process</a></li>
+                        <li><a href="../index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <button type="button" id="askAiBtn" class="btn btn-dark nav-cta" aria-haspopup="true" aria-expanded="false">
+                    <span class="ask-ai-sparkle" aria-hidden="true">✦</span> Ask AI about me
+                </button>
+            </nav>
         </header>
+
+        <div class="ask-ai-menu" id="askAiMenu" role="menu" aria-hidden="true">
+            <span class="ask-ai-menu-label mono">Ask about me in</span>
+            <a href="#" data-engine="chatgpt" target="_blank" rel="noopener" class="ask-ai-item" role="menuitem">ChatGPT</a>
+            <a href="#" data-engine="claude" target="_blank" rel="noopener" class="ask-ai-item" role="menuitem">Claude</a>
+            <a href="#" data-engine="perplexity" target="_blank" rel="noopener" class="ask-ai-item" role="menuitem">Perplexity</a>
+        </div>
 
         <!-- ═══════════════════════════════════════════
              HERO
@@ -752,7 +1079,7 @@
             </div>
         </section>
 
-        <div class="stat-float reveal in">
+        <div class="stat-float reveal">
             <div class="stat-float-inner">
                 <div class="stat-cell text">
                     <span class="stat-num">UX Design Lead</span>
@@ -774,7 +1101,7 @@
         </div>
 
         <div class="cs-hero-figure-wrap">
-            <figure class="cs-figure reveal in">
+            <figure class="cs-figure reveal">
                 <img class="phone-mockup" src="assets/phone-hero.png" alt="Scentsy Home App product visual" />
                 <figcaption class="cs-caption">Companion platform for Scentsy's first connected fragrance device</figcaption>
             </figure>
@@ -784,7 +1111,7 @@
              01 · THE CHALLENGE
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
-            <section class="panel reveal in">
+            <section class="panel reveal">
                 <span class="eyebrow">01 · The Challenge</span>
                 <h2 class="heading-lg" style="margin-top: 1.1rem">
                     Designing the controller before anyone could <span class="hl">see the device.</span>
@@ -818,7 +1145,7 @@
              02 · RESEARCH UNDER SEAL
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
-            <section class="panel reveal in">
+            <section class="panel reveal">
                 <span class="eyebrow">02 · Research, Under Seal</span>
                 <h2 class="heading-lg" style="margin-top: 1.1rem">
                     A panel of <span class="hl">seven,</span> hand-selected and under lock.
@@ -854,14 +1181,14 @@
              03 · DESIGN APPROACH
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
-            <section class="panel reveal in">
+            <section class="panel reveal">
                 <span class="eyebrow">03 · Design Approach</span>
                 <h2 class="heading-lg" style="margin-top: 1.1rem; margin-bottom: 2rem">
                     Designed to be legible at a <span class="hl">glance.</span>
                 </h2>
                 <div class="cs-split-inner">
                     <div class="cs-split-media">
-                        <img class="phone-mockup" src="assets/phone-onboarding.png" alt="Scentsy Home App: onboarding and control screens" />
+                        <img class="phone-mockup" src="assets/phone-onboarding.png" alt="Scentsy Home App: onboarding and control screens" loading="lazy" />
                     </div>
                     <div class="cs-split-body">
                         <p>
@@ -882,7 +1209,7 @@
              04 · PLATFORM EXPANSION
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
-            <section class="panel reveal in">
+            <section class="panel reveal">
                 <span class="eyebrow">04 · Platform Expansion</span>
                 <h2 class="heading-lg" style="margin-top: 1.1rem; margin-bottom: 2rem">
                     From single-purpose controller to <span class="hl">full ecosystem.</span>
@@ -901,7 +1228,7 @@
                         </p>
                     </div>
                     <div class="cs-split-media">
-                        <img class="phone-mockup" src="assets/phone-platform.png" alt="Scentsy Home App: platform expansion features" />
+                        <img class="phone-mockup" src="assets/phone-platform.png" alt="Scentsy Home App: platform expansion features" loading="lazy" />
                     </div>
                 </div>
                 <div class="cs-body">
@@ -930,7 +1257,7 @@
              05 · OUTCOMES
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
-            <section class="panel dark reveal in">
+            <section class="panel dark reveal">
                 <span class="eyebrow on-dark">05 · Outcomes</span>
                 <h2 class="heading-lg on-dark" style="margin-top: 1.1rem">
                     What shipped and <span class="hl">what it did.</span>
@@ -968,7 +1295,7 @@
              06 · REFLECTIONS
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
-            <section class="panel reveal in">
+            <section class="panel reveal">
                 <span class="eyebrow">06 · Reflections</span>
                 <h2 class="heading-lg" style="margin-top: 1.1rem">
                     What I'd do <span class="hl">differently.</span>
@@ -1000,16 +1327,46 @@
              FOOTER NAV
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
-            <nav class="cs-footnav reveal in" aria-label="Case study navigation">
+            <nav class="cs-footnav reveal" aria-label="Case study navigation">
                 <a href="customer-subscription-program.html" class="cs-footnav-link">
                     <span class="cs-footnav-direction mono">← Previous case study</span>
                     <span class="cs-footnav-title">Customer Subscription Program</span>
                 </a>
-                <a href="scentsy-category-taxonomy-navigation.html" class="cs-footnav-link next">
+                <a href="scent-finder.html" class="cs-footnav-link next">
                     <span class="cs-footnav-direction mono">Next case study →</span>
-                    <span class="cs-footnav-title">Category Taxonomy &amp; Navigation</span>
+                    <span class="cs-footnav-title">Scentsy Harmonize · Fragrance Finder</span>
                 </a>
             </nav>
+        </div>
+
+        <div class="panel-wrap">
+            <section class="panel dark reveal">
+                <div class="contact-inner">
+                    <div class="contact-left">
+                        <span class="eyebrow on-dark">Contact</span>
+                        <h2 class="heading-lg on-dark">
+                            Let's build something <span class="hl">real.</span>
+                        </h2>
+                        <p class="contact-sub">
+                            If you're looking for a senior UX leader who runs on data, ships with conviction, and
+                            doesn't confuse activity with impact. Let's talk.
+                        </p>
+                        <a href="mailto:iamgaryengel@gmail.com" class="contact-email-link">
+                            iamgaryengel@gmail.com <span>→</span>
+                        </a>
+                    </div>
+
+                    <div class="contact-right">
+                        <a href="mailto:iamgaryengel@gmail.com" class="btn btn-solid" style="justify-content: center">
+                            Send a Message <span class="btn-arrow">→</span>
+                        </a>
+                        <a href="../assets/gary-engel-resume.pdf" download="Gary Engel - UX Leadership Resume.pdf" class="btn btn-outline on-dark" style="justify-content: center">
+                            Download Resume <span class="btn-arrow">↓</span>
+                        </a>
+                        <a href="https://linkedin.com/in/garyengel" target="_blank" rel="noopener" class="social-link">↗ LinkedIn</a>
+                    </div>
+                </div>
+            </section>
         </div>
 
         <footer class="site-footer">
@@ -1020,7 +1377,16 @@
         <!-- ═══════════════════════════════════════════
              JAVASCRIPT
         ═══════════════════════════════════════════ -->
+
+        <a href="../index.html#work" class="fab-back" aria-label="Back to Case Studies">
+            <span class="fab-back-arrow" aria-hidden="true">←</span>
+            <span class="fab-back-label">Back to Case Studies</span>
+        </a>
+
         <script>
+            window.addEventListener("load", () => {
+                document.documentElement.classList.add("smooth-scroll");
+            });
             // Nav border + scroll progress
             const nav = document.getElementById("nav");
             const navProgress = document.getElementById("navProgress");
@@ -1032,6 +1398,72 @@
             }
             document.addEventListener("scroll", onScroll, { passive: true });
             onScroll();
+
+            // Nav wayfinding — case study pages don't have the homepage's
+            // sections to scroll-spy against, so the pill just sits under
+            // the permanently-active "Case Studies" link.
+            (function initNavPill() {
+                const navLinksWrap = document.querySelector(".nav-links-wrap");
+                const navPill = document.getElementById("navPill");
+                const activeLink = document.querySelector("#navLinks a.active");
+                if (!navLinksWrap || !navPill || !activeLink) return;
+                function positionPill() {
+                    const linkRect = activeLink.getBoundingClientRect();
+                    const wrapRect = navLinksWrap.getBoundingClientRect();
+                    navPill.style.width = linkRect.width + "px";
+                    navPill.style.height = linkRect.height + "px";
+                    navPill.style.transform = `translate(${linkRect.left - wrapRect.left}px, ${linkRect.top - wrapRect.top}px)`;
+                    navPill.style.opacity = "1";
+                }
+                positionPill();
+                window.addEventListener("resize", positionPill);
+            })();
+
+            // "Ask AI about me" — deep-links to ChatGPT/Claude/Perplexity
+            // with a prefilled prompt pointing them at the live site + LinkedIn.
+            (function initAskAi() {
+                const ASK_AI_PROMPT =
+                    "Search the web and tell me about Gary Engel, a User Experience Design Leader at Scentsy in Meridian, Idaho. His portfolio is https://garyengeldesign.com and his LinkedIn is linkedin.com/in/garyengel. Summarize his background, notable projects, and design process.";
+                const ENGINE_URLS = {
+                    chatgpt: (q) => `https://chatgpt.com/?q=${q}`,
+                    claude: (q) => `https://claude.ai/new?q=${q}`,
+                    perplexity: (q) => `https://www.perplexity.ai/search?q=${q}`,
+                };
+                const encoded = encodeURIComponent(ASK_AI_PROMPT);
+                document.querySelectorAll(".ask-ai-item[data-engine]").forEach((a) => {
+                    const build = ENGINE_URLS[a.dataset.engine];
+                    if (build) a.href = build(encoded);
+                });
+
+                const askBtn = document.getElementById("askAiBtn");
+                const askMenu = document.getElementById("askAiMenu");
+                if (!askBtn || !askMenu) return;
+
+                function closeMenu() {
+                    askMenu.classList.remove("open");
+                    askMenu.setAttribute("aria-hidden", "true");
+                    askBtn.setAttribute("aria-expanded", "false");
+                }
+                function openMenu() {
+                    const r = askBtn.getBoundingClientRect();
+                    askMenu.style.top = r.bottom + 10 + "px";
+                    askMenu.style.right = window.innerWidth - r.right + "px";
+                    askMenu.classList.add("open");
+                    askMenu.setAttribute("aria-hidden", "false");
+                    askBtn.setAttribute("aria-expanded", "true");
+                }
+                askBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    askMenu.classList.contains("open") ? closeMenu() : openMenu();
+                });
+                document.addEventListener("click", (e) => {
+                    if (!askMenu.contains(e.target) && e.target !== askBtn) closeMenu();
+                });
+                document.addEventListener("keydown", (e) => {
+                    if (e.key === "Escape") closeMenu();
+                });
+                document.addEventListener("scroll", closeMenu, { passive: true });
+            })();
 
             // Scroll-reveal
             const revealEls = document.querySelectorAll(".reveal");
