@@ -111,6 +111,15 @@
 
             a {
                 color: inherit;
+                /* Without this, some mobile browsers wait to see if a
+                   second tap follows (in case it's a double-tap-to-zoom
+                   gesture) before committing to the click — which can
+                   read as needing to tap twice to activate a link. This
+                   tells the browser a single tap should act immediately. */
+                touch-action: manipulation;
+            }
+            button {
+                touch-action: manipulation;
             }
             img {
                 max-width: 100%;
