@@ -700,8 +700,8 @@
                 .fab-back {
                     right: 1rem;
                     bottom: 1rem;
-                    width: 48px;
-                    height: 48px;
+                    width: 56px;
+                    height: 56px;
                     padding: 0;
                     justify-content: center;
                     border-radius: 50%;
@@ -727,6 +727,15 @@
                     min-width: 45%;
                     border-right: none !important;
                     border-bottom: 1px solid var(--border-soft);
+                }
+                /* Comfortable touch targets (Apple HIG / Material both
+                   recommend ~44-48px minimum) — these measured 33px and
+                   36px tall at mobile widths. */
+                .nav-cta {
+                    min-height: 44px;
+                }
+                .ask-ai-item {
+                    min-height: 44px;
                 }
             }
             @media (max-width: 540px) {
