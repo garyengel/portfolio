@@ -604,10 +604,6 @@
             .detail-link:active {
                 transform: translateY(0) scale(0.98);
             }
-            .project-item:has(.project-card-link:active) {
-                border-color: var(--teal-border);
-                box-shadow: var(--shadow-card);
-            }
             @media (prefers-reduced-motion: reduce) {
                 html {
                     scroll-behavior: auto;
