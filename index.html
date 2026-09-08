@@ -341,9 +341,17 @@
                     border-color 0.25s ease,
                     box-shadow 0.25s ease;
             }
-            .project-item:hover {
-                border-color: var(--teal-border);
-                box-shadow: var(--shadow-card);
+            /* Hover styles only for devices that truly support hovering —
+               on iOS Safari, a card whose ancestor changes appearance on
+               :hover needs a first tap just to "activate" that state, and
+               only follows the link on a second tap. Scoping :hover to
+               (hover: hover) devices means the first tap on touch always
+               just navigates, no double-tap needed. */
+            @media (hover: hover) {
+                .project-item:hover {
+                    border-color: var(--teal-border);
+                    box-shadow: var(--shadow-card);
+                }
             }
 
             /* Makes the entire card clickable while keeping the thumbnail
@@ -376,9 +384,11 @@
                 font-weight: 700;
                 transition: all 0.25s ease;
             }
-            .project-item:hover .proj-num {
-                background: var(--teal);
-                color: #fff;
+            @media (hover: hover) {
+                .project-item:hover .proj-num {
+                    background: var(--teal);
+                    color: #fff;
+                }
             }
 
             .proj-title-group {
@@ -448,9 +458,11 @@
             .detail-thumb-contain img {
                 object-fit: contain;
             }
-            .detail-thumb:hover img,
-            .project-item:hover .detail-thumb img {
-                transform: scale(1.05);
+            @media (hover: hover) {
+                .detail-thumb:hover img,
+                .project-item:hover .detail-thumb img {
+                    transform: scale(1.05);
+                }
             }
             .detail-text {
                 display: flex;
@@ -501,15 +513,17 @@
             .detail-link span {
                 transition: transform 0.2s ease;
             }
-            .detail-link:hover,
-            .project-item:hover .detail-link {
-                background: var(--teal-deep);
-                transform: translateY(-2px);
-                box-shadow: 0 10px 22px rgba(0, 97, 182, 0.24);
-            }
-            .detail-link:hover span,
-            .project-item:hover .detail-link span {
-                transform: translateX(3px);
+            @media (hover: hover) {
+                .detail-link:hover,
+                .project-item:hover .detail-link {
+                    background: var(--teal-deep);
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 22px rgba(0, 97, 182, 0.24);
+                }
+                .detail-link:hover span,
+                .project-item:hover .detail-link span {
+                    transform: translateX(3px);
+                }
             }
 
             /* ─────────────────────────────────────────────

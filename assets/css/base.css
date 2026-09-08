@@ -671,12 +671,23 @@
                     box-shadow 0.2s ease,
                     padding 0.2s ease;
             }
-            .fab-back:hover {
-                background: var(--teal-deep);
-                transform: translateY(-3px);
-                box-shadow:
-                    0 16px 40px rgba(6, 20, 34, 0.28),
-                    0 4px 16px rgba(6, 20, 34, 0.14);
+            /* Hover styles only for devices that truly support hovering —
+               on iOS Safari, a link whose ancestor (or itself) changes
+               appearance on :hover needs a first tap just to "activate"
+               the hover state, and only follows the link on a second tap.
+               Scoping :hover to (hover: hover) devices skips that trap
+               entirely on touch, so the first tap always just navigates. */
+            @media (hover: hover) {
+                .fab-back:hover {
+                    background: var(--teal-deep);
+                    transform: translateY(-3px);
+                    box-shadow:
+                        0 16px 40px rgba(6, 20, 34, 0.28),
+                        0 4px 16px rgba(6, 20, 34, 0.14);
+                }
+                .fab-back:hover .fab-back-arrow {
+                    transform: translateX(-3px);
+                }
             }
             .fab-back:active {
                 transform: translateY(0) scale(0.97);
@@ -685,14 +696,15 @@
                 font-size: 1rem;
                 transition: transform 0.2s ease;
             }
-            .fab-back:hover .fab-back-arrow {
-                transform: translateX(-3px);
-            }
             @media (max-width: 640px) {
                 .fab-back {
                     right: 1rem;
                     bottom: 1rem;
-                    padding: 1rem;
+                    width: 48px;
+                    height: 48px;
+                    padding: 0;
+                    justify-content: center;
+                    border-radius: 50%;
                 }
                 .fab-back-label {
                     display: none;

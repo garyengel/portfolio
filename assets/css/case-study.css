@@ -1,19 +1,27 @@
             /* Taller nav on case-study pages only, to make room for the
-               case-study progress indicator below the main nav content. */
-            :root {
-                --nav-h: 116px;
-            }
-            /* Pin the nav's main content near the top of the taller bar
-               instead of letting it re-center within the extra height. */
-            .nav {
-                align-items: flex-start;
-                padding-top: 20px;
-            }
-            /* base.css's .nav.scrolled sets its own padding shorthand
-               (padding: 0 1.5rem), which resets padding-top back to 0 —
-               restore it here so the top margin holds while scrolled too. */
-            .nav.scrolled {
-                padding-top: 20px;
+               case-study progress indicator below the main nav content —
+               but only above the breakpoint where the indicator (and the
+               nav links it's anchored to) are actually visible. Below
+               that, there's nothing to make room for, so the nav stays at
+               its normal shared height instead of wasting mobile space. */
+            @media (min-width: 1001px) {
+                :root {
+                    --nav-h: 116px;
+                }
+                /* Pin the nav's main content near the top of the taller
+                   bar instead of letting it re-center within the extra
+                   height. */
+                .nav {
+                    align-items: flex-start;
+                    padding-top: 20px;
+                }
+                /* base.css's .nav.scrolled sets its own padding shorthand
+                   (padding: 0 1.5rem), which resets padding-top back to 0
+                   — restore it here so the top margin holds while
+                   scrolled too. */
+                .nav.scrolled {
+                    padding-top: 20px;
+                }
             }
 
             /* ─────────────────────────────────────────────
