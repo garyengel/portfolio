@@ -93,3 +93,62 @@
                 { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
             );
             revealEls.forEach((el) => io.observe(el));
+
+            // Floating "01 02 03 04" submenu under the Case Studies nav
+            // link, showing which case study you're on and letting you
+            // jump straight to any other one without leaving the page.
+            (function initCaseStudySubmenu() {
+                const CASE_STUDIES = [
+                    { num: "01", href: "scentsy-home-app.html" },
+                    { num: "02", href: "scent-finder.html" },
+                    { num: "03", href: "scentsy-category-taxonomy-navigation.html" },
+                    { num: "04", href: "customer-subscription-program.html" },
+                ];
+                const currentFile = location.pathname.split("/").pop();
+                const activeIndex = CASE_STUDIES.findIndex((cs) => cs.href === currentFile);
+                if (activeIndex === -1) return; // not one of the 4 linked case studies
+
+                const caseStudiesLink = document.querySelector('#navLinks a[href$="#work"]');
+                if (!caseStudiesLink) return;
+
+                const submenu = document.createElement("div");
+                submenu.className = "cs-progress";
+                submenu.setAttribute("aria-label", "Jump to another case study");
+                CASE_STUDIES.forEach((cs, i) => {
+                    const a = document.createElement("a");
+                    a.href = cs.href;
+                    a.className = "cs-progress-seg" + (i === activeIndex ? " active" : "");
+                    a.setAttribute("aria-label", "Case study " + cs.num);
+                    if (i === activeIndex) a.setAttribute("aria-current", "page");
+                    const num = document.createElement("span");
+                    num.className = "cs-progress-num";
+                    num.textContent = cs.num;
+                    const underline = document.createElement("span");
+                    underline.className = "cs-progress-underline";
+                    a.appendChild(num);
+                    a.appendChild(underline);
+                    submenu.appendChild(a);
+                });
+                document.body.appendChild(submenu);
+
+                function positionSubmenu() {
+                    const linkRect = caseStudiesLink.getBoundingClientRect();
+                    // Anchored to the "Case Studies" link's own position
+                    // rather than the nav's outer bottom edge — the link
+                    // stays put as the nav shrinks on scroll, but a fixed
+                    // offset from the nav's bottom edge doesn't (the nav
+                    // shrinks by 12px when scrolled), which was causing the
+                    // indicators to collide with the nav content above them.
+                    submenu.style.top = linkRect.bottom + 8 + "px";
+                    submenu.style.left = linkRect.left + "px";
+                    submenu.style.width = linkRect.width + "px";
+                    submenu.classList.add("visible");
+                }
+                positionSubmenu();
+                window.addEventListener("resize", positionSubmenu);
+                document.addEventListener("scroll", positionSubmenu, { passive: true });
+                // The nav's own scrolled/unscrolled state animates over
+                // 0.45s — resync once that settles so the indicators don't
+                // lag behind if scrolling stops mid-animation.
+                nav.addEventListener("transitionend", positionSubmenu);
+            })();
