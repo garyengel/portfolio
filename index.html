@@ -347,7 +347,7 @@
                only follows the link on a second tap. Scoping :hover to
                (hover: hover) devices means the first tap on touch always
                just navigates, no double-tap needed. */
-            @media (hover: hover) {
+            @media (hover: hover) and (pointer: fine) {
                 .project-item:hover {
                     border-color: var(--teal-border);
                     box-shadow: var(--shadow-card);
@@ -384,7 +384,7 @@
                 font-weight: 700;
                 transition: all 0.25s ease;
             }
-            @media (hover: hover) {
+            @media (hover: hover) and (pointer: fine) {
                 .project-item:hover .proj-num {
                     background: var(--teal);
                     color: #fff;
@@ -458,7 +458,7 @@
             .detail-thumb-contain img {
                 object-fit: contain;
             }
-            @media (hover: hover) {
+            @media (hover: hover) and (pointer: fine) {
                 .detail-thumb:hover img,
                 .project-item:hover .detail-thumb img {
                     transform: scale(1.05);
@@ -513,7 +513,7 @@
             .detail-link span {
                 transition: transform 0.2s ease;
             }
-            @media (hover: hover) {
+            @media (hover: hover) and (pointer: fine) {
                 .detail-link:hover,
                 .project-item:hover .detail-link {
                     background: var(--teal-deep);

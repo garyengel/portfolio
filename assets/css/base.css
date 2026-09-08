@@ -686,7 +686,7 @@
                the hover state, and only follows the link on a second tap.
                Scoping :hover to (hover: hover) devices skips that trap
                entirely on touch, so the first tap always just navigates. */
-            @media (hover: hover) {
+            @media (hover: hover) and (pointer: fine) {
                 .fab-back:hover {
                     background: var(--teal-deep);
                     transform: translateY(-3px);
