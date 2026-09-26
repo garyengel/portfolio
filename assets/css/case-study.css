@@ -456,3 +456,112 @@
                     display: none;
                 }
             }
+
+            /* ─────────────────────────────────────────────
+               SCROLLYTELLING — sticky visual crossfades beside
+               scrolling narrative (see initScrolly in case-study.js)
+            ───────────────────────────────────────────── */
+            .scrolly {
+                display: grid;
+                grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+                gap: clamp(2rem, 6vw, 5rem);
+                align-items: start;
+                margin-top: 2.5rem;
+            }
+            .scrolly-stage {
+                position: sticky;
+                top: calc(var(--nav-h, 76px) + 20px);
+                height: min(72vh, 620px);
+                min-height: 420px;
+                overflow: hidden;
+                border-radius: var(--radius-md);
+                border: 1px solid var(--border);
+                background: var(--bg-alt);
+            }
+            .scrolly-visual {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 1.25rem;
+                padding: 2.5rem;
+                opacity: 0;
+                transform: scale(0.985);
+                transition:
+                    opacity 0.48s cubic-bezier(0.2, 0.75, 0.25, 1),
+                    transform 0.48s cubic-bezier(0.2, 0.75, 0.25, 1);
+            }
+            .scrolly-visual.active {
+                opacity: 1;
+                transform: scale(1);
+            }
+            .scrolly-visual img {
+                max-width: 100%;
+                max-height: calc(100% - 3rem);
+                width: auto;
+                object-fit: contain;
+            }
+            .scrolly-visual figcaption {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 0.75rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--faint);
+                text-align: center;
+            }
+            .scrolly-copy article {
+                min-height: 72vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 2.5rem 0;
+            }
+            .scrolly-copy article:first-child {
+                padding-top: 1rem;
+            }
+            .scrolly-copy h3 {
+                font-size: clamp(1.333rem, 2.6vw, 2rem);
+                letter-spacing: -0.02em;
+                margin-bottom: 1.25rem;
+                max-width: 22ch;
+            }
+            .scrolly-copy p {
+                font-size: 1rem;
+                line-height: 1.85;
+                color: var(--muted);
+                margin-bottom: 1rem;
+                max-width: 60ch;
+            }
+            .scrolly-copy p:last-child {
+                margin-bottom: 0;
+            }
+            .scrolly-copy p strong {
+                color: var(--ink);
+                font-weight: 600;
+            }
+            .scrolly-copy .cs-weights {
+                margin-top: 1.5rem;
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .scrolly-visual {
+                    transition: none;
+                }
+            }
+            @media (max-width: 1000px) {
+                .scrolly {
+                    grid-template-columns: 1fr;
+                    gap: 1.5rem;
+                }
+                .scrolly-stage {
+                    top: calc(var(--nav-h, 76px) + 10px);
+                    height: 38vh;
+                    min-height: 280px;
+                    z-index: 5;
+                }
+                .scrolly-copy article {
+                    min-height: 60vh;
+                    padding: 2rem 0;
+                }
+            }
