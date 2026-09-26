@@ -241,3 +241,45 @@
                 { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
             );
             revealEls.forEach((el) => io.observe(el));
+
+            // Cursor tilt — case-study thumbnails lean toward the pointer
+            // with a damped 3D rotation that eases back to flat on leave.
+            // Damped lerp (~12% per frame), no bounce, honors
+            // prefers-reduced-motion and only runs on fine-pointer devices.
+            (function initTilt() {
+                const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+                const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+                if (reduced || !finePointer) return;
+                document.querySelectorAll(".detail-thumb").forEach((card) => {
+                    let rx = 0,
+                        ry = 0,
+                        tx = 0,
+                        ty = 0,
+                        frame = 0;
+                    function animate() {
+                        rx += (tx - rx) * 0.12;
+                        ry += (ty - ry) * 0.12;
+                        card.style.transform =
+                            "rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
+                        if (Math.abs(tx - rx) > 0.01 || Math.abs(ty - ry) > 0.01) {
+                            frame = requestAnimationFrame(animate);
+                        } else {
+                            frame = 0;
+                        }
+                    }
+                    function start() {
+                        if (!frame) frame = requestAnimationFrame(animate);
+                    }
+                    card.addEventListener("mousemove", (e) => {
+                        const r = card.getBoundingClientRect();
+                        tx = ((e.clientY - r.top) / r.height - 0.5) * -7;
+                        ty = ((e.clientX - r.left) / r.width - 0.5) * 8;
+                        start();
+                    });
+                    card.addEventListener("mouseleave", () => {
+                        tx = 0;
+                        ty = 0;
+                        start();
+                    });
+                });
+            })();
