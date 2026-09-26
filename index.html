@@ -442,6 +442,22 @@
                 border-radius: var(--radius-sm);
                 background: var(--teal-bg);
                 border: 1px solid var(--border);
+                transform-style: preserve-3d;
+                will-change: transform;
+                box-shadow: 0 12px 26px -20px rgba(15, 30, 46, 0.45);
+                transition: box-shadow 0.4s cubic-bezier(0.2, 0.75, 0.25, 1);
+            }
+            /* Cursor tilt — thumbnails lean toward the pointer with a damped
+               3D rotation (see initTilt in homepage.js); the shadow deepens
+               while tilted. transform on the anchor never fights the img's
+               own hover scale, which lives on the child. */
+            .detail-body.has-thumb {
+                perspective: 1200px;
+            }
+            @media (hover: hover) and (pointer: fine) {
+                .detail-thumb:hover {
+                    box-shadow: 0 34px 56px -28px rgba(15, 30, 46, 0.55);
+                }
             }
             .detail-thumb img {
                 width: 100%;
