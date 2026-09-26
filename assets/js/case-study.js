@@ -152,3 +152,30 @@
                 // lag behind if scrolling stops mid-animation.
                 nav.addEventListener("transitionend", positionSubmenu);
             })();
+
+            // Scrollytelling — sticky visuals crossfade beside the scrolling
+            // narrative. Each .scrolly-copy article names its visual via
+            // data-visual; an IntersectionObserver toggles the matching
+            // .scrolly-visual. No-op on pages without a .scrolly block.
+            (function initScrolly() {
+                const stage = document.querySelector(".scrolly-stage");
+                if (!stage) return;
+                const visuals = Array.prototype.slice.call(
+                    stage.querySelectorAll(".scrolly-visual"),
+                );
+                if (!visuals.length) return;
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                const i = Number(entry.target.getAttribute("data-visual"));
+                                visuals.forEach((v, n) => v.classList.toggle("active", n === i));
+                            }
+                        });
+                    },
+                    { rootMargin: "-35% 0px -45% 0px", threshold: 0 },
+                );
+                document
+                    .querySelectorAll(".scrolly-copy article[data-visual]")
+                    .forEach((el) => observer.observe(el));
+            })();
