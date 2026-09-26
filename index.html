@@ -1068,7 +1068,7 @@
              FOOTER
         ═══════════════════════════════════════════ -->
         <footer class="site-footer">
-            <span>© 2026 Gary Engel · All rights reserved</span>
+            <span>© <span id="copy-year">2026</span> Gary Engel · All rights reserved</span>
             <span>Designed with precision</span>
         </footer>
 
@@ -1076,5 +1076,8 @@
              JAVASCRIPT
         ═══════════════════════════════════════════ -->
         <script src="assets/js/homepage.js"></script>
+        <script>
+            document.getElementById('copy-year').textContent = new Date().getFullYear();
+        </script>
     </body>
 </html>
