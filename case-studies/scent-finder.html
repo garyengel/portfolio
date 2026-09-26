@@ -254,130 +254,110 @@
         </div>
 
         <!-- ═══════════════════════════════════════════
-             02 · GUIDED DISCOVERY
+             02 · GUIDED DISCOVERY — scrollytelling: sticky visuals
+             crossfade beside the scrolling quiz narrative.
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
             <section class="panel reveal">
                 <span class="eyebrow">02 · Guided Discovery</span>
-                <h2 class="heading-lg" style="margin-top: 1.1rem; margin-bottom: 2rem">
+                <h2 class="heading-lg" style="margin-top: 1.1rem">
                     Four questions, framed around <span class="hl">real decisions.</span>
                 </h2>
-                <div class="cs-split-inner">
-                    <figure class="cs-split-media">
-                        <img
-                            src="assets/scent-finder/quiz-rooms.png"
-                            alt="Scentsy Harmonize quiz: which rooms do you want to fragrance?"
-                                                loading="lazy"
-                        />
-                        <figcaption>Question 1 of 4 · Space</figcaption>
-                    </figure>
-                    <div class="cs-split-body">
-                        <p>
-                            Instead of asking people to self-identify a scent family, the quiz starts with context
-                            they already know: which rooms they want to fragrance, and what ambiance they're after in
-                            each. Photography does the work that scent-family jargon can't: a living room card and a
-                            bathroom card look and feel different before a single word is read.
-                        </p>
-                        <p>
-                            <strong>Rooms</strong> and <strong>ambiance</strong> are both multi-select, since most
-                            people are fragrancing more than one space with more than one mood in mind. Scent family
-                            comes third, as a lighter-weight preference layer once space and mood are already set.
-                        </p>
+                <div class="scrolly">
+                    <div class="scrolly-stage">
+                        <figure class="scrolly-visual active">
+                            <img
+                                src="assets/scent-finder/quiz-rooms.png"
+                                alt="Scentsy Harmonize quiz: which rooms do you want to fragrance?"
+                                loading="eager"
+                            />
+                            <figcaption>Question 1 of 4 · Space</figcaption>
+                        </figure>
+                        <figure class="scrolly-visual">
+                            <img
+                                src="assets/scent-finder/quiz-intensity.png"
+                                alt="Scentsy Harmonize quiz: how strong should the fragrance be?"
+                                loading="lazy"
+                            />
+                            <figcaption>Question 4 of 4 · Strength</figcaption>
+                        </figure>
+                        <figure class="scrolly-visual">
+                            <img
+                                src="assets/scent-finder/results.png"
+                                alt="Scentsy Harmonize results: top match plus six supporting recommendations"
+                                loading="lazy"
+                            />
+                            <figcaption>Top match, profile recap, and six supporting picks</figcaption>
+                        </figure>
+                    </div>
+                    <div class="scrolly-copy">
+                        <article data-visual="0">
+                            <h3>Which rooms, <span class="hl">what ambiance.</span></h3>
+                            <p>
+                                Instead of asking people to self-identify a scent family, the quiz starts with context
+                                they already know: which rooms they want to fragrance, and what ambiance they're after in
+                                each. Photography does the work that scent-family jargon can't: a living room card and a
+                                bathroom card look and feel different before a single word is read.
+                            </p>
+                            <p>
+                                <strong>Rooms</strong> and <strong>ambiance</strong> are both multi-select, since most
+                                people are fragrancing more than one space with more than one mood in mind. Scent family
+                                comes third, as a lighter-weight preference layer once space and mood are already set.
+                            </p>
+                        </article>
+                        <article data-visual="1">
+                            <h3>Strength isn't a <span class="hl">tiebreaker.</span> It's the filter.</h3>
+                            <p>
+                                The last question asks how strong the fragrance should be (light and subtle, moderate,
+                                or strong and bold), and it's the single heaviest-weighted signal in the whole match. A
+                                fragrance can score well on room and mood and still be the wrong pick if it fills a small
+                                bathroom when someone wanted something barely-there.
+                            </p>
+                            <p>
+                                Behind the scenes, every one of the 205 fragrances carries tags for room fit, mood, scent
+                                family, and intensity. Each answer scores every fragrance against those tags, then ranks
+                                the full catalog:
+                            </p>
+                            <div class="cs-weights">
+                                <div class="cs-weight">
+                                    <span class="cs-weight-pts mono">+4</span>
+                                    <span class="cs-weight-label">Exact intensity match (light, moderate, or strong)</span>
+                                </div>
+                                <div class="cs-weight">
+                                    <span class="cs-weight-pts mono">+3</span>
+                                    <span class="cs-weight-label">Scent family match, and any other shared attribute tag</span>
+                                </div>
+                                <div class="cs-weight">
+                                    <span class="cs-weight-pts mono">+2</span>
+                                    <span class="cs-weight-label">Each matching room, each matching ambiance</span>
+                                </div>
+                            </div>
+                        </article>
+                        <article data-visual="2">
+                            <h3>One confident answer, <span class="hl">not another list.</span></h3>
+                            <p>
+                                The whole point of asking four questions is to earn the right to give one clear answer. The
+                                top-scoring fragrance is presented as a single, confident recommendation: full photography,
+                                scent notes, which rooms it's best for, and a match percentage, before anything else on the
+                                page. Six supporting alternatives follow underneath, each still carrying its own scent
+                                profile, best-for rooms, intensity, and rating, so the choice never feels like a black box.
+                            </p>
+                            <p>
+                                A "Your Profile" recap sits above the results, restating the rooms, moods, families, and
+                                strength the person picked. It's a small thing, but it closes the loop: the recommendation
+                                visibly traces back to what they actually said, not a mystery algorithm.
+                            </p>
+                        </article>
                     </div>
                 </div>
             </section>
         </div>
-
         <!-- ═══════════════════════════════════════════
-             03 · WEIGHTING STRENGTH
+             03 · REFLECTIONS
         ═══════════════════════════════════════════ -->
         <div class="panel-wrap">
             <section class="panel reveal">
-                <span class="eyebrow">03 · Weighting Strength</span>
-                <h2 class="heading-lg" style="margin-top: 1.1rem; margin-bottom: 2rem">
-                    Strength isn't a <span class="hl">tiebreaker. It's the filter.</span>
-                </h2>
-                <div class="cs-split-inner reverse">
-                    <div class="cs-split-body">
-                        <p>
-                            The last question asks how strong the fragrance should be (light and subtle, moderate,
-                            or strong and bold), and it's the single heaviest-weighted signal in the whole match. A
-                            fragrance can score well on room and mood and still be the wrong pick if it fills a small
-                            bathroom when someone wanted something barely-there.
-                        </p>
-                        <p>
-                            Behind the scenes, every one of the 205 fragrances carries tags for room fit, mood, scent
-                            family, and intensity. Each answer scores every fragrance against those tags, then ranks
-                            the full catalog:
-                        </p>
-                    </div>
-                    <figure class="cs-split-media">
-                        <img
-                            src="assets/scent-finder/quiz-intensity.png"
-                            alt="Scentsy Harmonize quiz: how strong should the fragrance be?"
-                                                loading="lazy"
-                        />
-                        <figcaption>Question 4 of 4 · Strength</figcaption>
-                    </figure>
-                </div>
-                <div class="cs-weights cs-body">
-                    <div class="cs-weight">
-                        <span class="cs-weight-pts mono">+4</span>
-                        <span class="cs-weight-label">Exact intensity match (light, moderate, or strong)</span>
-                    </div>
-                    <div class="cs-weight">
-                        <span class="cs-weight-pts mono">+3</span>
-                        <span class="cs-weight-label">Scent family match, and any other shared attribute tag</span>
-                    </div>
-                    <div class="cs-weight">
-                        <span class="cs-weight-pts mono">+2</span>
-                        <span class="cs-weight-label">Each matching room, each matching ambiance</span>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- ═══════════════════════════════════════════
-             04 · THE MATCH
-        ═══════════════════════════════════════════ -->
-        <div class="panel-wrap">
-            <section class="panel reveal">
-                <span class="eyebrow">04 · The Match</span>
-                <h2 class="heading-lg" style="margin-top: 1.1rem">
-                    One confident answer, <span class="hl">not another list.</span>
-                </h2>
-                <div class="cs-body">
-                    <p>
-                        The whole point of asking four questions is to earn the right to give one clear answer. The
-                        top-scoring fragrance is presented as a single, confident recommendation: full photography,
-                        scent notes, which rooms it's best for, and a match percentage, before anything else on the
-                        page. Six supporting alternatives follow underneath, each still carrying its own scent
-                        profile, best-for rooms, intensity, and rating, so the choice never feels like a black box.
-                    </p>
-                    <p>
-                        A "Your Profile" recap sits above the results, restating the rooms, moods, families, and
-                        strength the person picked. It's a small thing, but it closes the loop: the recommendation
-                        visibly traces back to what they actually said, not a mystery algorithm.
-                    </p>
-                </div>
-                <div class="cs-hero-figure-wrap" style="margin-top: 2.5rem; padding: 0;">
-                    <figure class="cs-figure reveal" style="max-width: 100%;">
-                        <img
-                            src="assets/scent-finder/results.png"
-                            alt="Scentsy Harmonize results: top match plus six supporting recommendations" loading="lazy"
-                        />
-                        <figcaption class="cs-caption">Top match, profile recap, and six supporting picks</figcaption>
-                    </figure>
-                </div>
-            </section>
-        </div>
-
-        <!-- ═══════════════════════════════════════════
-             05 · REFLECTIONS
-        ═══════════════════════════════════════════ -->
-        <div class="panel-wrap">
-            <section class="panel reveal">
-                <span class="eyebrow">05 · Reflections</span>
+                <span class="eyebrow">03 · Reflections</span>
                 <h2 class="heading-lg" style="margin-top: 1.1rem">
                     What this would need <span class="hl">to go further.</span>
                 </h2>
