@@ -1,0 +1,25 @@
+# Gary Engel
+
+> Gary Engel is a Senior Product Design Leader based in Meridian, Idaho, with 25 years of user experience design experience. He is Digital Experience Manager at Scentsy, Inc., leading UX and design systems for e-commerce, mobile apps, and consultant tools.
+
+## Pages
+
+- [Home](https://garyengeldesign.com/): Portfolio overview with selected case studies, design process, and contact information.
+- [Scentsy Harmonize Fragrance Finder](https://garyengeldesign.com/case-studies/scent-finder.html): Guided fragrance discovery concept matching customers to scents across 205 options.
+- [Consultant Workstation Dashboard](https://garyengeldesign.com/case-studies/consultant-workstation-dashboard.html): Widgetized, customizable dashboard for Scentsy Consultants.
+- [Customer Journey: Joining Scentsy](https://garyengeldesign.com/case-studies/customer-journey-joining-scentsy.html): Journey maps, interviews, and surveys on how customers decide to join Scentsy.
+- [Customer Subscription Program](https://garyengeldesign.com/case-studies/customer-subscription-program.html): Design of Scentsy Club, the subscription and loyalty program.
+- [Scentsy Category Taxonomy & Navigation](https://garyengeldesign.com/case-studies/scentsy-category-taxonomy-navigation.html): Rebuilt category taxonomy and navigation for scentsy.com.
+- [Scentsy Home App](https://garyengeldesign.com/case-studies/scentsy-home-app.html): Zero-to-one connected-fragrance ecosystem design (under NDA).
+
+## Background
+
+- Role: Digital Experience Manager, Scentsy, Inc. (2018 to present); previously 14 years at Micron Technology leading UX for Crucial.com.
+- Location: Meridian, Idaho, United States.
+- Education: University of Idaho.
+- Specialties: e-commerce UX, design systems, experimentation (A/B testing), accessibility, user research, navigation architecture.
+
+## Profiles
+
+- [LinkedIn](https://www.linkedin.com/in/garyengel)
+- [GitHub](https://github.com/garyengel)
