@@ -603,9 +603,6 @@
             .btn:active {
                 transform: translateY(0) scale(0.98);
             }
-            .skill-tag:active {
-                transform: scale(0.96);
-            }
             .cs-footnav-link:active {
                 transform: translateY(0) scale(0.99);
             }
